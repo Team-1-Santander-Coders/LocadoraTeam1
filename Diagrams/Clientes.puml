@@ -1,0 +1,26 @@
+@startuml
+class Customer {
+    -String nome
+    -String endereco
+    -String telefone
+    +getters e setters
+    +getTipoCliente() String
+}
+class PhysicalPerson
+class LegalPerson {
+    -String cnpj
+    +getters e setters
+    +getTipoCliente() String
+}
+class CustomerDAO
+
+Customer <|-- PhysicalPerson
+Customer <|-- LegalPerson
+DataAccessObject <|.. CustomerDAO
+
+note "Clientes não podem estar duplicados." as N1
+Customer .. N1
+
+note "Clientes não podem estar duplicados." as N2
+CustomerDAO .. N2
+@enduml

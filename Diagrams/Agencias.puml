@@ -1,0 +1,17 @@
+@startuml
+class Agency {
+    -String id
+    -String nome
+    -String endereco
+    +getters e setters
+}
+class AgencyDAO
+
+DataAccessObject <|.. AgencyDAO
+
+note "Agências não podem estar duplicadas." as N1
+Agency .. N1
+
+note "Agências não podem estar duplicadas." as N2
+AgencyDAO .. N2
+@enduml

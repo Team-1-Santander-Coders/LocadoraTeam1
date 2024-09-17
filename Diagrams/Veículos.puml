@@ -1,0 +1,27 @@
+@startuml
+class Vehicle {
+    -String id
+    -String placa
+    -String modelo
+    -String marca
+    -int ano
+    -boolean disponivel
+    -double precoDiaria
+    +getters e setters
+}
+class Car
+class Motorcycle
+class Truck
+class VehicleDAO
+
+Vehicle <|-- Car
+Vehicle <|-- Motorcycle
+Vehicle <|-- Truck
+DataAccessObject <|.. VehicleDAO
+
+note "Tipos de veículos que serão considerados: Carro, Moto, Caminhões.\nOs veículos que estiverem alugados não poderão estar disponíveis." as N1
+Vehicle .. N1
+
+note "Os veículos não podem ser repetidos." as N2
+VehicleDAO .. N2
+@enduml

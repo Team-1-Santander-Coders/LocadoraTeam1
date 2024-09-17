@@ -1,4 +1,4 @@
 package main.java.com.team1.model;
 
-public class Vehicle {
+public abstract class Vehicle {
 }

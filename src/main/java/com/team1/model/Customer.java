@@ -1,4 +1,4 @@
 package main.java.com.team1.model;
 
-public class Customer {
+public abstract class Customer {
 }
