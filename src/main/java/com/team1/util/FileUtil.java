@@ -14,6 +14,8 @@ public class FileUtil<T> implements Serializable {
      * @param data Lista de objetos do tipo T, que representa os dados a serem escritos no arquivo.
      * @param filename String que referencia o arquivo onde as informações serão salvas.
      * @param <T>
+     *
+     *
      */
 
     public static <T> void writeToFile(List<T> data, String filename){
@@ -86,17 +88,7 @@ public class FileUtil<T> implements Serializable {
         return dataConvertida;
     }
 
-    /**
-     * <p>O método logError registra as exceções lançadas pelo sistema em um arquivo de logs.</p>
-     *
-     * <p>Esse método formata a data e hora atuais, registra a mensagem da exceção,
-     * e inclui o stack trace para facilitar a análise do erro. O log é escrito
-     * em um arquivo especificado por LOG_FILE, permitindo o acompanhamento das operações
-     * e a identificação de problemas.</p>
-     *
-     * @param e Exception que contém informações sobre o erro ocorrido.
-     */
-    public static void logError(Exception e) {
+    private static void logError(Exception e) {
         System.out.println("Operação não concluída. Verificar Log.");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy HH:mm:ss] ");
         try (BufferedWriter logWriter = new BufferedWriter(new FileWriter(LOG_FILE, true))) {
