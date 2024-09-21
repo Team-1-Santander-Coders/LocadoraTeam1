@@ -88,7 +88,11 @@ public class FileUtil<T> implements Serializable {
         return dataConvertida;
     }
 
-    private static void logError(Exception e) {
+    /**<p>O método logError registra as exceções lançadas pelo sistema para o arquivo de logs.</p>
+     *
+     * @param e Exception que referencia o arquivo onde as informações estão armazenadas.
+     */
+    public static void logError(Exception e) {
         System.out.println("Operação não concluída. Verificar Log.");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy HH:mm:ss] ");
         try (BufferedWriter logWriter = new BufferedWriter(new FileWriter(LOG_FILE, true))) {
