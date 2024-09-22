@@ -31,7 +31,7 @@ public class VehicleServiceTest {
         CarDTO car = new CarDTO("ABC1234", "Modelo", "Marca", 2020, true, 100.00);
         Exception exception = assertThrows(DuplicateEntityException.class, () -> {
             vehicleService.addVehicle(car);
-            vehicleService.addVehicle(car); // Adicionando novamente
+            vehicleService.addVehicle(car);
         });
         assertEquals("Veículo com a placa ABC1234 já existe.", exception.getMessage());
     }
