@@ -14,13 +14,12 @@ public class Motorcycle implements Vehicle {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    // Atributos da motocicleta
-    private final String placa;     // Placa da motocicleta (não pode ser alterada após a criação)
-    private final String modelo;     // Modelo da motocicleta
-    private final String marca;      // Marca da motocicleta
-    private final int ano;           // Ano de fabricação da motocicleta
-    private boolean disponivel;      // Disponibilidade da motocicleta
-    private static final double precoDiaria = 100.00; // Preço diário de locação
+    private final String placa;
+    private final String modelo;
+    private final String marca;
+    private final int ano;
+    private boolean disponivel;
+    private static final double precoDiaria = 100.00;
 
     /**
      * Construtor da classe Motorcycle.
