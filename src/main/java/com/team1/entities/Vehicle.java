@@ -1,6 +1,5 @@
 package main.java.com.team1.entities;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
