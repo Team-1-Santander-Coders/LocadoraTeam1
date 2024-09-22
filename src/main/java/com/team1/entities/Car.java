@@ -12,12 +12,12 @@ import java.io.Serial;
 public class Car implements Vehicle {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final String placa; // Placa do carro
-    private final String modelo; // Modelo do carro
-    private final String marca;  // Marca do carro
-    private final int ano;       // Ano de fabricação do carro
-    private boolean disponivel;  // Disponibilidade do carro
-    private static final double precoDiaria = 150.00; // Preço diário de locação
+    private final String placa;
+    private final String modelo;
+    private final String marca;
+    private final int ano;
+    private boolean disponivel;
+    private static final double precoDiaria = 150.00;
 
     /**
      * Construtor da classe Car.
