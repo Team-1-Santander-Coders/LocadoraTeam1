@@ -27,7 +27,7 @@ public class VehicleRepositoryImplTest {
         File file = new File(TEST_FILE).getAbsoluteFile();
         if (file.exists()) {
             try {
-                new FileWriter(file, false).close(); // Limpa o arquivo
+                new FileWriter(file, false).close();
                 System.out.println("Arquivo limpo.");
             } catch (IOException e) {
                 e.printStackTrace();
