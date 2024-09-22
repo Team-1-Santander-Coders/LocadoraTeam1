@@ -8,6 +8,8 @@ import java.util.List;
 
 
 public class FileUtil<T> implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private static final String LOG_FILE = "src/resources/data/logs.txt";
     /**
      *<p>O método writeToFile faz o uso do método <code>ObjectOutputStream</code> para serializar e salvar os objetos, isto é, converter os objetos para bytes e gravar em um arquivo.</p>
@@ -19,7 +21,6 @@ public class FileUtil<T> implements Serializable {
     public static <T> void writeToFile(List<T> data, String filename){
         try(ObjectOutputStream objectOutput = new ObjectOutputStream(new FileOutputStream(filename))){
             objectOutput.writeObject(data);
-            objectOutput.close();
         } catch (IOException e) {
             logError(e);
         }
@@ -34,13 +35,20 @@ public class FileUtil<T> implements Serializable {
 
     @SuppressWarnings("unchecked")
     public static <T> List<T> readFromFile(String filename) {
-        try{
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
-            return (List<T>) ois.readObject();
+        File file = new File(filename);
+        if (!file.exists() || file.length() == 0) {
+            return new ArrayList<>();
+        }
 
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            return (List<T>) ois.readObject();
+        } catch (StreamCorruptedException e) {
+            logError(e);
+            System.out.println("Arquivo corrompido. Criando um novo arquivo.");
+            return new ArrayList<>();
         } catch (IOException | ClassNotFoundException e) {
             logError(e);
-            return null;
+            return new ArrayList<>();
         }
     }
     /**
@@ -55,7 +63,7 @@ public class FileUtil<T> implements Serializable {
         try {
             List<T> data = readFromFile(fileName);
             if(!data.isEmpty()){
-                if(!data.get(0).getClass().equals(content.getClass())) throw new RuntimeException("Tipo incompativel: " + content.getClass());
+                if(!data.getFirst().getClass().equals(content.getClass())) throw new RuntimeException("Tipo incompativel: " + content.getClass());
             }
             data.add(content);
             writeToFile(data, fileName);
