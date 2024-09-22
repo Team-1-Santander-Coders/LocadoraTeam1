@@ -1,4 +1,107 @@
 package main.java.com.team1.entities;
 
-public class Car {
+import java.io.Serial;
+
+/**
+ * Classe que representa um carro, implementando a interface {@link Vehicle}.
+ * <p>
+ * Esta classe fornece as propriedades e métodos relacionados a um carro, incluindo
+ * informações como placa, modelo, marca, ano, disponibilidade e preço diário de locação.
+ * </p>
+ */
+public class Car implements Vehicle {
+    @Serial
+    private static final long serialVersionUID = 1L;
+    private final String placa; // Placa do carro
+    private final String modelo; // Modelo do carro
+    private final String marca;  // Marca do carro
+    private final int ano;       // Ano de fabricação do carro
+    private boolean disponivel;  // Disponibilidade do carro
+    private static final double precoDiaria = 150.00; // Preço diário de locação
+
+    /**
+     * Construtor da classe Car.
+     *
+     * @param placa  A placa do carro.
+     * @param modelo O modelo do carro.
+     * @param marca  A marca do carro.
+     * @param ano    O ano de fabricação do carro.
+     */
+    public Car(String placa, String modelo, String marca, int ano) {
+        this.placa = placa;
+        this.modelo = modelo;
+        this.marca = marca;
+        this.ano = ano;
+        this.disponivel = true;
+    }
+
+    /**
+     * Retorna a placa do carro.
+     *
+     * @return A placa do carro.
+     */
+    @Override
+    public String getPlaca() {
+        return placa;
+    }
+
+    /**
+     * Retorna o modelo do carro.
+     *
+     * @return O modelo do carro.
+     */
+    @Override
+    public String getModelo() {
+        return modelo;
+    }
+
+    /**
+     * Retorna a marca do carro.
+     *
+     * @return A marca do carro.
+     */
+    @Override
+    public String getMarca() {
+        return marca;
+    }
+
+    /**
+     * Retorna o ano de fabricação do carro.
+     *
+     * @return O ano de fabricação do carro.
+     */
+    @Override
+    public int getAno() {
+        return ano;
+    }
+
+    /**
+     * Verifica se o carro está disponível para locação.
+     *
+     * @return true se o carro está disponível, false caso contrário.
+     */
+    @Override
+    public boolean isDisponivel() {
+        return disponivel;
+    }
+
+    /**
+     * Retorna o preço diário de locação do carro.
+     *
+     * @return O preço diário de locação do carro.
+     */
+    @Override
+    public double getPrecoDiaria() {
+        return precoDiaria;
+    }
+
+    /**
+     * Retorna o tipo do veículo como uma string.
+     *
+     * @return Tipo do veículo ("Carro").
+     */
+    @Override
+    public String getTipo() {
+        return "Carro";
+    }
 }
