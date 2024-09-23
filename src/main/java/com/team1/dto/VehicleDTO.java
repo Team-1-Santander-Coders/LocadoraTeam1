@@ -119,4 +119,65 @@ public abstract class VehicleDTO implements Serializable {
                 ", tipo=" + getTipo() +
                 '}';
     }
+
+    public static VehicleDTO fromJson(String json) {
+        String[] keyValuePairs = json.replaceAll("[{}\"]", "").split(",");
+
+        String placa = "", modelo = "", marca = "";
+        int ano = 0;
+        boolean disponivel = false;
+        double precoDiaria = 0.0;
+        String tipo = "";
+
+        for (String pair : keyValuePairs) {
+            String[] keyValue = pair.split(":");
+            String key = keyValue[0].trim();
+            String value = keyValue[1].trim();
+
+            switch (key) {
+                case "placa":
+                    placa = value;
+                    break;
+                case "modelo":
+                    modelo = value;
+                    break;
+                case "marca":
+                    marca = value;
+                    break;
+                case "ano":
+                    ano = Integer.parseInt(value);
+                    break;
+                case "disponivel":
+                    disponivel = Boolean.parseBoolean(value);
+                    break;
+                case "precoDiaria":
+                    precoDiaria = Double.parseDouble(value);
+                    break;
+                case "tipo":
+                    tipo = value;
+                    break;
+            }
+        }
+
+        // Instancia o veículo com base no tipo
+        return createVehicleByType(placa, modelo, marca, ano, disponivel, precoDiaria, tipo);
+    }
+
+
+
+    private static VehicleDTO createVehicleByType(String placa, String modelo, String marca, int ano,
+                                                  boolean disponivel, double precoDiaria, String tipo) {
+        switch (tipo) {
+            case "Carro" -> {
+                return new CarDTO(placa, modelo, marca, ano, disponivel, precoDiaria);
+            }
+            case "Moto" -> {
+                return new MotorcycleDTO(placa, modelo, marca, ano, disponivel, precoDiaria);
+            }
+            case "Caminhão" -> {
+                return new TruckDTO(placa, modelo, marca, ano, disponivel, precoDiaria);
+            }
+            default -> throw new IllegalArgumentException("Tipo de veículo desconhecido: " + tipo);
+        }
+    }
 }
