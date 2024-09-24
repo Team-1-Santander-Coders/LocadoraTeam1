@@ -6,58 +6,24 @@ import com.sun.net.httpserver.HttpServer;
 import main.java.com.team1.entities.User;
 import main.java.com.team1.service.CustomerService;
 import main.java.com.team1.service.UserService;
+import main.java.com.team1.server.MainServer.StaticFileHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class UserServer {
     private static CustomerService customerService;
+    private static final String page = "user";
 
-    public static void StartServer() throws IOException {
+    public static void createContexts() throws IOException {
+        HttpServer server = MainServer.getServer();
         customerService = new CustomerService();
 
-        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-
-        server.createContext("/", new StaticFileHandler("index.html")); // Serve o arquivo HTML principal.
-        server.createContext("/style.css", new StaticFileHandler("style.css")); // Serve o CSS.
-        server.createContext("/script.js", new StaticFileHandler("script.js"));
+        server.createContext("/usuario", new StaticFileHandler(page, "index.html")); // Serve o arquivo HTML principal.
+        server.createContext("/usuario/script.js", new StaticFileHandler(page, "script.js"));
         server.createContext("/user", new UserCreateHandler());
-
-        server.setExecutor(null); // Define que o servidor usará o executor padrão (threading).
-        server.start(); // Inicia o servidor.
-        System.out.println("Servidor rodando http://localhost:8000");
-
-
-    }
-
-    static class StaticFileHandler implements HttpHandler {
-        private String fileName;
-
-        public StaticFileHandler(String fileName) {
-            this.fileName = fileName;
-        }
-        // Serve o JavaScript.
-
-
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            String path = Paths.get("src", "resources", "static", "User",fileName).toString();
-            byte[] response = Files.readAllBytes(Paths.get(path));
-
-            exchange.getResponseHeaders().add("Content-Type", fileName.endsWith(".css") ? "text/css" :
-                    fileName.endsWith(".js") ? "application/javascript" : "text/html");
-
-            exchange.sendResponseHeaders(200, response.length);
-
-            OutputStream os = exchange.getResponseBody();
-            os.write(response);
-            os.close();
-        }
     }
 
         static class UserCreateHandler implements HttpHandler {
@@ -100,6 +66,4 @@ public class UserServer {
             }
         }
 
-
     }
-

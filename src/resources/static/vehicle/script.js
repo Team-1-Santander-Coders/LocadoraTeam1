@@ -9,11 +9,10 @@ document.addEventListener("DOMContentLoaded", function() {
 let allVehicles = [];
 
 
-
 document.getElementById('vehicleForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const type = document.getElementById('type').value;
-    const placa = document.getElementById('placa').value;
+    const placa = document.getElementById('placa').value.replace(/[^a-z0-9]/gi, '');
     const modelo = document.getElementById('modelo').value;
     const marca = document.getElementById('marca').value;
     const ano = document.getElementById('ano').value;
