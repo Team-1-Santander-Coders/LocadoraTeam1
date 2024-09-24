@@ -31,7 +31,7 @@ Manipulador responsável por servir arquivos estáticos (HTML, CSS, JS).
 - **Construtor**: Recebe o nome do arquivo que será servido.
 - **Método `handle(HttpExchange exchange)`**:
     - Lê o arquivo solicitado e o envia como resposta HTTP.
-    - Define o tipo de conteúdo (HTML, CSS, JS) com base na extensão do arquivo.
+    - Define o type de conteúdo (HTML, CSS, JS) com base na extensão do arquivo.
 
 ---
 
@@ -39,7 +39,7 @@ Manipulador responsável por servir arquivos estáticos (HTML, CSS, JS).
 Manipulador responsável por listar todos os veículos.
 - **Método `handle(HttpExchange exchange)`**:
     - Obtém a lista de veículos do `VehicleService`.
-    - Formata cada veículo como uma string contendo informações como tipo, placa, modelo, ano e disponibilidade.
+    - Formata cada veículo como uma string contendo informações como type, placa, modelo, ano e disponibilidade.
     - Envia a resposta de volta ao cliente com a lista formatada.
 
 ---
@@ -49,7 +49,7 @@ Manipulador responsável por criar um novo veículo.
 - **Método `handle(HttpExchange exchange)`**:
     - Verifica se o método HTTP é `POST`.
     - Lê os dados do veículo a partir do corpo da requisição.
-    - Com base no tipo de veículo (Carro, Moto, Caminhão), cria uma entidade correspondente e a transforma em um DTO.
+    - Com base no type de veículo (Carro, Moto, Caminhão), cria uma entidade correspondente e a transforma em um DTO.
     - Usa o serviço `VehicleService` para adicionar o veículo.
     - Responde com uma mensagem de sucesso ou erro (conflito se a placa já existir).
 

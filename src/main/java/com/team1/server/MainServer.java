@@ -32,7 +32,7 @@ public class MainServer {
         return server;
     }
 
-    static class StaticFileHandler implements HttpHandler {
+    public static class StaticFileHandler implements HttpHandler {
         private final String page;
         private final String fileName;
 
@@ -45,7 +45,7 @@ public class MainServer {
         public void handle(HttpExchange exchange) throws IOException {
             // Constrói o caminho para o arquivo estático (HTML, CSS ou JS).
             String path = Paths.get("src", "resources", "static", page, fileName).toString();
-            if (page.equals("home") && fileName.contains(".css")) {
+            if (page.equals("home")) {
                 path = Paths.get("src", "resources", "static", fileName).toString();
             }
             byte[] response = Files.readAllBytes(Paths.get(path)); // Lê o conteúdo do arquivo.

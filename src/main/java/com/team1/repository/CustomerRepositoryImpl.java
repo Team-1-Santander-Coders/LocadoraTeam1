@@ -148,7 +148,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
      */
     private boolean isIncluded(CustomerDTO customerDTO) {
         List<CustomerDTO> customersList = findAll();
-        if(customersList.getFirst() == null) return false;
+
+        if(customersList.isEmpty()) return false;
         for(CustomerDTO customer : customersList){
                 if(customerDTO.hashCode() == customer.hashCode())
                     return true;

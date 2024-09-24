@@ -1,8 +1,13 @@
 package main.java.com.team1.entities;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Agency {
+public class Agency implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     String name;
 
     public String getAddress() {

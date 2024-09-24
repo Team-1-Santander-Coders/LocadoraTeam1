@@ -1,30 +1,37 @@
 package main.java.com.team1.entities;
 
 import main.java.com.team1.dto.AgencyDTO;
+import main.java.com.team1.dto.CustomerDTO;
+import main.java.com.team1.dto.VehicleDTO;
 import main.java.com.team1.util.DateUtil;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Rental implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-    private final Vehicle vehicle;          // Veículo alugado
-    private final Customer customer;        // Cliente que aluga o veículo
-    private final AgencyDTO agencyRental;      // Agência de onde o veículo foi retirado
-    private AgencyDTO agencyReturn;      // Agência de devolução do veículo
-    private final LocalDate rentalDate; // Data e hora de início do aluguel
-    private LocalDate returnDate; // Data e hora de devolução
-    private double totalCost;         // Custo total do aluguel
+    private final VehicleDTO vehicle;
+    private final CustomerDTO customer;
+    private final AgencyDTO agencyRental;
+    private AgencyDTO agencyReturn;
+    private final LocalDate rentalDate;
+    private LocalDate returnDate;
+    private boolean isReturned;
+    private double totalCost;
 
     // Construtor que inicializa os atributos necessários no início do aluguel
-    public Rental(Vehicle vehicle, Customer customer, AgencyDTO agencyRental, LocalDate rentalDate) {
+    public Rental(VehicleDTO vehicle, CustomerDTO customer, AgencyDTO agencyRental, LocalDate rentalDate) {
         this.vehicle = vehicle;
         this.customer = customer;
         this.agencyRental = agencyRental;
         this.rentalDate = rentalDate;
-        this.totalCost = 0.0;
+        this.totalCost = 0;
+        this.isReturned = false;
     }
 
     // Método para finalizar o aluguel e calcular o custo total
@@ -32,6 +39,7 @@ public class Rental implements Serializable {
         this.agencyReturn = agencyReturn;
         this.returnDate = returnDate;
         this.totalCost = calcularCustoTotal();
+        this.isReturned = true;
     }
 
     // Método que calcula o custo total do aluguel

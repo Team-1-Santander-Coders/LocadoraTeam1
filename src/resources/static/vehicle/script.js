@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
-    loadVehicles(); // Carrega a lista de veículos quando a página é carregada
+    loadVehicles();
 
-    // Adiciona um evento de input no campo de pesquisa para filtrar conforme o usuário digita
     document.getElementById('search').addEventListener('input', filterVehicles);
     document.getElementById('disponibility').addEventListener('change', filterVehicles);
 });
@@ -32,26 +31,24 @@ document.getElementById('vehicleForm').addEventListener('submit', function(event
 });
 
 function loadVehicles() {
-    fetch('/vehicles') // Faz um GET para a rota que lista todos os veículos
-        .then(response => response.text()) // Lê a resposta como texto simples
+    fetch('/vehicles')
+        .then(response => response.text())
         .then(data => {
             const vehicleList = document.getElementById('vehicleList');
-            vehicleList.innerHTML = ''; // Limpa a lista de veículos
+            vehicleList.innerHTML = '';
 
             if (data.trim() === '') {
-                document.getElementById('noVehiclesMessage').style.display = 'block'; // Mostra a mensagem "Sem veículos"
+                document.getElementById('noVehiclesMessage').style.display = 'block';
             } else {
-                document.getElementById('noVehiclesMessage').style.display = 'none'; // Esconde a mensagem
+                document.getElementById('noVehiclesMessage').style.display = 'none';
 
-                // Divide os veículos pelo caractere de nova linha
+
                 allVehicles = data.split('\n').map(vehicle => {
-                    // Divide cada linha pelos delimitadores " - " e retorna um objeto
                     const [tipo, placa, modelo, ano, disponivel] = vehicle.split(' - ');
                     return { tipo, placa, modelo, ano, disponivel };
                 });
 
-                // Exibe os veículos na lista inicialmente
-                displayVehicles(allVehicles); // Mostra todos os veículos quando carregado
+                displayVehicles(allVehicles);
             }
         })
         .catch(error => {
@@ -62,42 +59,38 @@ function loadVehicles() {
 
 function displayVehicles(vehicles) {
     const vehicleList = document.getElementById('vehicleList');
-    vehicleList.innerHTML = ''; // Limpa a lista de veículos antes de renderizar
+    vehicleList.innerHTML = '';
 
     if (vehicles.length === 0) {
-        vehicleList.innerHTML = "<li>Nenhum veículo encontrado</li>"; // Exibe uma mensagem se não houver veículos após a pesquisa
+        vehicleList.innerHTML = "<li>Nenhum veículo encontrado</li>";
         return;
     }
 
-    // Para cada veículo, cria um item da lista (li) e o adiciona ao <ul>
     vehicles.forEach(vehicle => {
         const li = document.createElement('li');
         li.textContent = `${vehicle.tipo} - ${vehicle.placa} - ${vehicle.modelo} - ${vehicle.ano} - ${vehicle.disponivel === 'Disponível' ? 'Disponível' : 'Indisponível'}`;
         vehicleList.appendChild(li);
 
-        // Adiciona um botão de deletar para cada veículo
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Deletar';
         deleteButton.onclick = function() {
-            deleteVehicle(vehicle.placa); // Chama a função de deletar, passando a placa do veículo
+            deleteVehicle(vehicle.placa);
         };
         li.appendChild(deleteButton);
     });
 }
 
 function filterVehicles() {
-    const searchTerm = document.getElementById('search').value.toLowerCase(); // Obtém o valor do campo de pesquisa
+    const searchTerm = document.getElementById('search').value.toLowerCase();
 
-    // Filtra a lista de veículos com base na placa, modelo, tipo ou ano
     const filteredVehicles = allVehicles.filter(vehicle =>
-        vehicle.placa.toLowerCase().includes(searchTerm) || // Verifica se a placa contém o termo pesquisado
-        vehicle.modelo.toLowerCase().includes(searchTerm) || // Verifica se o modelo contém o termo pesquisado
-        vehicle.tipo.toLowerCase().includes(searchTerm) || // Verifica se o tipo contém o termo pesquisado
-        vehicle.ano.includes(searchTerm) // Verifica se o ano contém o termo pesquisado
+        vehicle.placa.toLowerCase().includes(searchTerm) ||
+        vehicle.modelo.toLowerCase().includes(searchTerm) ||
+        vehicle.tipo.toLowerCase().includes(searchTerm) ||
+        vehicle.ano.includes(searchTerm)
     );
 
     if (document.getElementById('disponibility').value === '') {
-        // Exibe apenas os veículos filtrados
         displayVehicles(filteredVehicles);
     }
 
@@ -130,5 +123,4 @@ function deleteVehicle(placa) {
     });
 }
 
-// Carregar veículos ao iniciar
 loadVehicles();

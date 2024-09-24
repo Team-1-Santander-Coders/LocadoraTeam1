@@ -3,7 +3,7 @@ package main.java.com.team1.entities;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class User {
+public class User implements Customer {
 
     private String name;
     private String address;
@@ -13,7 +13,7 @@ public class User {
     private String document;
     private String tipo;
 
-    private User(String name, String address, String password, String email, String phone, String document, String tipo) {
+    public User(String name, String address, String password, String email, String phone, String document, String tipo) {
         this.name = name;
         this.address = address;
         this.password = password;
@@ -29,8 +29,8 @@ public class User {
             throw new IllegalArgumentException("Erro nos dados passados");
         }
 
-        if (tipo.equals("Física")) {
-            if (document.length() != 11) throw new IllegalArgumentException("Erro nos dados passados");
+        /* if (tipo.equals("Física")) {
+        *    if (document.length() != 11) throw new IllegalArgumentException("Erro nos dados passados");
             return null;
         }
 
@@ -38,6 +38,7 @@ public class User {
             if (document.length() != 14) throw new IllegalArgumentException("Erro nos dados passados");
             return null;
         }
+        */
 
         return new User(name, address, password, email, phone, document, tipo);
     }
@@ -46,8 +47,18 @@ public class User {
         return name;
     }
 
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getAddress(){
         return address;
+    }
+
+    @Override
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPassword() {
@@ -60,6 +71,16 @@ public class User {
 
     public String getPhone() {
         return phone;
+    }
+
+    @Override
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    @Override
+    public boolean equals(Customer customer) {
+        return false;
     }
 
     public String getDocument() {
