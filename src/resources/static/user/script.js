@@ -42,8 +42,8 @@ document.getElementById('userForm').addEventListener('submit', function(event) {
     const address = document.getElementById('address').value;
     const password = document.getElementById('password').value;
     const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value.value.replace(/[^a-z0-9]/gi, '');
-    const documentValue = document.getElementById('documentValue').value.value.replace(/[^a-z0-9]/gi, '');
+    const phone = document.getElementById('phone').value.replace(/[^a-z0-9]/gi, '');
+    const documentValue = document.getElementById('documentValue').value.replace(/[^a-z0-9]/gi, '');
     const tipo = document.getElementById('type').value;
 
     if (!name || !address || !password || !email || !phone || !documentValue || !tipo) {
