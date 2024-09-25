@@ -25,23 +25,24 @@ public class User implements Customer {
 
     public static User createUser(String name, String address, String password, String email, String phone, String document, String tipo) {
 
-        if (password.length() <= 8 || tipo.isEmpty()) {
-            throw new IllegalArgumentException("Erro nos dados passados");
+        if (password.trim().length() <= 8 || tipo.isEmpty()) {
+            throw new IllegalArgumentException("Senha precisa ter no mínimo 8 dígitos");
         }
 
-        /* if (tipo.equals("Física")) {
-        *    if (document.length() != 11) throw new IllegalArgumentException("Erro nos dados passados");
-            return null;
+        if (tipo.trim().equals("Física")) {
+            if (document.trim().length() != 11) throw new IllegalArgumentException("Erro nos dados passados");
+
         }
 
-        if (tipo.equals("Jurídica")) {
-            if (document.length() != 14) throw new IllegalArgumentException("Erro nos dados passados");
-            return null;
+        if (tipo.trim().equals("Jurídica")) {
+            if (document.trim().length() != 14) throw new IllegalArgumentException("Erro nos dados passados");
+
         }
-        */
+
 
         return new User(name, address, password, email, phone, document, tipo);
     }
+
 
     public String getName() {
         return name;
