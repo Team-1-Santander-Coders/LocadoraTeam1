@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        VehicleService vehicleService = new VehicleService(new VehicleRepositoryImpl());
+        /*VehicleService vehicleService = new VehicleService(new VehicleRepositoryImpl());
         AgencyService agencyService = new AgencyService();
         CustomerService customerService = new CustomerService();
         RentalService rentalService = new RentalService();
@@ -47,7 +47,7 @@ public class Main {
         } catch (DuplicateEntityException | EntityNotFoundException e) {
             System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         }
-
+        */
         try {
             MainServer.startServer();
         } catch (IOException e) {
