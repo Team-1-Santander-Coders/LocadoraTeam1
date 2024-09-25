@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class UserServer {
     private static CustomerService customerService;
@@ -88,6 +89,8 @@ public class UserServer {
                 String phone = userData[4].split(":")[1].replace("\"", "").trim();
                 String documentValue = userData[5].split(":")[1].replace("\"", "").trim();
                 String tipo = userData[6].split(":")[1].replace("\"", "").trim();
+
+                System.out.println(Arrays.toString(userData));
 
                 try {
                     User user = User.createUser(name, address, password, email, phone, documentValue, tipo);

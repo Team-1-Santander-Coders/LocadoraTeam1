@@ -39,6 +39,7 @@ document.getElementById('userForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
     const name = document.getElementById('name').value;
+    const address = document.getElementById('address').value.replace(/,/g, '-');
     const password = document.getElementById('password').value;
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value.replace(/[^0-9]/gi, '');
