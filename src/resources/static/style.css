@@ -1,34 +1,365 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Fira Code', monospace;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 h1, h2 {
-    color: #333;
+    color: #2c3e50;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 form {
-    margin-bottom: 20px;
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+    display: grid;
+    gap: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+form:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.form-item-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-item-wrap-code {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    justify-items: center;
+}
+
+.form-item-wrap-code input {
+    width: 60%;
+}
+
+.form-item-wrap-code #verificationCode {
+    width: 30% !important;
+}
+
+.form-item-wrap-code #verifyCodeButton {
+    width: 30% !important;
+    height: auto;
+    font-size: 90%;
+}
+
+.form-item-wrap-code button {
+    width: 35%;
 }
 
 label {
-    display: block;
-    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #34495e;
+    font-size: 14px;
+    text-transform: uppercase;
 }
 
 input, select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    width: 90%;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 14px;
+}
+
+select {
+    width: 95% !important;
+}
+
+input:focus, select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+    outline: none;
 }
 
 button {
-    padding: 10px 15px;
-    background-color: #28a745;
+    padding: 15px 20px;
+    background-color: #3498db;
     color: white;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    align-self: center;
+    width: fit-content;
 }
 
 button:hover {
-    background-color: #218838;
+    background-color: #2980b9;
+    transform: translateY(-3px);
+}
+
+.vehicle-search-box {
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+    display: grid;
+    gap: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+div {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+#search {
+    width: 300px;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#search:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+    outline: none;
+}
+
+#disponibility {
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    width: 160px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#disponibility:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+    outline: none;
+}
+
+#vehicleList {
+    list-style: none;
+    padding: 0;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+#vehicleList li {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 15px;
+    background-color: white;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#vehicleList li:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#noVehiclesMessage {
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+}
+
+.header_ul {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-left: auto;
+    list-style: none;
+    padding: 0;
+    margin-right: 4em;
+    height: 100%;
+}
+
+.header_ul li {
+    padding-left: 2em;
+    min-height: 100%;
+}
+
+.submenu {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    top: 2em;
+    right: 2em;
+    background-color: #f2f2f2;
+    list-style: none;
+    width: fit-content;
+    padding: 0;
+    margin: 0;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.submenu li {
+    font-size: 15px;
+    padding-left: 0;
+    padding-bottom: 1em;
+    padding-top: 1em;
+}
+
+.submenu a {
+    text-decoration: none;
+    color: black;
+}
+
+.submenu a:hover {
+    color: #3498db;
+}
+
+.menu_items {
+    margin-left: 1em;
+    min-width: 200px;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+}
+
+.menu_items:hover {
+    font-weight: 600;
+    color: #3498db;
+}
+
+.menu_item:hover .submenu,
+.menu_item:focus-within .submenu {
+    display: flex;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+.general_div {
+    display: flex;
+    height: 90dvh;
+    align-items: center;
+    justify-content: center;
+}
+
+.general_div h1 {
+    font-size: 15em;
+    font-weight: bolder;
+    cursor: default;
+}
+
+.cursor {
+    display: flex;
+    font-weight: bold;
+    animation: blink 1s step-end infinite;
+    justify-content: center;
+    align-items: center;
+}
+
+.cursor h1 {
+    color: #3498db;
+    font-size: 10em;
+    max-height: 15em;
+    line-height: 1;
+}
+
+.main_text_div {
+    display: flex;
+    align-items: center;
+    max-height: 15em;
+    margin: 0;
+}
+
+.general_text_div h2 {
+    font-weight: 400;
+    font-size: 1.8em;
+    max-height: 1.8em;
+    margin: 0;
+}
+
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+}
+
+#loginForm input {
+    border: none;
+    border-radius: 10px;
+    margin: 0;
+    padding: 10px;
+    max-width: 80%;
+}
+
+#loginForm button {
+    margin-top: 1em;
+    border-radius: 20px;
+    background-color: #f2f2f2;
+    outline: solid #34495e 1px;
+    color: #3498db;
+}
+
+#loginForm button:hover {
+    background-color: #3498db;
+    color: #f2f2f2;
+}
+
+@media (max-width: 768px) {
+    form {
+        width: 100%;
+    }
+
+    .vehicle-search-box {
+        width: 100%;
+    }
+
+    #search {
+        width: 80%;
+    }
+
+    #disponibility {
+        width: 80%;
+    }
+
+    #vehicleList {
+        width: 90%;
+    }
+
+    #loginForm input {
+        width: 90%;
+    }
+
+    #loginForm button {
+        width: 90%;
+    }
+}
+
+.vehicle-search-box div {
+    flex-direction: column;
+    align-items: center;
 }

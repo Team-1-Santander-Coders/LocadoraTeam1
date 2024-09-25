@@ -4,41 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Cadastro de Veículos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
 </head>
 <body>
-<h1>Cadastro de Veículos</h1>
-<form id="vehicleForm">
-    <label for="type">Tipo:</label>
-    <select id="type" required>
-        <option value="Carro">Carro</option>
-        <option value="Moto">Moto</option>
-        <option value="Caminhão">Caminhão</option>
-    </select>
-    <label for="placa">Placa:</label>
-    <input type="text" id="placa" required>
-    <label for="modelo">Modelo:</label>
-    <input type="text" id="modelo" required>
-    <label for="marca">Marca:</label>
-    <input type="text" id="marca" required>
-    <label for="ano">Ano:</label>
-    <input type="number" id="ano" required>
-    <button type="submit">Cadastrar</button>
-</form>
-<div>
-    <label for="search">Buscar veículo:</label>
-    <input type="text" id="search" placeholder="Pesquise veículos por placa, modelo, tipo ou ano">
-    <label for="disponibility">Disponibilidade</label>
-    <select id="disponibility">
-        <option value="">Todos</option>
-        <option value="true">Disponível</option>
-        <option value="false">Indisponível</option>
-    </select>
+<header>
+    <nav>
+        <ul class="header_ul">
+            <li><a class="menu_items" href="/veiculos">Painel adm</a></li>
+            <li class="menu_item"><a class="menu_items" id="user_menu"> Painel usuário </a>
+                <ul class="submenu">
+                    <li>
+                        <div>
+                            <form id="loginForm">
+                                <label for="email"></label>
+                                <input id="email" placeholder="email">
+                                <label for="password"></label>
+                                <input id="password" type="password" placeholder="password">
+
+                                <button type="submit">Log in</button>
+                            </form>
+                        </div>
+                    </li>
+                    <li><a href="/usuario">Novo usuário</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="general_div">
+    <div class="general_text_div" style="user-select: none;">
+        <h2>Locadora</h2>
+        <div class = main_text_div >
+            <h1>Team1</h1> <span class="cursor"><h1>|</h1></span>
+        </div>
+    </div>
 </div>
 
-<h2>Lista de Veículos</h2>
-<ul id="vehicleList"></ul>
-<p id="noVehiclesMessage" style="display:none;">Nenhum veículo disponível</p>
-<script src="script.js"></script>
 </body>
+<script src="/script.js"></script>
 </html>

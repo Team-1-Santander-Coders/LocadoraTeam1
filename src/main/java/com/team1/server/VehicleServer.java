@@ -21,57 +21,30 @@ import java.net.InetSocketAddress;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.List;
+
+import main.java.com.team1.server.MainServer.StaticFileHandler;
 
 public class VehicleServer {
     private static VehicleService vehicleService; // Serviço que manipula as operações relacionadas aos veículos.
 
-    public static void StartServer() throws IOException {
+    private static final String page = "vehicle";
+
+    public static void createContexts() throws IOException {
+        HttpServer server = MainServer.getServer();
         vehicleService = new VehicleService(new VehicleRepositoryImpl()); // Instancia o serviço de veículos com um repositório.
-
-        // Cria um servidor HTTP na porta 8000
-        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-
         // Criação de contextos (rotas). Cada rota aponta para um manipulador (handler).
-        server.createContext("/", new StaticFileHandler("index.html")); // Serve o arquivo HTML principal.
-        server.createContext("/style.css", new StaticFileHandler("style.css")); // Serve o CSS.
-        server.createContext("/script.js", new StaticFileHandler("script.js")); // Serve o JavaScript.
+        server.createContext("/veiculos", new StaticFileHandler(page,"index.html")); // Serve o arquivo HTML principal.
+        server.createContext("/veiculos/script.js", new StaticFileHandler(page,"script.js")); // Serve o JavaScript.
         server.createContext("/vehicles", new VehicleListHandler()); // Rota GET para listar todos os veículos.
         server.createContext("/vehicle", new VehicleCreateHandler()); // Rota POST para criar um veículo.
         server.createContext("/vehicle/edit", new VehicleEditHandler()); // Rota PUT para editar um veículo.
         server.createContext("/vehicle/delete", new VehicleDeleteHandler()); // Rota DELETE para excluir um veículo.
-
-        server.setExecutor(null); // Define que o servidor usará o executor padrão (threading).
-        server.start(); // Inicia o servidor.
-        System.out.println("Servidor rodando http://localhost:8000");
     }
 
     // Manipulador para servir arquivos estáticos (HTML, CSS, JS)
-    static class StaticFileHandler implements HttpHandler {
-        private final String fileName;
 
-        public StaticFileHandler(String fileName) {
-            this.fileName = fileName;
-        }
-
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            // Constrói o caminho para o arquivo estático (HTML, CSS ou JS).
-            String path = Paths.get("src", "resources", "static", fileName).toString();
-            byte[] response = Files.readAllBytes(Paths.get(path)); // Lê o conteúdo do arquivo.
-            // Define o tipo de conteúdo baseado no arquivo (.css, .js, .html).
-            exchange.getResponseHeaders().add("Content-Type", fileName.endsWith(".css") ? "text/css" :
-                    fileName.endsWith(".js") ? "application/javascript" : "text/html");
-            // Envia a resposta com o conteúdo do arquivo.
-            exchange.sendResponseHeaders(200, response.length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(response);
-            os.close();
-        }
-    }
 
     // Manipulador para listar os veículos (GET /vehicles)
     static class VehicleListHandler implements HttpHandler {
