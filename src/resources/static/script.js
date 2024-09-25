@@ -12,13 +12,11 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
         }),
         headers: {
             'Content-Type': 'application/json'
-        }}).then(response => {
-        if (response.ok) {
-            alert('Usuário logado!');
-        } else {
-            alert('Usuario ou senha incorretos');
-        }
-    }).catch(error => {
-        alert('Erro: ' + error);
-    });
+        }}).then(response => response.json())
+        .then(user => {
+            localStorage.setItem('user', JSON.stringify(user));
+            console.log(user.name + " logado com sucesso!");
+            window.location.href = "userPage/index.html"
+        })
+        .catch(error => console.error('Erro:', error));
 });

@@ -55,7 +55,6 @@ public class MainServer {
             if (page.equals("home")) {
                 path = Paths.get("src", "resources", "static", fileName).toString();
             }
-            byte[] response = Files.readAllBytes(Paths.get(path));
             exchange.getResponseHeaders().add("Content-Type", fileName.endsWith(".css") ? "text/css" :
                     fileName.endsWith(".js") ? "application/javascript" : "text/html");
             exchange.sendResponseHeaders(200, response.length);
@@ -80,9 +79,7 @@ public class MainServer {
                 try{
                     UserDTO user = UserAuth.AuthLogin(email.trim(), password.trim());
                     assert user != null;
-                    String response = user.getName() + " logado com sucesso!";
                     byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
-
                     exchange.sendResponseHeaders(200, responseBytes.length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(responseBytes);
