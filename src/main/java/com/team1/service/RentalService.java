@@ -5,6 +5,7 @@ import main.java.com.team1.exception.DuplicateEntityException;
 import main.java.com.team1.exception.EntityNotFoundException;
 import main.java.com.team1.repository.RentalRepository;
 import main.java.com.team1.util.FileUtil;
+import java.util.Collections;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -84,6 +85,7 @@ public class RentalService {
      * @param rentalDTO Os dados do aluguel para o comprovante.
      * @param fileName O nome do arquivo onde o comprovante será salvo.
      */
+
     public void generateReceipt(RentalDTO rentalDTO, String fileName) {
         String receiptContent = "Comprovante de Aluguel:\n" +
                 "Veículo: " + rentalDTO.vehiclePlate() + "\n" +
@@ -94,8 +96,11 @@ public class RentalService {
                 "Data de Devolução: " + rentalDTO.returnDate() + "\n" +
                 "Custo Total: R$ " + rentalDTO.totalCost();
 
+        // Cria uma lista contendo o conteúdo do recibo.
+        List<String> receiptLines = Collections.singletonList(receiptContent);
+
         // Salva o recibo no arquivo especificado.
-        FileUtil.writeToFile(String receiptContent, fileName);
+        FileUtil.writeToFile(receiptLines, fileName);
     }
 
     /**
