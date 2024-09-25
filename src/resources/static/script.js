@@ -1,28 +1,24 @@
-function navigateWithTransition(url) {
-    const overlay = document.getElementById('transition-overlay');
-    overlay.classList.remove('fade-out')
-    overlay.classList.add('fade-in')
+document.getElementById('loginForm').addEventListener('submit', function (event){
+    event.preventDefault()
 
-    setTimeout(function() {
-        window.location.href = url;
-    }, 500);
-}
+    const email = document.getElementById("email").value
+    const password = document.getElementById("password").value
 
-
-window.addEventListener('load', function() {
-    const overlay = document.getElementById('transition-overlay');
-    overlay.classList.add('fade-out');
-
-
-    setTimeout(function() {
-        overlay.style.display = 'none'; // Esconde o overlay após a transição
-    }, 500);
-});
-
-
-document.querySelectorAll('a').forEach(function(link) {
-    link.addEventListener('click', function(event) {
-        event.preventDefault();
-        navigateWithTransition(link.href);
+    fetch('/auth', {
+        method: 'POST',
+        body: JSON.stringify({
+            email,
+            password
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }}).then(response => {
+        if (response.ok) {
+            alert('Usuário logado!');
+        } else {
+            alert('Usuario ou senha incorretos');
+        }
+    }).catch(error => {
+        alert('Erro: ' + error);
     });
 });

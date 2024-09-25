@@ -41,21 +41,64 @@ header{
     display: flex;
     width:100dvw;
     margin:0;
+    justify-content: flex-end;
     background-color:#F2F2F2;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 
+
 }
 
-.header_ul{
+.header_ul {
     display: flex;
     margin-left: auto;
-
     list-style: none;
     padding: 0;
-    margin-right:2em;
+    margin-right:4em;
+    height: 100%;
 
 }
+.header_ul li{
+    padding-left: 2em;
+    min-height: 100%;
+}
+
+.submenu{
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    top:3em;
+    right:2em;
+    background-color:#f2f2f2 ;
+    list-style: none;
+    width:fit-content;
+    padding:0;
+    margin: 0;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+
+
+}
+
+.submenu li{
+font-size:15px;
+    padding-left: 0;
+    padding-bottom:1em;
+    padding-top: 1em;
+
+
+}
+
+.submenu a{
+    text-decoration: none;
+    color:black;
+}
+
+.submenu a:hover{
+    color:mediumseagreen;
+}
+
 
 .menu_items{
     margin-left:1em;
@@ -68,6 +111,11 @@ header{
 .menu_items:hover{
     font-weight: 600;
     color:mediumseagreen;
+}
+
+.menu_item:hover .submenu,
+.menu_item:focus-within .submenu{
+    display: flex;
 }
 
 @keyframes blink {
@@ -119,6 +167,34 @@ header{
     line-height: min();
     max-height: 1.8em;
     margin: 0;
+}
+
+#loginForm{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    margin:0;
+
+}
+
+#loginForm input{
+    border: none;
+    border-radius: 10px;
+    margin: 0;
+    padding:10px;
+    max-width: 80%;
+}
+#loginForm button{
+    margin-top:1em;
+    border-radius: 20px;
+    background-color:#f2f2f2;
+    outline: solid mediumseagreen 1px;
+    color:mediumseagreen;
+}
+
+#loginForm button:hover{
+    background-color:mediumseagreen;
+    color:#f2f2f2;
 }
 
 
