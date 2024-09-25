@@ -12,6 +12,9 @@ public class UserDTO extends CustomerDTO {
      * @param name
      * @param address
      * @param phone
+     * @param email
+     * @param password
+     * @param type
      */
     public UserDTO(String name, String address, String phone, String document, String email, String password, String type) {
         super(name, address, phone);
@@ -19,5 +22,13 @@ public class UserDTO extends CustomerDTO {
         this.email = email;
         this.password = password;
         this.type = type;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
