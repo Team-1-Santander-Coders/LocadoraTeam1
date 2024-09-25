@@ -90,8 +90,6 @@ public class UserServer {
                 String documentValue = userData[5].split(":")[1].replace("\"", "").trim();
                 String tipo = userData[6].split(":")[1].replace("\"", "").trim();
 
-                System.out.println(Arrays.toString(userData));
-
                 try {
                     User user = User.createUser(name, address, password, email, phone, documentValue, tipo);
                     UserDTO userDTO = new UserDTO(user.getName(), user.getAddress(), user.getPhone(), user.getDocument(), user.getEmail(), user.getPassword(), user.getTipo());
