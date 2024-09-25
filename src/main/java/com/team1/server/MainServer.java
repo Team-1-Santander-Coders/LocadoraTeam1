@@ -29,7 +29,9 @@ public class MainServer {
         System.out.println("Servidor iniciado http://localhost:" + port);
         System.out.println("User: http://localhost:" + port + "/usuario");
         System.out.println("Vehicle: http://localhost:" + port + "/veiculo");
-        System.out.println("Vehicle: http://localhost:" + port + "/userPage");
+
+        System.out.println("User Page: http://localhost:" + port + "/userPage");
+
     }
 
     public static HttpServer getServer() {
@@ -61,4 +63,6 @@ public class MainServer {
             os.close();
         }
     }
+
 }
+
