@@ -4,7 +4,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import main.java.com.team1.dto.UserDTO;
-import main.java.com.team1.entities.User;
 import main.java.com.team1.util.FileUtil;
 import main.java.com.team1.util.UserAuth;
 
@@ -52,17 +51,13 @@ public class MainServer {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            // Constrói o caminho para o arquivo estático (HTML, CSS ou JS).
             String path = Paths.get("src", "resources", "static", page, fileName).toString();
-
             if (page.equals("home")) {
                 path = Paths.get("src", "resources", "static", fileName).toString();
             }
-            byte[] response = Files.readAllBytes(Paths.get(path)); // Lê o conteúdo do arquivo.
-            // Define o tipo de conteúdo baseado no arquivo (.css, .js, .html).
+            byte[] response = Files.readAllBytes(Paths.get(path));
             exchange.getResponseHeaders().add("Content-Type", fileName.endsWith(".css") ? "text/css" :
                     fileName.endsWith(".js") ? "application/javascript" : "text/html");
-            // Envia a resposta com o conteúdo do arquivo.
             exchange.sendResponseHeaders(200, response.length);
             OutputStream os = exchange.getResponseBody();
             os.write(response);

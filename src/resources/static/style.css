@@ -330,8 +330,12 @@ div {
 }
 
 @media (max-width: 768px) {
+    body {
+        align-items: center;
+    }
     form {
-        width: 100%;
+        align-self: center;
+        width: 90%;
     }
 
     .vehicle-search-box {

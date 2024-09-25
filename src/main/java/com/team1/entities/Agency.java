@@ -8,7 +8,13 @@ public class Agency implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    String name;
+    private String name;
+    private String address;
+
+    public Agency(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
 
     public String getAddress() {
         return address;
@@ -26,7 +32,7 @@ public class Agency implements Serializable {
         this.name = name;
     }
 
-    String address;
+
 
     @Override
     public boolean equals(Object o) {

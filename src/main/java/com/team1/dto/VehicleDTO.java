@@ -159,11 +159,8 @@ public abstract class VehicleDTO implements Serializable {
             }
         }
 
-        // Instancia o veículo com base no tipo
         return createVehicleByType(placa, modelo, marca, ano, disponivel, precoDiaria, tipo);
     }
-
-
 
     private static VehicleDTO createVehicleByType(String placa, String modelo, String marca, int ano,
                                                   boolean disponivel, double precoDiaria, String tipo) {

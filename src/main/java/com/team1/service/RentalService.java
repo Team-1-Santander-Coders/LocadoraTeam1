@@ -1,4 +1,57 @@
 package main.java.com.team1.service;
 
+import main.java.com.team1.dto.AgencyDTO;
+import main.java.com.team1.dto.RentalDTO;
+import main.java.com.team1.exception.DuplicateEntityException;
+import main.java.com.team1.exception.EntityNotFoundException;
+import main.java.com.team1.repository.RentalRepositoryImpl;
+import main.java.com.team1.util.DateUtil;
+
+import java.time.LocalDate;
+import java.util.List;
+
 public class RentalService {
+    private final RentalRepositoryImpl rentalRepository = new RentalRepositoryImpl();
+
+    public void addRental(RentalDTO rentalDTO) throws DuplicateEntityException {
+        rentalRepository.save(rentalDTO);
+    }
+
+    public List<RentalDTO> getAllRentals() {
+        return rentalRepository.findAll();
+    }
+
+    public List<RentalDTO> getRentalByDate(String date) {
+        List<RentalDTO> allRentals = getAllRentals();
+        assert allRentals != null;
+        LocalDate dataConvertida = DateUtil.converterTextoParaData(date);
+        return allRentals.stream()
+                .filter(rental -> rental.getRentalDate() == dataConvertida || rental.getReturnDate() == dataConvertida)
+                .toList();
+    }
+
+    public String returnRental(RentalDTO rentalDTO, AgencyDTO returnAgency, String returnDate) throws EntityNotFoundException {
+        RentalDTO updatedRentalDTO = new RentalDTO(rentalDTO.getVehicle(), rentalDTO.getCustomer(), rentalDTO.getAgencyRental(), rentalDTO.getRentalDate(), returnAgency, DateUtil.converterTextoParaData(returnDate));
+        rentalRepository.update(updatedRentalDTO);
+        return updatedRentalDTO.generateReceipt();
+    }
+
+    public void deleteRental(String placa, String document) throws EntityNotFoundException {
+        rentalRepository.delete(placa, document);
+    }
+
+    public String getReceipt(String placa, String document) {
+        RentalDTO rentalDTO = getAllRentals().stream()
+                                             .filter(r -> r.vehiclePlate().equals(placa) && r.customerDocument().equals(document))
+                                             .toList().getFirst();
+
+        return rentalDTO.generateReceipt();
+    }
+
+    public List<RentalDTO> getRentalsByPage(int pageNumber, int pageSize) {
+        List<RentalDTO> allRentals = getAllRentals();
+        int fromIndex = Math.min(pageNumber * pageSize, allRentals.size());
+        int toIndex = Math.min(fromIndex + pageSize, allRentals.size());
+        return allRentals.subList(fromIndex, toIndex);
+    }
 }

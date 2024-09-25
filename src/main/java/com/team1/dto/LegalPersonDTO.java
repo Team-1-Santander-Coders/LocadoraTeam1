@@ -81,7 +81,10 @@ public class LegalPersonDTO extends CustomerDTO {
                 "cpf= " + getCnpj()  + "]";
     }
 
-
+    @Override
+    public String getTipo() {
+        return "Física";
+    }
 }
 
 

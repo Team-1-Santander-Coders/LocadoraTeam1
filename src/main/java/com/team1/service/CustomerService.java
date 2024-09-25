@@ -113,5 +113,7 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-
+    public CustomerDTO findCustomerByDocument(String document) {
+        return customerRepository.findByDocument(document);
+    }
 }

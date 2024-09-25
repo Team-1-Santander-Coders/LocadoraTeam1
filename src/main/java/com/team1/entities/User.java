@@ -1,9 +1,12 @@
 package main.java.com.team1.entities;
 
+import java.io.Serial;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class User implements Customer {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private String name;
     private String address;
@@ -25,18 +28,16 @@ public class User implements Customer {
 
     public static User createUser(String name, String address, String password, String email, String phone, String document, String tipo) {
 
-        if (password.trim().length() <= 8 || tipo.isEmpty()) {
+        if (password.trim().length() < 8 || tipo.isEmpty()) {
             throw new IllegalArgumentException("Senha precisa ter no mínimo 8 dígitos");
         }
 
         if (tipo.trim().equals("Física")) {
             if (document.trim().length() != 11) throw new IllegalArgumentException("Erro nos dados passados");
-
         }
 
         if (tipo.trim().equals("Jurídica")) {
             if (document.trim().length() != 14) throw new IllegalArgumentException("Erro nos dados passados");
-
         }
 
 

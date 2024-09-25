@@ -78,4 +78,8 @@ public class PhysicalPersonDTO extends CustomerDTO {
                 "cpf= " + getCpf()  + "]";
     }
 
+    @Override
+    public String getTipo() {
+        return "Física";
+    }
 }

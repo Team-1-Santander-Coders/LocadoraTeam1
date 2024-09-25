@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface CustomerRepository {
 
-    public void save(CustomerDTO customerDTO) throws DuplicateEntityException;
+    void save(CustomerDTO customerDTO) throws DuplicateEntityException;
 
-    public List<CustomerDTO> findAll();
+    List<CustomerDTO> findAll();
 
-    public void update(CustomerDTO customer, String newName, String newAddress, String newPhone) throws EntityNotFoundException;
+    void update(CustomerDTO customer, String newName, String newAddress, String newPhone) throws EntityNotFoundException;
 
-    public void delete(CustomerDTO customerDTO) throws EntityNotFoundException;
+    void delete(CustomerDTO customerDTO) throws EntityNotFoundException;
 
-    public CustomerDTO findByDocument(String document);
+    CustomerDTO findByDocument(String document);
 }

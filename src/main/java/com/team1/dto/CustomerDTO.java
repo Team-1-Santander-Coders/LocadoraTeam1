@@ -113,4 +113,8 @@ public abstract class CustomerDTO implements Serializable {
     public int hashCode(){
         return (31 * name.hashCode() + name.hashCode());
     }
+
+    public String getTipo() {
+        return "Generic customer";
+    }
 }

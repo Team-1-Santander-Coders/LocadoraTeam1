@@ -6,7 +6,6 @@ import com.sun.net.httpserver.HttpServer;
 import main.java.com.team1.dto.UserDTO;
 import main.java.com.team1.entities.User;
 import main.java.com.team1.service.CustomerService;
-import main.java.com.team1.service.UserService;
 import main.java.com.team1.server.MainServer.StaticFileHandler;
 import main.java.com.team1.util.FileUtil;
 
@@ -47,6 +46,8 @@ public class UserServer {
                 String phone = userData[4].split(":")[1].replace("\"", "").trim();
                 String documentValue = userData[5].split(":")[1].replace("\"", "").trim();
                 String tipo = userData[6].split(":")[1].replace("\"", "").trim();
+
+                System.out.println(Arrays.toString(userData));
 
                 try {
                     User user = User.createUser(name, address, password, email, phone, documentValue, tipo);

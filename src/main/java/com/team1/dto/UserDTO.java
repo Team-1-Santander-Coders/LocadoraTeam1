@@ -1,6 +1,10 @@
 package main.java.com.team1.dto;
 
+import java.io.Serial;
+
 public class UserDTO extends CustomerDTO {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String email;
     private String password;
     private String document;
@@ -30,5 +34,14 @@ public class UserDTO extends CustomerDTO {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getDocument() {
+        return document;
+    }
+
+    @Override
+    public String getTipo() {
+        return type;
     }
 }

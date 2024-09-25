@@ -8,8 +8,6 @@ import main.java.com.team1.util.DateUtil;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class Rental implements Serializable {
     @Serial
@@ -24,7 +22,6 @@ public class Rental implements Serializable {
     private boolean isReturned;
     private double totalCost;
 
-    // Construtor que inicializa os atributos necessários no início do aluguel
     public Rental(VehicleDTO vehicle, CustomerDTO customer, AgencyDTO agencyRental, LocalDate rentalDate) {
         this.vehicle = vehicle;
         this.customer = customer;
@@ -34,7 +31,6 @@ public class Rental implements Serializable {
         this.isReturned = false;
     }
 
-    // Método para finalizar o aluguel e calcular o custo total
     public void finalizarAluguel(AgencyDTO agencyReturn, LocalDate returnDate) {
         this.agencyReturn = agencyReturn;
         this.returnDate = returnDate;
@@ -42,56 +38,65 @@ public class Rental implements Serializable {
         this.isReturned = true;
     }
 
-    // Método que calcula o custo total do aluguel
     private double calcularCustoTotal() {
-        long diasAluguel = DateUtil.calcularDiferencaDatas(rentalDate, returnDate); // Calcula o número de dias de aluguel
-        double custoDiario = vehicle.getPrecoDiaria(); // Pega a taxa diária do veículo
+        long diasAluguel = DateUtil.calcularDiferencaDatas(rentalDate, returnDate);
+        double custoDiario = vehicle.getPrecoDiaria();
 
-        // Aplicar regra de desconto (5% de desconto para aluguéis de mais de 5 dias)
         if (diasAluguel > 5) {
             return (diasAluguel * custoDiario) * 0.95;
         }
         return diasAluguel * custoDiario;
     }
 
-    // Sobrescrita do método toString para representar o aluguel em formato textual
     @Override
     public String toString() {
+        if (isReturned) {
+            return "Rental{" +
+                    "vehicle=" + vehicle +
+                    ", customer=" + customer +
+                    ", agencyRental=" + agencyRental +
+                    ", agencyReturn=" + agencyReturn +
+                    ", rentalDate=" + DateUtil.formatarData(rentalDate) +
+                    ", returnDate=" + DateUtil.formatarData(returnDate) +
+                    ", isReturned=" + isReturned +
+                    ", totalCost=" + totalCost +
+                    '}';
+        }
         return "Rental{" +
                 "vehicle=" + vehicle +
                 ", customer=" + customer +
-                ", agencyRental=" + agencyRental.name() +
-                ", agencyReturn=" + agencyReturn.name() +
+                ", agencyRental=" + agencyRental +
                 ", rentalDate=" + DateUtil.formatarData(rentalDate) +
-                ", returnDate=" + DateUtil.formatarData(returnDate) +
-                ", totalCost=" + String.format("R$ %.2f", totalCost) +
+                ", isReturned=" + isReturned +
+                ", totalCost=" + totalCost +
                 '}';
     }
 
-    // Sobrescrita de equals para comparar aluguéis com base em veículo e cliente
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Rental rental = (Rental) o;
-        return Objects.equals(vehicle, rental.vehicle) &&
-                Objects.equals(customer, rental.customer);
+    public VehicleDTO getVehicle() {
+        return vehicle;
     }
 
-    // Sobrescrita do hashCode para garantir que o hash seja consistente com equals
-    @Override
-    public int hashCode() {
-        return Objects.hash(vehicle, customer);
+    public CustomerDTO getCustomer() {
+        return customer;
     }
 
-    public record RentalDTO(
-            String vehiclePlate,
-            String customerDocument,
-            String agencyRentalName,
-            String agencyReturnName,
-            LocalDateTime rentalDate,
-            LocalDateTime returnDate,
-            double totalCost
-    ) {}
+    public AgencyDTO getAgencyRental() {
+        return agencyRental;
+    }
 
+    public AgencyDTO getAgencyReturn() {
+        return agencyReturn;
+    }
+
+    public LocalDate getRentalDate() {
+        return rentalDate;
+    }
+
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
+
+    public boolean isReturned() {
+        return isReturned;
+    }
 }
