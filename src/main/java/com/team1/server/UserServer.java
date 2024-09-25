@@ -6,15 +6,14 @@ import com.sun.net.httpserver.HttpServer;
 import main.java.com.team1.dto.UserDTO;
 import main.java.com.team1.entities.User;
 import main.java.com.team1.service.CustomerService;
-import main.java.com.team1.service.UserService;
 import main.java.com.team1.server.MainServer.StaticFileHandler;
 import main.java.com.team1.util.FileUtil;
+import main.java.com.team1.util.UserAuth;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class UserServer {
     private static CustomerService customerService;
@@ -28,6 +27,49 @@ public class UserServer {
         server.createContext("/usuario", new StaticFileHandler(page, "index.html")); // Serve o arquivo HTML principal
         server.createContext("/usuario/script.js", new StaticFileHandler(page, "script.js"));
         server.createContext("/user", new UserCreateHandler());
+        server.createContext("/userPage", new StaticFileHandler("userPage", "index.html"));
+        server.createContext("/userPage/script.js", new StaticFileHandler("userPage", "script.js"));
+        server.createContext("/auth", new UserAuthHandler());
+    }
+
+    static class UserAuthHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if("POST".equals(exchange.getRequestMethod())) {
+                InputStream inputStream = exchange.getRequestBody();
+                String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+                body = body.replace("{", "").replace("}", "");
+                String[] loginData = body.split(",");
+
+                String email = loginData[0].split(":")[1].replace("\"", "").trim();
+                String password = loginData[1].split(":")[1].replace("\"", "").trim();
+
+                try{
+                    UserDTO user = UserAuth.AuthLogin(email.trim(), password.trim());
+                    assert user != null;
+                    String response = "{" +
+                            "\"name\":\"" + user.getName() + "\"," +
+                            "\"email\":\"" + user.getEmail() + "\"," +
+                            "\"document\":\"" + user.getDocument() + "\"" +
+                            "}";
+
+                    byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
+                    exchange.getResponseHeaders().set("Content-Type", "application/json");
+                    exchange.sendResponseHeaders(200, responseBytes.length);
+                    OutputStream os = exchange.getResponseBody();
+                    os.write(responseBytes);
+                    os.close();
+                } catch (Exception e) {
+                    String response = "Usuário ou senha incorretos " + (e.getMessage() != null ? e.getMessage() : "Erro desconhecido.");
+                    byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
+                    FileUtil.logError(e);
+                    exchange.sendResponseHeaders(409, responseBytes.length);
+                    OutputStream os = exchange.getResponseBody();
+                    os.write(responseBytes);
+                    os.close();
+                }
+            }
+        }
     }
 
     static class UserCreateHandler implements HttpHandler {
