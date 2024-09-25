@@ -1,5 +1,10 @@
 body {
     font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    height: 100dvh;
+    font-family: "Fira Code", monospace;
+
 }
 
 h1, h2 {
@@ -32,3 +37,88 @@ button {
 button:hover {
     background-color: #218838;
 }
+header{
+    display: flex;
+    width:100dvw;
+    margin:0;
+    background-color:#F2F2F2;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+}
+
+.header_ul{
+    display: flex;
+    margin-left: auto;
+
+    list-style: none;
+    padding: 0;
+    margin-right:2em;
+
+}
+
+.menu_items{
+    margin-left:1em;
+    min-width:200px;
+    cursor:pointer;
+    text-decoration: none;
+    color:black;
+}
+
+.menu_items:hover{
+    font-weight: 600;
+    color:mediumseagreen;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+.general_div{
+    display: flex;
+    height: 90dvh;
+    align-items: center;
+    justify-content: center;
+}
+
+.general_div h1{
+    font-size:15em;
+    font-weight: bolder;
+    cursor:default;
+}
+
+.cursor {
+    display: flex;
+    font-weight: bold;
+    animation: blink 1s step-end infinite;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+.cursor h1{
+    color:mediumseagreen;
+    font-size: 10em;
+    max-height: 15em;
+
+    line-height: 1;
+}
+
+.main_text_div{
+    display: flex;
+    align-items: center;
+    line-height: min();
+    max-height: 15em;
+    margin: 0;
+}
+
+.general_text_div h2{
+    font-weight: 400;
+    font-size: 1.8em;
+    line-height: min();
+    max-height: 1.8em;
+    margin: 0;
+}
+
+
