@@ -4,7 +4,7 @@
 
 document.getElementById('sendCodeButton').addEventListener('click', function(event) {
     event.preventDefault();
-    document.getElementById('userForm').style.display = 'none';
+
     const email = document.getElementById('email').value;
     const code = Math.floor(1000 + Math.random() * 9000);
 
@@ -14,7 +14,7 @@ document.getElementById('sendCodeButton').addEventListener('click', function(eve
     }).then(function(response) {
         alert("Código enviado com sucesso!");
         localStorage.setItem('verificationCode', code);
-        document.getElementById('verificationSection').style.display = 'block';
+        document.getElementById('verificationSection').style.display = 'block'; // Mostra a seção de verificação
     }).catch(function(error) {
         alert("Erro ao enviar código: " + error);
     });
@@ -28,8 +28,8 @@ document.getElementById('verifyCodeButton').addEventListener('click', function(e
 
     if (verificationCode === storedCode) {
         alert('Código validado com sucesso!');
-        document.getElementById('userForm').style.display = 'block';
-        document.getElementById('verificationSection').style.display = 'none';
+        document.getElementById('userForm').style.display = 'block'; // Mostra o formulário do usuário
+        document.getElementById('verificationSection').style.display = 'none'; // Esconde a seção de verificação
     } else {
         alert('Código de verificação inválido.');
     }
@@ -42,8 +42,8 @@ document.getElementById('userForm').addEventListener('submit', function(event) {
     const address = document.getElementById('address').value;
     const password = document.getElementById('password').value;
     const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value.replace(/[^a-z0-9]/gi, '');
-    const documentValue = document.getElementById('documentValue').value.replace(/[^a-z0-9]/gi, '');
+    const phone = document.getElementById('phone').value.replace(/[^0-9]/gi, '');
+    const documentValue = document.getElementById('documentValue').value.replace(/[^0-9]/gi, '');
     const tipo = document.getElementById('type').value;
 
     if (!name || !address || !password || !email || !phone || !documentValue || !tipo) {
@@ -68,8 +68,9 @@ document.getElementById('userForm').addEventListener('submit', function(event) {
     }).then(response => {
         if (response.ok) {
             alert('Usuário cadastrado com sucesso!');
-            document.getElementById('userForm').reset();
-            document.getElementById('userForm').style.display = 'none';
+            document.getElementById('userForm').reset(); // Limpa o formulário
+            document.getElementById('userForm').style.display = 'none'; // Esconde o formulário após cadastro
+            document.getElementById('verificationSection').style.display = 'none'; // Esconde a seção de verificação
         } else {
             alert('Erro ao cadastrar usuário.');
         }
