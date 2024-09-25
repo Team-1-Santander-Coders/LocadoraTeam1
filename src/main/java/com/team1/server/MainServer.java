@@ -79,7 +79,14 @@ public class MainServer {
                 try{
                     UserDTO user = UserAuth.AuthLogin(email.trim(), password.trim());
                     assert user != null;
+                    String response = "{" +
+                            "\"name\":\"" + user.getName() + "\"," +
+                            "\"email\":\"" + user.getEmail() + "\"," +
+                            "\"document\":\"" + user.getDocument() + "\"" +
+                            "}";
+
                     byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
+                    exchange.getResponseHeaders().set("Content-Type", "application/json");
                     exchange.sendResponseHeaders(200, responseBytes.length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(responseBytes);

@@ -22,7 +22,6 @@ public class UserService {
 
         try{
             CustomerDTO customer;
-
             if(user != null){
                 System.out.println("Física".hashCode());
                 System.out.println(user.getTipo().hashCode());
