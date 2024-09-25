@@ -34,7 +34,7 @@ public class Rental implements Serializable {
     // Método que calcula o custo total do aluguel
     private double calcularCustoTotal() {
         long diasAluguel = ChronoUnit.DAYS.between(rentalDate, returnDate); // Calcula o número de dias de aluguel
-        double custoDiario = vehicle.getDailyRate(); // Pega a taxa diária do veículo
+        double custoDiario = vehicle.getPrecoDiaria(); // Pega a taxa diária do veículo
 
         // Aplicar regra de desconto (5% de desconto para aluguéis de mais de 5 dias)
         if (diasAluguel > 5) {
