@@ -22,7 +22,7 @@ public class MainServer {
     private static final String page = "home";
 
     public static void startServer() throws IOException {
-        server = HttpServer.create(new InetSocketAddress(8000), 0);
+        server = HttpServer.create(new InetSocketAddress(80), 0);
         server.createContext("/", new StaticFileHandler(page,"index.html"));
         server.createContext("/style.css", new StaticFileHandler(page, "style.css"));
         server.createContext("/script.js", new StaticFileHandler(page, "script.js"));
