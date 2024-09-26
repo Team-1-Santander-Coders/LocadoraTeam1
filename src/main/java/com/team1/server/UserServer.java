@@ -82,7 +82,7 @@ public class UserServer {
             if (cookieHeader != null) {
                 for (String cookie : cookieHeader.split("; ")) {
                     if (cookie.startsWith("userId=")) {
-                        userIdCookie = HttpCookie.parse(cookie).get(0);
+                        userIdCookie = HttpCookie.parse(cookie).getFirst();
                     }
                 }
             }

@@ -112,6 +112,10 @@ function filterVehicles() {
 function deleteVehicle(placa) {
     fetch('/vehicle/delete', {
         method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
         body: placa
     }).then(response => {
         if (response.ok) {
@@ -120,6 +124,8 @@ function deleteVehicle(placa) {
         } else {
             alert('Erro ao deletar veículo.');
         }
+    }).catch(error => {
+        console.error('Erro:', error);
     });
 }
 
