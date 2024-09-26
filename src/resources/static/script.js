@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-try {
+if (window.location.href === "http://localhost:8000/" || window.location.href === "http://localhost:8000") {
     document.getElementById('loginForm').addEventListener('submit', function (event) {
         event.preventDefault();
         deleteCookie("userId")
@@ -117,7 +117,6 @@ try {
                 alert("Usuário ou senha incorretos.");
             })
     });
-} catch (e) {
 }
 
 
