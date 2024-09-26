@@ -1,6 +1,5 @@
+const user = JSON.parse(localStorage.getItem('user'))
 document.addEventListener('DOMContentLoaded', () => {
-    const user = JSON.parse(localStorage.getItem('user'))
-
     if (!user) {
         document.body.innerHTML = '';
         window.location.href = '/';
@@ -23,6 +22,5 @@ document.getElementById("welcome_message").textContent =`Bem vindo, ${user.name.
 
 document.getElementById("exit").addEventListener("click", ()=>{
     localStorage.clear()
-
 })
 
