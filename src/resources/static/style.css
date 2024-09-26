@@ -255,6 +255,10 @@ div {
     display: flex;
 }
 
+#user_menu a {
+    text-decoration: none;
+}
+
 @keyframes blink {
     50% { opacity: 0; }
 }

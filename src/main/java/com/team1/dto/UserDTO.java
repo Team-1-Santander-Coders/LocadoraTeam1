@@ -6,7 +6,7 @@ import java.io.Serial;
 public class UserDTO extends CustomerDTO {
     @Serial
     private static final long serialVersionUID = 1L;
-    private UUID id;
+    private String id;
     private String email;
     private String password;
     private String document;
@@ -25,11 +25,26 @@ public class UserDTO extends CustomerDTO {
      */
     public UserDTO(String name, String address, String phone, String document, String email, String password, String type) {
         super(name, address, phone);
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString();
         this.document = document;
         this.email = email;
         this.password = password;
         this.type = type;
+        this.isAdmin = false;
+    }
+
+    private UserDTO(String name, String address, String phone, String document, String email, String password, String type, boolean isAdmin) {
+        super(name, address, phone);
+        this.id = UUID.randomUUID().toString();
+        this.document = document;
+        this.email = email;
+        this.password = password;
+        this.type = type;
+        this.isAdmin = isAdmin;
+    }
+
+    public static UserDTO createAdmin(String name, String address, String phone, String document, String email, String password, String type) {
+        return new UserDTO(name, address, phone, document, email, password, type, true);
     }
 
     public String getEmail() {
@@ -44,12 +59,28 @@ public class UserDTO extends CustomerDTO {
         return document;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
+    }
+
+    public boolean isAdmin(){
+        return isAdmin;
     }
 
     @Override
     public String getTipo() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", document='" + document + '\'' +
+                ", type='" + type + '\'' +
+                ", isAdmin=" + isAdmin +
+                '}';
     }
 }

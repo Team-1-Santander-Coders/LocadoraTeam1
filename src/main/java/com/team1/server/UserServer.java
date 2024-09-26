@@ -13,6 +13,7 @@ import main.java.com.team1.util.UserAuth;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpCookie;
 import java.nio.charset.StandardCharsets;
 
 public class UserServer {
@@ -23,51 +24,92 @@ public class UserServer {
         HttpServer server = MainServer.getServer();
         customerService = new CustomerService();
 
-        // Contextos para servir os arquivos estáticos e a criação de usuário
-        server.createContext("/usuario", new StaticFileHandler(page, "index.html")); // Serve o arquivo HTML principal
+        server.createContext("/usuario", new StaticFileHandler(page, "index.html"));
         server.createContext("/usuario/script.js", new StaticFileHandler(page, "script.js"));
         server.createContext("/user", new UserCreateHandler());
         server.createContext("/userPage", new StaticFileHandler("userPage", "index.html"));
         server.createContext("/userPage/script.js", new StaticFileHandler("userPage", "script.js"));
+        server.createContext("/checkAuth", new SessionValidationHandler());
         server.createContext("/auth", new UserAuthHandler());
     }
 
     static class UserAuthHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            if("POST".equals(exchange.getRequestMethod())) {
+            if ("POST".equals(exchange.getRequestMethod())) {
                 InputStream inputStream = exchange.getRequestBody();
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 body = body.replace("{", "").replace("}", "");
                 String[] loginData = body.split(",");
 
+
                 String email = loginData[0].split(":")[1].replace("\"", "").trim();
                 String password = loginData[1].split(":")[1].replace("\"", "").trim();
 
-                try{
-                    UserDTO user = UserAuth.AuthLogin(email.trim(), password.trim());
-                    assert user != null;
-                    String response = "{" +
-                            "\"name\":\"" + user.getName() + "\"," +
-                            "\"email\":\"" + user.getEmail() + "\"," +
-                            "\"document\":\"" + user.getDocument() + "\"" +
-                            "}";
+                UserDTO user = UserAuth.AuthLogin(email.trim(), password.trim());
 
-                    byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
+                if (user != null) {
+                    HttpCookie userIdCookie = new HttpCookie("userId", user.getId());
+
+                    exchange.getResponseHeaders().add("Set-Cookie", userIdCookie.toString());
+                    String response = "{\"success\": true, \"redirectUrl\": \"/userPage\"}";
+                    if (user.isAdmin()) {
+                        response = "{\"success\": true, \"redirectUrl\": \"/adminPage/\"}";
+                    }
+                    exchange.sendResponseHeaders(200, response.length());
+                    OutputStream os = exchange.getResponseBody();
+                    os.write(response.getBytes());
+                    os.close();
+                } else {
+                    String response = "{\"success\": false, \"message\": \"Credenciais inválidas\"}";
+                    exchange.sendResponseHeaders(401, response.length());
+                    OutputStream os = exchange.getResponseBody();
+                    os.write(response.getBytes());
+                    os.close();
+                }
+            } else {
+                exchange.sendResponseHeaders(405, -1);
+            }
+        }
+    }
+
+    static class SessionValidationHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            HttpCookie userIdCookie = null;
+
+            String cookieHeader = exchange.getRequestHeaders().getFirst("Cookie");
+            if (cookieHeader != null) {
+                for (String cookie : cookieHeader.split("; ")) {
+                    if (cookie.startsWith("userId=")) {
+                        userIdCookie = HttpCookie.parse(cookie).get(0);
+                    }
+                }
+            }
+
+            if (userIdCookie != null) {
+                String userId = userIdCookie.getValue();
+
+                UserDTO user = customerService.findUserByID(userId);
+
+                if (user != null) {
+                    boolean isAdmin = user.isAdmin();
+                    String userName = user.getName();
+
+                    String jsonResponse = String.format("{\"name\": \"%s\", \"isAdmin\": %b}", userName, isAdmin);
+
                     exchange.getResponseHeaders().set("Content-Type", "application/json");
+
+                    byte[] responseBytes = jsonResponse.getBytes();
                     exchange.sendResponseHeaders(200, responseBytes.length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(responseBytes);
                     os.close();
-                } catch (Exception e) {
-                    String response = "Usuário ou senha incorretos " + (e.getMessage() != null ? e.getMessage() : "Erro desconhecido.");
-                    byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
-                    FileUtil.logError(e);
-                    exchange.sendResponseHeaders(409, responseBytes.length);
-                    OutputStream os = exchange.getResponseBody();
-                    os.write(responseBytes);
-                    os.close();
+                } else {
+                    exchange.sendResponseHeaders(302, -1);
                 }
+            } else {
+                exchange.sendResponseHeaders(302, -1);
             }
         }
     }
@@ -95,7 +137,6 @@ public class UserServer {
                     customerService.addCustomer(userDTO);
                     String response = tipo + " cadastrado com sucesso!";
                     byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
-
                     exchange.sendResponseHeaders(200, responseBytes.length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(responseBytes);

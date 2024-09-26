@@ -71,8 +71,9 @@ document.getElementById('userForm').addEventListener('submit', function(event) {
             document.getElementById('userForm').reset();
             document.getElementById('user-form-pos-validation').style.display = 'none';
             document.getElementById('verificationSection').style.display = 'none';
+            window.location.href = "/"
         } else {
-            alert('Erro ao cadastrar usuário.');
+            alert(response.body);
         }
     }).catch(error => {
         alert('Erro: ' + error);

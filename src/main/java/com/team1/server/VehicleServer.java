@@ -27,15 +27,15 @@ import java.util.List;
 import main.java.com.team1.server.MainServer.StaticFileHandler;
 
 public class VehicleServer {
-    private static VehicleService vehicleService; // Serviço que manipula as operações relacionadas aos veículos.
+    private static VehicleService vehicleService;
 
-    private static final String page = "vehicle";
+    private static final String page = "adminPage";
 
     public static void createContexts() throws IOException {
         HttpServer server = MainServer.getServer();
         vehicleService = new VehicleService(new VehicleRepositoryImpl());
-        server.createContext("/veiculos", new StaticFileHandler(page,"index.html"));
-        server.createContext("/veiculos/script.js", new StaticFileHandler(page,"script.js"));
+        server.createContext("/adminPage", new StaticFileHandler(page,"index.html"));
+        server.createContext("/adminPage/script.js", new StaticFileHandler(page,"script.js"));
         server.createContext("/vehicles", new VehicleListHandler());
         server.createContext("/vehicle", new VehicleCreateHandler());
         server.createContext("/vehicle/edit", new VehicleEditHandler());

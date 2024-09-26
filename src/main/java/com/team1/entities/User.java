@@ -1,8 +1,10 @@
 package main.java.com.team1.entities;
 
+import main.java.com.team1.exception.DuplicateEntityException;
+import main.java.com.team1.service.CustomerService;
+import main.java.com.team1.util.UserAuth;
+
 import java.io.Serial;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class User implements Customer {
     @Serial
@@ -26,7 +28,17 @@ public class User implements Customer {
         this.tipo = tipo;
     }
 
-    public static User createUser(String name, String address, String password, String email, String phone, String document, String tipo) {
+    public static User createUser(String name, String address, String password, String email, String phone, String document, String tipo) throws DuplicateEntityException {
+
+        CustomerService customerService = new CustomerService();
+
+        if (customerService.findCustomerByDocument(document) != null) {
+            throw new DuplicateEntityException("Usuário com este documento já cadastrado.");
+        }
+
+        if (UserAuth.findUserByMail(email) != null) {
+            throw new DuplicateEntityException("Usuário com este email já cadastrado.");
+        }
 
         if (password.trim().length() < 8 || tipo.isEmpty()) {
             throw new IllegalArgumentException("Senha precisa ter no mínimo 8 dígitos");
@@ -39,7 +51,6 @@ public class User implements Customer {
         if (tipo.trim().equals("Jurídica")) {
             if (document.trim().length() != 14) throw new IllegalArgumentException("Erro nos dados passados");
         }
-
 
         return new User(name, address, password, email, phone, document, tipo);
     }

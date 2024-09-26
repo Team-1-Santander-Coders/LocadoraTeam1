@@ -3,6 +3,8 @@ package main.java.com.team1.repository;
 import main.java.com.team1.dto.CustomerDTO;
 import main.java.com.team1.dto.LegalPersonDTO;
 import main.java.com.team1.dto.PhysicalPersonDTO;
+import main.java.com.team1.dto.UserDTO;
+import main.java.com.team1.entities.User;
 import main.java.com.team1.exception.DuplicateEntityException;
 import main.java.com.team1.exception.EntityNotFoundException;
 import main.java.com.team1.util.FileUtil;
@@ -136,6 +138,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             }
             if(customer instanceof PhysicalPersonDTO){
                 if(document.equals(((PhysicalPersonDTO) customer).getCpf())) return customer;
+            }
+            if(customer instanceof UserDTO){
+                if(document.equals(((UserDTO) customer).getDocument())) return customer;
             }
         }
         return null;

@@ -4,7 +4,9 @@ import main.java.com.team1.dto.AgencyDTO;
 import main.java.com.team1.dto.RentalDTO;
 import main.java.com.team1.exception.DuplicateEntityException;
 import main.java.com.team1.exception.EntityNotFoundException;
+import main.java.com.team1.exception.RentIllegalUpdateException;
 import main.java.com.team1.repository.RentalRepositoryImpl;
+import main.java.com.team1.repository.VehicleRepositoryImpl;
 import main.java.com.team1.util.DateUtil;
 
 import java.time.LocalDate;
@@ -12,8 +14,10 @@ import java.util.List;
 
 public class RentalService {
     private final RentalRepositoryImpl rentalRepository = new RentalRepositoryImpl();
+    private final VehicleService vehicleService = new VehicleService(new VehicleRepositoryImpl());
 
-    public void addRental(RentalDTO rentalDTO) throws DuplicateEntityException {
+    public void addRental(RentalDTO rentalDTO) throws DuplicateEntityException, RentIllegalUpdateException {
+        vehicleService.rentVehicle(rentalDTO.getVehicle());
         rentalRepository.save(rentalDTO);
     }
 
@@ -30,7 +34,8 @@ public class RentalService {
                 .toList();
     }
 
-    public String returnRental(RentalDTO rentalDTO, AgencyDTO returnAgency, String returnDate) throws EntityNotFoundException {
+    public String returnRental(RentalDTO rentalDTO, AgencyDTO returnAgency, String returnDate) throws EntityNotFoundException, RentIllegalUpdateException {
+        vehicleService.returnVehicle(rentalDTO.getVehicle());
         RentalDTO updatedRentalDTO = new RentalDTO(rentalDTO.getVehicle(), rentalDTO.getCustomer(), rentalDTO.getAgencyRental(), rentalDTO.getRentalDate(), returnAgency, DateUtil.converterTextoParaData(returnDate));
         rentalRepository.update(updatedRentalDTO);
         return updatedRentalDTO.generateReceipt();

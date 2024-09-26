@@ -1,9 +1,6 @@
 package main.java.com.team1;
 
-import main.java.com.team1.dto.AgencyDTO;
-import main.java.com.team1.dto.CarDTO;
-import main.java.com.team1.dto.RentalDTO;
-import main.java.com.team1.dto.UserDTO;
+import main.java.com.team1.dto.*;
 import main.java.com.team1.exception.DuplicateEntityException;
 import main.java.com.team1.exception.EntityNotFoundException;
 import main.java.com.team1.repository.VehicleRepositoryImpl;
@@ -48,6 +45,9 @@ public class Main {
             System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         }
         */
+
+        CustomerService customerService = new CustomerService();
+        System.out.println(customerService.getAll());
         try {
             MainServer.startServer();
         } catch (IOException e) {

@@ -96,7 +96,7 @@ public class VehicleService {
      * @param vehicleDTO os dados do veículo a ser devolvido.
      * @throws RentIllegalUpdateException se o veículo já estiver disponível.
      */
-    public void returnCar(VehicleDTO vehicleDTO) throws RentIllegalUpdateException {
+    public void returnVehicle(VehicleDTO vehicleDTO) throws RentIllegalUpdateException {
         if (vehicleDTO.isDisponivel()) {
             throw new RentIllegalUpdateException(vehicleDTO.getTipo() + " já está disponível.");
         }
