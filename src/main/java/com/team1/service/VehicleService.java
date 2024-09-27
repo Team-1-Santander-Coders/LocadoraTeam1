@@ -10,6 +10,7 @@ import main.java.com.team1.exception.RentIllegalUpdateException;
 import main.java.com.team1.repository.VehicleRepository;
 import main.java.com.team1.util.FileUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -177,4 +178,21 @@ public class VehicleService {
             FileUtil.logError(e);
         }
     }
-}
+
+    public List<VehicleDTO> getAllAvailableVehicles() {
+        List<VehicleDTO> availableVehicles = new ArrayList<>();
+
+        // Recupera todos os veículos do repositório
+        List<VehicleDTO> allVehicles = vehicleRepository.findAll();
+
+        // Adiciona apenas os veículos disponíveis à lista
+        for (VehicleDTO vehicle : allVehicles) {
+            if (vehicle.isDisponivel()) { // Verifica se o veículo está disponível
+                availableVehicles.add(vehicle);
+            }
+        }
+
+        return availableVehicles;
+        }
+    }
+

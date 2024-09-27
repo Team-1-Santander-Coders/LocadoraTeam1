@@ -27,11 +27,12 @@ import java.util.List;
  * </p>
  */
 public class CustomerRepositoryImpl implements CustomerRepository {
-     private static final String CUSTOMERS_FILE = "src/resources/data/customers.dat";
+    private static final String CUSTOMERS_FILE = "src/resources/data/customers.dat";
 
     /**
      * Método responsável por salvar o cliente. Faz a verificação se o cliente já foi adicionado na base de dados,
      * bem como se a quantidade de digitos do cliente se enquadram nas regras do negócio.
+     *
      * @param customer - Tipo PhysicalPersonDTO ou LegalPersonDTO
      * @throws DuplicateEntityException - Proteção contra duplicidade de cadastro de clientes
      * @throws IllegalArgumentException - Proteção contra dados que não se enquadrem nas regras de negócio
@@ -40,16 +41,16 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public void save(CustomerDTO customer) throws DuplicateEntityException, IllegalArgumentException {
         List<CustomerDTO> customersList = findAll();
 
-        if(isIncluded(customer)) throw new DuplicateEntityException("Cliente já cadastrado");
+        if (isIncluded(customer)) throw new DuplicateEntityException("Cliente já cadastrado");
         else {
-            if(customer instanceof LegalPersonDTO) {
-                if(((LegalPersonDTO) customer).getCnpj() == null || ((LegalPersonDTO) customer).getCnpj().length() != 14) {
+            if (customer instanceof LegalPersonDTO) {
+                if (((LegalPersonDTO) customer).getCnpj() == null || ((LegalPersonDTO) customer).getCnpj().length() != 14) {
                     throw new IllegalArgumentException("CNPJ invalido");
                 }
             }
 
-            if(customer instanceof PhysicalPersonDTO) {
-                if(((PhysicalPersonDTO) customer).getCpf() == null || ((PhysicalPersonDTO) customer).getCpf().length() != 11) {
+            if (customer instanceof PhysicalPersonDTO) {
+                if (((PhysicalPersonDTO) customer).getCpf() == null || ((PhysicalPersonDTO) customer).getCpf().length() != 11) {
                     throw new IllegalArgumentException("CPF invalido");
                 }
             }
@@ -60,12 +61,13 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     /**
      * Retorna uma lista com todos os dados persistidos
+     *
      * @return List<CustomerDTO>
      */
     @Override
     public List<CustomerDTO> findAll() {
         List<CustomerDTO> customersList;
-        if(FileUtil.readFromFile(CUSTOMERS_FILE) == null) customersList = new ArrayList<>();
+        if (FileUtil.readFromFile(CUSTOMERS_FILE) == null) customersList = new ArrayList<>();
         else customersList = FileUtil.readFromFile(CUSTOMERS_FILE);
 
         return customersList;
@@ -75,16 +77,17 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     /**
      * Método responsável por editar um contato anteriormente adicionado à base de dados.
      * Caso os parâmetros passados sejam vazios, os mesmos não serão editados.
-     * @param customer  Tipo PhysicalPersonDTO ou LegalPersonDTO
+     *
+     * @param customer   Tipo PhysicalPersonDTO ou LegalPersonDTO
      * @param newName
      * @param newAddress
      * @param newPhone
-     * @throws EntityNotFoundException  Refere-se a não poder editar um cliente inexistente
+     * @throws EntityNotFoundException Refere-se a não poder editar um cliente inexistente
      */
     public void update(CustomerDTO customer, String newName, String newAddress, String newPhone) throws EntityNotFoundException {
         List<CustomerDTO> customersList = findAll();
 
-        if(!isIncluded(customer)) throw new EntityNotFoundException("Contato não existe");
+        if (!isIncluded(customer)) throw new EntityNotFoundException("Contato não existe");
         else {
             for (CustomerDTO c : customersList) {
                 if (c.hashCode() == customer.hashCode()) {
@@ -104,6 +107,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     /**
      * Deletar um cliente passado como parãmetro
+     *
      * @param customer
      * @throws EntityNotFoundException - Caso o cliente não exista
      */
@@ -111,9 +115,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public void delete(CustomerDTO customer) throws EntityNotFoundException {
         List<CustomerDTO> customersList = findAll();
 
-        if(!isIncluded(customer)) throw new EntityNotFoundException("Cliente não encontrado");
-        for(CustomerDTO c : customersList){
-            if(customer.hashCode() == c.hashCode()){
+        if (!isIncluded(customer)) throw new EntityNotFoundException("Cliente não encontrado");
+        for (CustomerDTO c : customersList) {
+            if (customer.hashCode() == c.hashCode()) {
                 customersList.remove(c);
                 FileUtil.writeToFile(customersList, CUSTOMERS_FILE);
                 customersList = findAll();
@@ -125,6 +129,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     /**
      * Recebe um documento como parâmetro. Faz uma iteração da lista de clientes, comparando o documento com os CPF e CNPJ
      * cadastrados. Retorna o cliente que possui o documento igual ao passado como parâmetro.
+     *
      * @param document
      * @return CustomerDTO
      */
@@ -132,15 +137,15 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public CustomerDTO findByDocument(String document) {
         List<CustomerDTO> customersList = findAll();
 
-        for(CustomerDTO customer : customersList){
-            if(customer instanceof LegalPersonDTO){
-                if(document.equals(((LegalPersonDTO) customer).getCnpj())) return customer;
+        for (CustomerDTO customer : customersList) {
+            if (customer instanceof LegalPersonDTO) {
+                if (document.equals(((LegalPersonDTO) customer).getCnpj())) return customer;
             }
-            if(customer instanceof PhysicalPersonDTO){
-                if(document.equals(((PhysicalPersonDTO) customer).getCpf())) return customer;
+            if (customer instanceof PhysicalPersonDTO) {
+                if (document.equals(((PhysicalPersonDTO) customer).getCpf())) return customer;
             }
-            if(customer instanceof UserDTO){
-                if(document.equals(((UserDTO) customer).getDocument())) return customer;
+            if (customer instanceof UserDTO) {
+                if (document.equals(((UserDTO) customer).getDocument())) return customer;
             }
         }
         return null;
@@ -148,17 +153,18 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     /**
      * Método de auxilio, cuja a função é verificar se um cliente passado como parametro está presente na base de dados.
+     *
      * @param customerDTO
      * @return boolean
      */
     private boolean isIncluded(CustomerDTO customerDTO) {
         List<CustomerDTO> customersList = findAll();
 
-        if(customersList.isEmpty()) return false;
-        for(CustomerDTO customer : customersList){
-                if(customerDTO.hashCode() == customer.hashCode())
-                    return true;
-            }
-        return false;
+        if (customersList.isEmpty()) return false;
+        for (CustomerDTO customer : customersList) {
+            if (customerDTO.hashCode() == customer.hashCode())
+                return true;
         }
+        return false;
+    }
 }

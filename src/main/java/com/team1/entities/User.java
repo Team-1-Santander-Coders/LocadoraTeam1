@@ -103,4 +103,12 @@ public class User implements Customer {
     public String getTipo() {
         return tipo;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+
 }
