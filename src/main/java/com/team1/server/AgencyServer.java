@@ -34,29 +34,34 @@ public class AgencyServer {
     static class AgencyListHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            List<AgencyDTO> agencies = agencyService.getAllAgencies();
+            if ("GET".equals(exchange.getRequestMethod())) {
+                List<AgencyDTO> agencies = agencyService.getAllAgencies();
 
-            StringBuilder jsonResponse = new StringBuilder();
-            jsonResponse.append("[");
+                StringBuilder jsonResponse = new StringBuilder();
+                jsonResponse.append("[");
 
-            for (int i = 0; i < agencies.size(); i++) {
-                AgencyDTO agency = agencies.get(i);
-                jsonResponse.append("{");
-                jsonResponse.append("\"name\": \"").append(agency.name()).append("\", ");
-                jsonResponse.append("\"address\": \"").append(agency.address()).append("\"");
-                jsonResponse.append("}");
-                if (i < agencies.size() - 1) {
-                    jsonResponse.append(", ");
+                for (int i = 0; i < agencies.size(); i++) {
+                    AgencyDTO agency = agencies.get(i);
+                    jsonResponse.append("{");
+                    jsonResponse.append("\"name\": \"").append(agency.name()).append("\", ");
+                    jsonResponse.append("\"address\": \"").append(agency.address()).append("\"");
+                    jsonResponse.append("}");
+                    if (i < agencies.size() - 1) {
+                        jsonResponse.append(", ");
+                    }
                 }
+
+                jsonResponse.append("]");
+
+                String response = jsonResponse.toString();
+                exchange.getResponseHeaders().set("Content-Type", "application/json"); // Adicionando o cabeçalho
+                exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes(StandardCharsets.UTF_8));
+                os.close();
+            } else {
+                exchange.sendResponseHeaders(405, -1); // Método não permitido
             }
-
-            jsonResponse.append("]");
-
-            String response = jsonResponse.toString();
-            exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes(StandardCharsets.UTF_8));
-            os.close();
         }
     }
 
@@ -135,7 +140,6 @@ public class AgencyServer {
                 InputStream inputStream = exchange.getRequestBody();
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 String[] agencyData = body.split(" / ");
-                System.out.println(Arrays.toString(agencyData));
 
                 if (agencyData.length != 4) {
                     sendResponse(exchange, 400, "Dados inválidos. Esperado: nomeAntigo,enderecoAntigo,nomeNovo,enderecoNovo.");
@@ -147,11 +151,6 @@ public class AgencyServer {
                 String newName = agencyData[2].trim();
                 String newAddress = agencyData[3].trim();
 
-                System.out.println(oldName);
-                System.out.println(oldAddress);
-                System.out.println(newName);
-                System.out.println(newAddress);
-
                 HttpCookie userIdCookie = getUserIdCookie(exchange);
 
                 if (userIdCookie != null) {
@@ -161,7 +160,6 @@ public class AgencyServer {
                     if (user != null && user.isAdmin()) {
                         try {
                             agencyService.updateAgency(agencyService.getAgencyByNameAndAddress(oldName, oldAddress), newName, newAddress);
-                            System.out.println("Atualizado");
                             sendResponse(exchange, 200, "Agência editada com sucesso!");
                         } catch (EntityNotFoundException e) {
                             sendResponse(exchange, 404, "Agência não encontrada.");
@@ -190,11 +188,12 @@ public class AgencyServer {
         }
 
         private void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
+            byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             exchange.getResponseHeaders().set("Content-Type", "application/json");
-            exchange.sendResponseHeaders(statusCode, response.length());
+            exchange.sendResponseHeaders(statusCode, responseBytes.length);
             try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes(StandardCharsets.UTF_8));
+                os.write(responseBytes);
             }
         }
     }

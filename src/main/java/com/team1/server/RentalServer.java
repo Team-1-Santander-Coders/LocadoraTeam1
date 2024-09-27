@@ -110,12 +110,11 @@ public class RentalServer {
                 String vehiclePlate = requestData[0];
                 String agencyRentalName = requestData[1];
                 String agencyRentalAddress = requestData[2];
-                LocalDate rentalDate = DateUtil.converterTextoParaData(requestData[3]); // Data de aluguel enviada no body
+                LocalDate rentalDate = DateUtil.converterTextoParaData(requestData[3]);
 
                 LocalDate returnDate = null;
                 AgencyDTO agencyReturn = null;
 
-                // Verificar se os dados de retorno da agência e data de devolução foram enviados
                 if (requestData.length > 4) {
                     String agencyReturnName = requestData[4];
                     String agencyReturnAddress = requestData[5];
@@ -155,7 +154,7 @@ public class RentalServer {
                         CustomerDTO customer = null;
 
                         if (user.isAdmin()) {
-                            String customerDocument = requestData[7]; // Documento enviado pelo admin
+                            String customerDocument = requestData[7];
                             customer = customerService.findCustomerByDocument(customerDocument);
                         } else {
                             customer = user;

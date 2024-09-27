@@ -79,13 +79,17 @@ document.getElementById('editAgencyForm').addEventListener('submit', function(ev
     fetch('/agency/edit', {
         method: 'PUT',
         headers: {
-            'Content-Type': 'text/plain',
+            'Content-Type': 'application/json',
         },
         body: body,
         credentials: 'include',
     })
         .then(response => {
-            if (!response.ok) throw new Error('Erro ao editar agência');
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
+                });
+            }
             return response.text();
         })
         .then(message => {
@@ -95,6 +99,6 @@ document.getElementById('editAgencyForm').addEventListener('submit', function(ev
         })
         .catch(error => {
             console.error('Erro:', error);
-            alert('Erro ao editar agência.');
+            alert(`Erro ao editar agência: ${error.message}`);
         });
 });
