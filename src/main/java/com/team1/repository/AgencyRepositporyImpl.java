@@ -9,9 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Implementação da interface {@link AgencyRepository} para o gerenciamento
+ * de agências usando um arquivo para persistência de dados.
+ * <p>
+ * Esta classe fornece métodos para salvar, buscar, atualizar e deletar agências,
+ * utilizando o utilitário {@link FileUtil} para operações de leitura e escrita
+ * em um arquivo específico.
+ * </p>
+ */
 public class AgencyRepositporyImpl implements AgencyRepository {
     private static final String FILE_NAME = "src/resources/data/agencies.dat";
 
+    /**
+     * Salva uma nova agência no repositório.
+     *
+     * @param agencyDTO O objeto {@link AgencyDTO} que representa a agência a ser salva.
+     * @throws DuplicateEntityException Se já existir uma agência com os mesmos dados.
+     */
     @Override
     public void save(AgencyDTO agencyDTO) throws DuplicateEntityException {
         List<AgencyDTO> agencies = FileUtil.readFromFile(FILE_NAME);
@@ -25,12 +40,25 @@ public class AgencyRepositporyImpl implements AgencyRepository {
         FileUtil.writeToFile(agencies, FILE_NAME);
     }
 
+    /**
+     * Retorna uma lista de todas as agências presentes no repositório.
+     *
+     * @return Uma lista contendo todos os objetos {@link AgencyDTO}.
+     */
     @Override
     public List<AgencyDTO> findAll() {
         List<AgencyDTO> agencies = FileUtil.readFromFile(FILE_NAME);
         return agencies != null ? agencies : new ArrayList<>();
     }
 
+    /**
+     * Atualiza as informações de uma agência existente no repositório.
+     *
+     * @param updatedAgencyDTO O objeto {@link AgencyDTO} com as novas informações.
+     * @param name O novo nome da agência.
+     * @param address O novo endereço da agência.
+     * @throws EntityNotFoundException Se a agência a ser atualizada não for encontrada.
+     */
     @Override
     public void update(AgencyDTO updatedAgencyDTO, String name, String address) throws EntityNotFoundException {
         List<AgencyDTO> agencies = FileUtil.readFromFile(FILE_NAME);
@@ -51,6 +79,13 @@ public class AgencyRepositporyImpl implements AgencyRepository {
         FileUtil.writeToFile(agencies, FILE_NAME);
     }
 
+    /**
+     * Remove uma agência do repositório com base no nome e endereço.
+     *
+     * @param name O nome da agência a ser removida.
+     * @param address O endereço da agência a ser removida.
+     * @throws EntityNotFoundException Se a agência a ser removida não for encontrada.
+     */
     @Override
     public void delete(String name, String address) throws EntityNotFoundException {
         List<AgencyDTO> agencies = FileUtil.readFromFile(FILE_NAME);
@@ -60,6 +95,14 @@ public class AgencyRepositporyImpl implements AgencyRepository {
         FileUtil.writeToFile(agencies, FILE_NAME);
     }
 
+    /**
+     * Busca uma agência no repositório com base no nome e endereço.
+     *
+     * @param name O nome da agência a ser buscada.
+     * @param address O endereço da agência a ser buscada.
+     * @return O objeto {@link AgencyDTO} que representa a agência encontrada.
+     * @throws EntityNotFoundException Se a agência não for encontrada.
+     */
     @Override
     public AgencyDTO findByNameAndAddress(String name, String address) throws EntityNotFoundException {
         List<AgencyDTO> agencies = FileUtil.readFromFile(FILE_NAME);
