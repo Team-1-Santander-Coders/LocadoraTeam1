@@ -21,7 +21,6 @@ public class RentalDTO extends Rental implements Serializable {
         super(vehicle, customer, agencyRental, rentalDate);
     }
 
-
     public RentalDTO(VehicleDTO vehicle, CustomerDTO customer, AgencyDTO agencyRental, LocalDate rentalDate, AgencyDTO agencyReturn, LocalDate returnDate) {
         super(vehicle, customer, agencyRental, rentalDate);
         finalizarAluguel(agencyReturn, returnDate);
@@ -65,9 +64,8 @@ public class RentalDTO extends Rental implements Serializable {
                 "=============================\n";
     }
 
-    private double calcularCustoTotal() {
+    public double calcularCustoTotal() {
         VehicleService vehicleService = new VehicleService(new VehicleRepositoryImpl());
-        CustomerRepositoryImpl customerRepository = new CustomerRepositoryImpl();
         try {
             long diasAluguel = DateUtil.calcularDiferencaDatas(getRentalDate(), getReturnDate());
             double custoDiario = vehicleService.getVehicleByPlaca(this.vehiclePlate()).getPrecoDiaria();
@@ -83,11 +81,12 @@ public class RentalDTO extends Rental implements Serializable {
         }
 
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof RentalDTO rentalDTO)) return false;
-        return Objects.equals(vehiclePlate(), rentalDTO.vehiclePlate()) && Objects.equals(customerDocument(), rentalDTO.customerDocument());
+        return Objects.equals(vehiclePlate(), rentalDTO.vehiclePlate()) && Objects.equals(customerDocument(), rentalDTO.customerDocument()) && (!this.isReturned() || !((RentalDTO) o).isReturned());
     }
 
     @Override
@@ -97,6 +96,19 @@ public class RentalDTO extends Rental implements Serializable {
 
     public String toString() {
         return super.toString();
+    }
+
+    public String toJson() {
+        return "{\n" +
+                "  \"veiculo\": \"" + this.vehiclePlate() + " - " + getVehicle().getModelo() + "\",\n" +
+                "  \"cliente\": \"" + this.customerDocument() + "\",\n" +
+                "  \"agenciaRetirada\": \"" + this.agencyRentalName() + "\",\n" +
+                "  \"agenciaDevolucao\": \"" + (isReturned() ? this.agencyReturnName() : "Não devolvido.") + "\",\n" +
+                "  \"dataRetirada\": \"" + DateUtil.formatarData(getRentalDate()) + "\",\n" +
+                "  \"dataDevolucao\": \"" + (isReturned() ? DateUtil.formatarData(getReturnDate()) : "Não devolvido.") + "\",\n" +
+                "  \"custoTotal\": \"" + (isReturned() ? String.format("%.2f", this.calcularCustoTotal()) : "0") + "\"\n" +
+                "  \"situacao\": \"" + (isReturned() ? "Fechado" : "Em aberto") + "\"\n" +
+                "}";
     }
 
 }

@@ -61,12 +61,13 @@ public class VehicleService {
     }
 
     /**
-     * Aluga um veículo, alterando sua disponibilidade para não disponível.
+     * Aluga um veículo de acordo com sua placa, alterando sua disponibilidade para não disponível.
      *
-     * @param vehicleDTO os dados do veículo a ser alugado.
+     * @param placa a placa do .
      * @throws RentIllegalUpdateException se o veículo já estiver alugado.
      */
-    public void rentVehicle(VehicleDTO vehicleDTO) throws RentIllegalUpdateException {
+    public void rentVehicle(String placa) throws RentIllegalUpdateException, EntityNotFoundException {
+        VehicleDTO vehicleDTO = getVehicleByPlaca(placa);
         if (!vehicleDTO.isDisponivel()) {
             throw new RentIllegalUpdateException(vehicleDTO.getTipo() + " já está alugado.");
         }
@@ -91,12 +92,13 @@ public class VehicleService {
     }
 
     /**
-     * Devolve um veículo, alterando sua disponibilidade para disponível.
+     * Devolve um veículo baseado na placa, alterando sua disponibilidade para disponível.
      *
-     * @param vehicleDTO os dados do veículo a ser devolvido.
+     * @param placa os dados do veículo a ser devolvido.
      * @throws RentIllegalUpdateException se o veículo já estiver disponível.
      */
-    public void returnVehicle(VehicleDTO vehicleDTO) throws RentIllegalUpdateException {
+    public void returnVehicle(String placa) throws RentIllegalUpdateException, EntityNotFoundException {
+        VehicleDTO vehicleDTO = getVehicleByPlaca(placa);
         if (vehicleDTO.isDisponivel()) {
             throw new RentIllegalUpdateException(vehicleDTO.getTipo() + " já está disponível.");
         }

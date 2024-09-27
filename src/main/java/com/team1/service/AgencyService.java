@@ -27,6 +27,10 @@ public class AgencyService {
                 .toList();
     }
 
+    public AgencyDTO getAgencyByNameAndAddress(String name, String address) {
+        return agencyRepository.findAll().stream().filter(agencyDTO -> agencyDTO.name().equals(name) && agencyDTO.address().equals(address)).toList().getFirst();
+    }
+
     public void updateAgency(AgencyDTO agencyDTO, String name, String address) throws EntityNotFoundException {
         agencyRepository.update(agencyDTO, name, address);
     }

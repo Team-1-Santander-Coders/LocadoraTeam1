@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>Gerenciamento de Agências</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul class="header_ul">
+            <li class="menu_item"><a class="menu_items" id="user_menu"></a></li>
+            <li class="menu_item"><a class="menu_items" id="home" href="/">Home</a></li>
+            <li class="menu_item"><a class="menu_items" id="adminpage" href="/adminPage">Painel Administrativo</a></li>
+            <li class="menu_item"><a class="menu_items" id="agencias" href="/adminPage/agencias">Gerenciamento de Agências</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="form-list-wrapper">
+    <h1>Agências</h1>
+
+    <div class="add-agency">
+        <h2>Adicionar Agência</h2>
+        <form id="addAgencyForm">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" required>
+
+            <label for="address">Endereço:</label>
+            <input type="text" id="address" required>
+
+            <button type="submit">Adicionar Agência</button>
+        </form>
+    </div>
+
+    <div class="agency-search-box">
+        <label for="search">Buscar agência:</label>
+        <input type="text" id="search" placeholder="Pesquise agências por nome ou endereço">
+    </div>
+
+    <ul id="agencyList"></ul>
+    <p id="noAgenciesMessage" style="display:none;">Nenhuma agência disponível</p>
+
+    <div class="edit-agency" id="editAgencyDialog" style="display:none;">
+        <h2>Editar Agência</h2>
+        <form id="editAgencyForm">
+            <label for="oldName">Nome Antigo:</label>
+            <input type="text" id="oldName" required readonly>
+
+            <label for="oldAddress">Endereço Antigo:</label>
+            <input type="text" id="oldAddress" required readonly>
+
+            <label for="newName">Nome Novo:</label>
+            <input type="text" id="newName" required>
+
+            <label for="newAddress">Endereço Novo:</label>
+            <input type="text" id="newAddress" required>
+
+            <button type="submit">Editar Agência</button>
+            <button type="button" onclick="closeEditDialog()">Cancelar</button>
+        </form>
+    </div>
+
+    <div id="deleteDialog" style="display:none;">
+        <p>Você tem certeza que deseja deletar esta agência?</p>
+        <button id="confirmDelete">Confirmar</button>
+        <button id="cancelDelete">Cancelar</button>
+    </div>
+</div>
+
+<script src="/adminPage/script.js"></script>
+<script src="/adminPage/agencia.js"></script>
+<script src="/script.js"></script>
+</body>
+</html>
