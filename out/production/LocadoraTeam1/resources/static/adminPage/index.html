@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>Cadastro de Veículos</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul class="header_ul">
+            <li class="menu_item"><a class="menu_items" id="user_menu"></a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Cadastro de Veículos</h1>
+<form id="vehicleForm">
+    <label for="type">Tipo:</label>
+    <select id="type" required>
+        <option value="Carro">Carro</option>
+        <option value="Moto">Moto</option>
+        <option value="Caminhão">Caminhão</option>
+    </select>
+    <div class="form-item-wrap">
+        <label for="placa">Placa:</label>
+        <input type="text" id="placa" required>
+    </div>
+
+    <div class="form-item-wrap">
+        <label for="modelo">Modelo:</label>
+        <input type="text" id="modelo" required>
+    </div>
+    <div class="form-item-wrap">
+        <label for="marca">Marca:</label>
+        <input type="text" id="marca" required>
+    </div>
+    <div class="form-item-wrap">
+        <label for="ano">Ano:</label>
+        <input type="number" id="ano" required>
+    </div>
+    <button type="submit">Cadastrar</button>
+</form>
+<div class="vehicle-search-box">
+    <label for="search">Buscar veículo:</label>
+    <input type="text" id="search" placeholder="Pesquise veículos por placa, modelo, type ou ano">
+    <label for="disponibility">Disponibilidade</label>
+    <select class="disponibility" id="disponibility">
+        <option value="">Todos</option>
+        <option value="true">Disponível</option>
+        <option value="false">Indisponível</option>
+    </select>
+</div>
+
+<h2>Lista de Veículos</h2>
+<ul id="vehicleList"></ul>
+<p id="noVehiclesMessage" style="display:none;">Nenhum veículo disponível</p>
+<script src="/adminPage/script.js"></script>
+</body>
+<script src="/script.js"></script>
+</html>

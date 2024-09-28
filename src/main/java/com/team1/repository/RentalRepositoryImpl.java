@@ -9,9 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Implementação da interface {@link RentalRepository}, responsável por gerenciar
+ * as operações de CRUD (Create, Read, Update, Delete) para locações.
+ * <p>
+ * Esta classe utiliza a classe {@link FileUtil} para ler e escrever locações em um arquivo
+ * de dados persistente.
+ * </p>
+ */
 public class RentalRepositoryImpl implements RentalRepository {
     private static final String RENTAL_FILE = "src/resources/data/rentals.dat";
 
+    /**
+     * Salva uma nova locação no arquivo de dados.
+     *
+     * @param rentalDTO O objeto {@link RentalDTO} a ser salvo.
+     * @throws DuplicateEntityException Se a locação já estiver cadastrada.
+     */
     @Override
     public void save(RentalDTO rentalDTO) throws DuplicateEntityException {
         List<RentalDTO> rentals = FileUtil.readFromFile(RENTAL_FILE);
@@ -23,12 +37,24 @@ public class RentalRepositoryImpl implements RentalRepository {
         FileUtil.writeToFile(rentals, RENTAL_FILE);
     }
 
+    /**
+     * Retorna todas as locações cadastradas.
+     *
+     * @return Uma lista de {@link RentalDTO} contendo todas as locações.
+     *         Se não houver locações cadastradas, retorna uma lista vazia.
+     */
     @Override
     public List<RentalDTO> findAll() {
         List<RentalDTO> rentals = FileUtil.readFromFile(RENTAL_FILE);
         return rentals != null ? rentals : new ArrayList<>();
     }
 
+    /**
+     * Atualiza uma locação existente no arquivo de dados.
+     *
+     * @param updatedRentalDTO O objeto {@link RentalDTO} atualizado.
+     * @throws EntityNotFoundException Se a locação não for encontrada.
+     */
     @Override
     public void update(RentalDTO updatedRentalDTO) throws EntityNotFoundException {
         List<RentalDTO> rentals = FileUtil.readFromFile(RENTAL_FILE);
@@ -47,6 +73,13 @@ public class RentalRepositoryImpl implements RentalRepository {
         FileUtil.writeToFile(rentals, RENTAL_FILE);
     }
 
+    /**
+     * Remove uma locação com base na placa do veículo e no documento do cliente.
+     *
+     * @param vehiclePlate A placa do veículo da locação.
+     * @param customerDocument O documento do cliente da locação.
+     * @throws EntityNotFoundException Se a locação não for encontrada.
+     */
     @Override
     public void delete(String vehiclePlate, String customerDocument) throws EntityNotFoundException {
         List<RentalDTO> rentals = FileUtil.readFromFile(RENTAL_FILE);

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Cadastro de Usuário</title>
+</head>
+<body>
+<h2>Cadastro de Usuário</h2>
+
+<form id="userForm">
+    <div class="form-item-wrap-code">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="button" id="sendCodeButton">Enviar Código</button>
+    </div>
+    <div id="verificationSection" class="form-item-wrap-code" style="display: none;">
+        <label for="verificationCode">Código de Verificação:</label>
+        <input type="text" id="verificationCode" name="verificationCode" required>
+        <button type="button" id="verifyCodeButton">Validar Código</button>
+    </div>
+    <div id="user-form-pos-validation" style="display: none;">
+    <div class="form-item-wrap" >
+        <label for="name">Nome:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div class="form-item-wrap">
+        <label for="address">Endereço:</label>
+        <input type="text" id="address" name="address" required>
+    </div>
+    <div class="form-item-wrap">
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div class="form-item-wrap">
+        <label for="phone">Telefone:</label>
+        <input type="tel" id="phone" name="phone" required>
+    </div>
+    <div class="form-item-wrap">
+        <label for="documentValue">Documento:</label>
+        <input type="text" id="documentValue" name="document" required>
+    </div>
+    <div class="form-item-wrap">
+        <label for="type">Tipo:</label>
+        <select id="type" name="type" required>
+            <option value="Física">Física</option>
+            <option value="Jurídica">Jurídica</option>
+        </select>
+    </div>
+    <div class="form-item-wrap">
+        <button type="submit">Cadastrar</button>
+    </div>
+    </div>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script src="usuario/script.js"></script>
+</body>
+</html>
