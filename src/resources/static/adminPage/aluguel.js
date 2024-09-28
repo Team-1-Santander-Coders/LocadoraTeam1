@@ -10,19 +10,27 @@ document.addEventListener("DOMContentLoaded", function () {
         const vehicleData = document.getElementById('vehicle').value.split(" / ");
         const pickupAgencyData = document.getElementById('pickupAgency').value.split(" / ");
         const dropoffAgencyData = document.getElementById('dropoffAgency').value.split(" / ");
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
+        const startDate = formatDate(document.getElementById('startDate').value);
+        let endDate = document.getElementById('endDate').value;
 
-        const customerName = customerData[0];
-        const vehiclePlaca = vehicleData[0];
+        const customerDocument = customerData[2];
+        const vehiclePlaca = vehicleData[1];
         const pickupAgencyName = pickupAgencyData[0];
         const pickupAgencyAddress = pickupAgencyData[1];
-        const dropoffAgencyName = dropoffAgencyData[0];
-        const dropoffAgencyAddress = dropoffAgencyData[1];
+        let dropoffAgencyName = dropoffAgencyData[0];
+        let dropoffAgencyAddress = dropoffAgencyData[1];
 
-        fetch('/rental', {
+        if (!dropoffAgencyAddress || !dropoffAgencyName || !endDate) {
+            endDate = 'Sem data de devolução';
+            dropoffAgencyName = 'Sem agência de devolução';
+            dropoffAgencyAddress = 'Sem agência de devolução';
+        } else {
+            endDate = formatDate(endDate);
+        }
+
+        fetch('/rent', {
             method: 'POST',
-            body: `${customerName} / ${vehiclePlaca} / ${pickupAgencyName} / ${pickupAgencyAddress} / ${dropoffAgencyName} / ${dropoffAgencyAddress} / ${startDate} / ${endDate}`,
+            body: `${vehiclePlaca} / ${pickupAgencyName} / ${pickupAgencyAddress} / ${startDate} / ${dropoffAgencyName} / ${dropoffAgencyAddress} / ${endDate} / ${customerDocument}`,
             credentials: 'include',
         }).then(response => {
             if (response.ok) {
@@ -31,21 +39,43 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 alert('Erro ao criar aluguel.');
             }
+        }).catch(error => {
+            console.error('Erro ao fazer requisição:', error);
+            alert('Falha na comunicação com o servidor.');
         });
     });
 });
 
+function formatDate(dateString) {
+    const dateParts = dateString.split('-');
+    const year = dateParts[0];
+    const month = dateParts[1];
+    const day = dateParts[2];
+
+    return `${day}/${month}/${year}`;
+}
+
 function loadCustomers() {
     fetch('/users')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro na resposta do servidor');
+            }
+            return response.json();
+        })
         .then(customers => {
+            console.log('Resposta do servidor:', customers);
             const customerSelect = document.getElementById('customer');
             customerSelect.innerHTML = '';
 
             customers.forEach(customer => {
+                const customerDocument = customer.document;
+                const customerName = customer.name;
+                const customerEmail = customer.email;
+
                 const option = document.createElement('option');
-                option.textContent = `${customer.name} / ${customer.email}`;
-                option.value = `${customer.name} / ${customer.email}`;
+                option.textContent = `${customerName} - ${customerEmail}`;
+                option.value = `${customerName} / ${customerEmail} / ${customerDocument}`;
                 customerSelect.appendChild(option);
             });
         })
@@ -85,6 +115,11 @@ function loadAgencies() {
             const dropoffAgencySelect = document.getElementById('dropoffAgency');
             pickupAgencySelect.innerHTML = '';
             dropoffAgencySelect.innerHTML = '';
+            const option = document.createElement('option');
+
+            option.textContent = "";
+            option.value = "";
+            dropoffAgencySelect.appendChild(option);
 
             agencies.forEach(agency => {
                 const option1 = document.createElement('option');

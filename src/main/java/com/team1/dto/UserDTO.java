@@ -47,6 +47,7 @@ public class UserDTO extends CustomerDTO {
         return new UserDTO(name, address, phone, document, email, password, type, true);
     }
 
+    @Override
     public String getEmail() {
         return email;
     }

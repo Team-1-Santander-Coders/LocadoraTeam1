@@ -29,11 +29,11 @@ public class UserServer {
         customerService = new CustomerService();
 
         server.createContext("/usuario", new StaticFileHandler(page, "index.html"));
-        server.createContext("/usuario/veiculo.js", new StaticFileHandler(page, "veiculo.js"));
+        server.createContext("/usuario/script.js", new StaticFileHandler(page, "script.js"));
         server.createContext("/user", new UserCreateHandler());
         server.createContext("/users", new UserListHandler());
         server.createContext("/userPage", new StaticFileHandler("userPage", "index.html"));
-        server.createContext("/userPage/veiculo.js", new StaticFileHandler("userPage", "veiculo.js"));
+        server.createContext("/userPage/script.js", new StaticFileHandler("userPage", "script.js"));
         server.createContext("/checkAuth", new SessionValidationHandler());
         server.createContext("/auth", new UserAuthHandler());
     }
@@ -136,6 +136,8 @@ public class UserServer {
                 String documentValue = userData[5].split(":")[1].replace("\"", "").trim();
                 String tipo = userData[6].split(":")[1].replace("\"", "").trim();
 
+                System.out.println(body);
+
                 try {
                     User user = User.createUser(name, address, password, email, phone, documentValue, tipo);
                     UserDTO userDTO = new UserDTO(user.getName(), user.getAddress(), user.getPhone(), user.getDocument(), user.getEmail(), user.getPassword(), user.getTipo());
@@ -146,7 +148,6 @@ public class UserServer {
                     OutputStream os = exchange.getResponseBody();
                     os.write(responseBytes);
                     os.close();
-
                 } catch (Exception e) {
                     String response = "Erro ao cadastrar usuário: " + (e.getMessage() != null ? e.getMessage() : "Erro desconhecido.");
                     byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
@@ -185,12 +186,16 @@ public class UserServer {
                     System.out.println("Erro ao encontrar usuário: " + e.getMessage());
                     FileUtil.logError(e);
                 }
-                if (user != null && !user.isAdmin()) {
-                    Stream<CustomerDTO> customerDTOStream = customerService.getAllCustomers().stream().filter(customer -> !customer.isAdmin());
+                if (user != null && user.isAdmin()) {
+                    Stream<CustomerDTO> customerDTOStream = customerService.getAll().stream().filter(customer -> !customer.isAdmin());
                     String response = customerDTOStream
-                            .map(customerDTO -> customerDTO.getDocument() + " - " + customerDTO.getName() + " - " + customerDTO.getPhone())
-                            .collect(Collectors.joining("\n"));
-
+                            .map(customerDTO -> String.format(
+                                    "{\"document\":\"%s\", \"name\":\"%s\", \"email\":\"%s\"}",
+                                    customerDTO.getDocument(),
+                                    customerDTO.getName(),
+                                    customerDTO.getEmail()))
+                            .collect(Collectors.joining(",\n", "[\n", "\n]"));
+                    exchange.getResponseHeaders().set("Content-Type", "application/json");
                     exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes(StandardCharsets.UTF_8));

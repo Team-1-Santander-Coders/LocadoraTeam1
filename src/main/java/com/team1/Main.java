@@ -1,6 +1,7 @@
 package main.java.com.team1;
 
 import main.java.com.team1.dto.*;
+import main.java.com.team1.entities.User;
 import main.java.com.team1.exception.DuplicateEntityException;
 import main.java.com.team1.exception.EntityNotFoundException;
 import main.java.com.team1.repository.VehicleRepositoryImpl;
@@ -45,9 +46,18 @@ public class Main {
             System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         }
         */
+        try {
+            User user = User.createUser("Lucas Moraes", "Chapada dos Veadeiros N 24", "@Lucas2709", "lucasmoraes@gmail.com", "19998841946", "12345678910", "Física");
+            UserDTO userDTO = new UserDTO(user.getName(), user.getAddress(), user.getPhone(), user.getDocument(), user.getEmail(), user.getPassword(), user.getTipo());
+            CustomerService customerService = new CustomerService();
+            customerService.addCustomer(userDTO);
+            System.out.println(customerService.getAll());
+        } catch (DuplicateEntityException e) {
+            FileUtil.logError(e);
+        }
 
-        CustomerService customerService = new CustomerService();
-        System.out.println(customerService.getAll());
+
+
         try {
             MainServer.startServer();
         } catch (IOException e) {

@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(error => {
+                deleteCookie('userId')
                 console.error(error);
             });
     } else {
@@ -84,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
 
 if (window.location.href === "http://localhost:8000/" || window.location.href === "http://localhost:8000") {
     document.getElementById('loginForm').addEventListener('submit', function (event) {
