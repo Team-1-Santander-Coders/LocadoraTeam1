@@ -333,6 +333,14 @@ div {
     color: #f2f2f2;
 }
 
+.vehicle-list-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0 auto;
+    width: 80vw;
+}
+
 @media (max-width: 768px) {
     body {
         align-items: center;
@@ -370,4 +378,56 @@ div {
 .vehicle-search-box div {
     flex-direction: column;
     align-items: center;
+}
+
+.vehicle-list {
+    display: grid;
+    flex-direction: row;
+}
+
+.vehicle_card{
+    gap:0;
+    width:15em;
+    display: flex;
+    flex-direction: column;
+    background-color:white;
+    padding:2em;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor:default;
+    user-select: none;
+    line-height: 1;
+    align-items: center;
+}
+
+.vehicle_brand{
+    margin-top:0;
+    margin-bottom:40px;
+    font-weight: lighter;
+
+
+}
+
+.vehicle_year{
+    margin:0;
+    font-size:1em;
+    font-weight: normal;
+}
+
+.vehicle_type{
+    font-weight: normal;
+    font-size:20px;
+    margin-top: 50px;
+}
+
+.vehicle_status{
+    margin:2em;
+    font-size: 0.8em;
+    width:min-content;
+    padding:0.6em;
+    border-radius: 20px;
+}
+.
+.rent_form{
+    display:flex;
 }

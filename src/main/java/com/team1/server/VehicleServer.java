@@ -131,12 +131,12 @@ public class VehicleServer {
                         if (user.isAdmin()) {
                             String[] vehicleData = body.split(" / ");
                             String tipo = vehicleData[0];
-                            String placa = vehicleData[1];
-                            String modelo = vehicleData[2];
-                            String marca = vehicleData[3];
-                            int ano = Integer.parseInt(vehicleData[4]);
-                            String agencyName = vehicleData[5];
-                            String agencyAddress = vehicleData[6];
+                            String marca = vehicleData[1];
+                            String placa = vehicleData[2];
+                            String modelo = vehicleData[3];
+                            int ano = Integer.parseInt(vehicleData[5]);
+                            String agencyName = vehicleData[6];
+                            String agencyAddress = vehicleData[7];
 
                             try {
                                 AgencyDTO agencyDTO = agencyService.getAgencyByNameAndAddress(agencyName, agencyAddress);

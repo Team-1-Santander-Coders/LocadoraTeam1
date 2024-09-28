@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>Criação de Aluguel</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul class="header_ul">
+            <li class="menu_item"><a class="menu_items" id="user_menu"></a></li>
+            <li class="menu_item"><a class="menu_items" id="home" href="/">Home</a></li>
+            <li class="menu_item"><a class="menu_items" id="adminpage" href="/adminPage">Painel Administrativo</a></li>
+            <li class="menu_item"><a class="menu_items" id="rentals" href="/adminPage/rentals">Criar Aluguel</a></li>
+        </ul>
+    </nav>
+</header>
+<div class="form-list-wrapper">
+    <Cadastro>
+        <h1>Criação de Aluguel</h1>
+        <form id="rentalForm">
+            <label for="customer">Cliente:</label>
+            <select id="customer" required></select>
+
+            <label for="vehicle">Veículo Disponível:</label>
+            <select id="vehicle" required></select>
+
+            <label for="pickupAgency">Agência de Retirada:</label>
+            <select id="pickupAgency" required></select>
+
+            <label for="dropoffAgency">Agência de Devolução:</label>
+            <select id="dropoffAgency"></select>
+
+            <label for="startDate">Data de Início:</label>
+            <input type="date" id="startDate" required>
+
+            <label for="endDate">Data de Término:</label>
+            <input type="date" id="endDate">
+
+            <button type="submit">Criar Aluguel</button>
+        </form>
+    </Cadastro>
+</div>
+<script src="/adminPage/aluguel.js"></script>
+</body>
+<script src="/script.js"></script>
+</html>

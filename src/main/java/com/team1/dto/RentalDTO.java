@@ -212,10 +212,10 @@ public class RentalDTO extends Rental implements Serializable {
                 "  \"veiculo\": \"" + this.vehiclePlate() + " - " + getVehicle().getModelo() + "\",\n" +
                 "  \"cliente\": \"" + this.customerDocument() + "\",\n" +
                 "  \"agenciaRetirada\": \"" + this.agencyRentalName() + "\",\n" +
-                "  \"agenciaDevolucao\": \"" + (isReturned() ? this.agencyReturnName() : "Não devolvido.") + "\",\n" +
-                "  \"dataRetirada\": \"" + DateUtil.formatarData(getRentalDate()) + "\",\n" +
-                "  \"dataDevolucao\": \"" + (isReturned() ? DateUtil.formatarData(getReturnDate()) : "Não devolvido.") + "\",\n" +
-                "  \"custoTotal\": \"" + (isReturned() ? String.format("%.2f", this.calcularCustoTotal()) : "0") + "\"\n" +
+                //"  \"agenciaDevolucao\": \"" + (isReturned() ? this.agencyReturnName() : "Não devolvido.") + "\",\n" +
+                //"  \"dataRetirada\": \"" + DateUtil.formatarData(getRentalDate()) + "\",\n" +
+                //"  \"dataDevolucao\": \"" + (isReturned() ? DateUtil.formatarData(getReturnDate()) : "Não devolvido.") + "\",\n" +
+                //"  \"custoTotal\": \"" + (isReturned() ? String.format("%.2f", this.calcularCustoTotal()) : "0") + "\"\n" +
                 "  \"situacao\": \"" + (isReturned() ? "Fechado" : "Em aberto") + "\"\n" +
                 "}";
     }

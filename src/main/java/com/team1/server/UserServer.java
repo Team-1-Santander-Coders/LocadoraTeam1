@@ -29,7 +29,7 @@ public class UserServer {
         customerService = new CustomerService();
 
         server.createContext("/usuario", new StaticFileHandler(page, "index.html"));
-        server.createContext("/usuario/veiculo.js", new StaticFileHandler(page, "veiculo.js"));
+        server.createContext("/usuario/script.js", new StaticFileHandler(page, "script.js"));
         server.createContext("/user", new UserCreateHandler());
         server.createContext("/users", new UserListHandler());
         server.createContext("/userPage", new StaticFileHandler("userPage", "index.html"));
