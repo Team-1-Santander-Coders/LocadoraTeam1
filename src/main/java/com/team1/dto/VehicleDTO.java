@@ -33,7 +33,7 @@ public abstract class VehicleDTO implements Serializable {
      * @param disponivel    A disponibilidade do veículo.
      * @param precoDiaria   O preço diário de locação do veículo.
      */
-    protected VehicleDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria) {
+    protected VehicleDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency) {
         this.placa = placa;
         this.modelo = modelo;
         this.marca = marca;

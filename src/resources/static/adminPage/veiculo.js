@@ -23,7 +23,7 @@ if (window.location.href.includes("veiculo")){
 
         fetch('/vehicle', {
             method: 'POST',
-            body: `${type} / ${placa} / ${modelo} / ${marca} / ${ano} / ${agencyName} / ${agencyAddress}`,
+            body: `${type} / ${marca} / ${placa} / ${modelo} / ${marca} / ${ano} / ${agencyName} / ${agencyAddress}`,
             credentials: 'include',
         }).then(response => {
             if (response.ok) {
@@ -57,9 +57,9 @@ if (window.location.href.includes("veiculo")){
                     document.getElementById('noVehiclesMessage').style.display = 'none';
 
                     allVehicles = data.split('\n').map(vehicle => {
-                        const [tipo, placa, modelo, ano, disponivel, agency] = vehicle.split(' - ');
+                        const [tipo, marca, placa, modelo, ano, disponivel, agency] = vehicle.split(' - ');
                         const [agencyName, agencyAddress] = agency.replace('{', '').replace('}', '').split(' - ');
-                        return { tipo, placa, modelo, ano, disponivel, agencyName, agencyAddress };
+                        return { tipo, marca, placa, modelo, ano, disponivel, agencyName, agencyAddress };
                     });
 
                     displayVehicles(allVehicles);

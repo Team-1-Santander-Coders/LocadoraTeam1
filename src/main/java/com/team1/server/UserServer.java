@@ -33,6 +33,7 @@ public class UserServer {
         server.createContext("/user", new UserCreateHandler());
         server.createContext("/users", new UserListHandler());
         server.createContext("/userPage", new StaticFileHandler("userPage", "index.html"));
+        server.createContext("/userPage/script.js", new StaticFileHandler("userPage", "script.js"));
         server.createContext("/userPage/veiculo.js", new StaticFileHandler("userPage", "veiculo.js"));
         server.createContext("/checkAuth", new SessionValidationHandler());
         server.createContext("/auth", new UserAuthHandler());
@@ -46,7 +47,6 @@ public class UserServer {
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 body = body.replace("{", "").replace("}", "");
                 String[] loginData = body.split(",");
-
 
                 String email = loginData[0].split(":")[1].replace("\"", "").trim();
                 String password = loginData[1].split(":")[1].replace("\"", "").trim();

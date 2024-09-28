@@ -149,7 +149,7 @@ public class RentalDTO extends Rental implements Serializable {
      * @return O custo total do aluguel ou -1 em caso de erro ao calcular.
      */
 
-    private double calcularCustoTotal() {
+    public double calcularCustoTotal() {
         VehicleService vehicleService = new VehicleService(new VehicleRepositoryImpl());
         CustomerRepositoryImpl customerRepository = new CustomerRepositoryImpl();
         try {

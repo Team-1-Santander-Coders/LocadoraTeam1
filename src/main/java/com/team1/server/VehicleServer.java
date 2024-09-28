@@ -1,9 +1,6 @@
 package main.java.com.team1.server;
 
-import main.java.com.team1.dto.CarDTO;
-import main.java.com.team1.dto.MotorcycleDTO;
-import main.java.com.team1.dto.TruckDTO;
-import main.java.com.team1.dto.VehicleDTO;
+import main.java.com.team1.dto.*;
 import main.java.com.team1.entities.Car;
 import main.java.com.team1.entities.Motorcycle;
 import main.java.com.team1.entities.Truck;
@@ -76,9 +73,10 @@ public class VehicleServer {
                     }
 
                     String response = vehicleStream
-                            .map(vehicle -> vehicle.getTipo() + " - " + vehicle.getPlaca() + " - " + vehicle.getModelo() + " - " + vehicle.getAno() +
+                            .map(vehicle -> vehicle.getTipo() + " - " + vehicle.getMarca() +" - " + vehicle.getPlaca() + " - " + vehicle.getModelo() + " - " + vehicle.getAno() +
                                     " - " + (vehicle.isDisponivel() ? "Disponível" : "Indisponível") + " - {" + vehicle.getAgency().name() + " - " + vehicle.getAgency().address() + "}")
                             .collect(Collectors.joining("\n"));
+
 
                     exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();

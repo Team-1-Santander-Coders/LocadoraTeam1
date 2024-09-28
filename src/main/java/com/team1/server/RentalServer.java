@@ -30,11 +30,11 @@ public class RentalServer {
 
     public static void createContexts() {
         HttpServer server = MainServer.getServer();
-        server.createContext("/rentals", new RentalListHander());
+        server.createContext("/rentals", new RentalListHandler());
         server.createContext("/rent", new RentHandler());
     }
 
-    static class RentalListHander implements HttpHandler {
+    static class RentalListHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             if ("GET".equals(exchange.getRequestMethod())) {
@@ -108,10 +108,11 @@ public class RentalServer {
                 InputStream inputStream = exchange.getRequestBody();
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 String[] requestData = body.split(",");
-                String vehiclePlate = requestData[0];
-                String agencyRentalName = requestData[1];
-                String agencyRentalAddress = requestData[2];
-                LocalDate rentalDate = DateUtil.converterTextoParaData(requestData[3]);
+                String vehiclePlate = requestData[0].split(":")[1].replace("\"", "").trim();
+                System.out.println(vehiclePlate);
+                String agencyRentalName = requestData[1].split(":")[1].replace("\"", "").trim();
+                String agencyRentalAddress = requestData[2].split(":")[1].replace("\"", "").trim();
+                LocalDate rentalDate = DateUtil.converterTextoParaData(requestData[3].split(":")[1].replace("\"", "").replace("}", "").trim());
 
                 LocalDate returnDate = null;
                 AgencyDTO agencyReturn = null;
