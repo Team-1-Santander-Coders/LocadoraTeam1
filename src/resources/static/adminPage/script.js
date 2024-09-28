@@ -11,6 +11,7 @@ let allVehicles = [];
 document.getElementById('vehicleForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const type = document.getElementById('type').value;
+
     const placa = document.getElementById('placa').value.replace(/[^a-z0-9]/gi, '');
     const modelo = document.getElementById('modelo').value;
     const marca = document.getElementById('marca').value;
@@ -18,7 +19,7 @@ document.getElementById('vehicleForm').addEventListener('submit', function(event
 
     fetch('/vehicle', {
         method: 'POST',
-        body: `${type},${placa},${modelo},${marca},${ano}`
+        body: `${type},${placa},${marca},${modelo},${marca},${ano}`
     }).then(response => {
         if (response.ok) {
             alert('Veículo cadastrado com sucesso!');
@@ -44,8 +45,8 @@ function loadVehicles() {
 
 
                 allVehicles = data.split('\n').map(vehicle => {
-                    const [tipo, placa, modelo, ano, disponivel] = vehicle.split(' - ');
-                    return { tipo, placa, modelo, ano, disponivel };
+                    const [tipo, placa, marca, modelo, ano, disponivel] = vehicle.split(' - ');
+                    return { tipo, placa, marca, modelo, ano, disponivel };
                 });
 
                 displayVehicles(allVehicles);

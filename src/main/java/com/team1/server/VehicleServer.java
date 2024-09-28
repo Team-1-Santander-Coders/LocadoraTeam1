@@ -47,9 +47,10 @@ public class VehicleServer {
         public void handle(HttpExchange exchange) throws IOException {
             List<VehicleDTO> vehicles = vehicleService.getAllVehicles();
             String response = vehicles.stream()
-                    .map(vehicle -> vehicle.getTipo() + " - " + vehicle.getPlaca() + " - " + vehicle.getModelo() + " - " + vehicle.getAno() +
+                    .map(vehicle -> vehicle.getTipo() + " - " + vehicle.getMarca() + " - "  + vehicle.getPlaca() + " - " + vehicle.getModelo() + " - " + vehicle.getAno() +
                             " - " + (vehicle.isDisponivel() ? "Disponível" : "Indisponível"))
                     .collect(Collectors.joining("\n"));
+
             exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes(StandardCharsets.UTF_8));
@@ -123,6 +124,7 @@ public class VehicleServer {
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes());
                     os.close();
+
                 } catch (EntityNotFoundException e) {
                     String response = "Erro: Veículo não encontrado.";
                     exchange.sendResponseHeaders(404, response.length());
@@ -135,6 +137,7 @@ public class VehicleServer {
     }
 
     static class VehicleDeleteHandler implements HttpHandler {
+
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             if ("DELETE".equals(exchange.getRequestMethod())) {
