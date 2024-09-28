@@ -1,6 +1,7 @@
 package main.java.com.team1;
-/*
+
 import main.java.com.team1.dto.*;
+import main.java.com.team1.entities.User;
 import main.java.com.team1.exception.DuplicateEntityException;
 import main.java.com.team1.exception.EntityNotFoundException;
 import main.java.com.team1.repository.VehicleRepositoryImpl;
@@ -44,34 +45,12 @@ public class Main {
         } catch (DuplicateEntityException | EntityNotFoundException e) {
             System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         }
+        */
 
-        CustomerService customerService = new CustomerService();
-        System.out.println(customerService.getAll());
         try {
             MainServer.startServer();
         } catch (IOException e) {
             FileUtil.logError(e);
         }
-    }
-}
-*/
-
-import main.java.com.team1.dto.*;
-import main.java.com.team1.entities.Rental;
-import main.java.com.team1.entities.User;
-import main.java.com.team1.repository.VehicleRepositoryImpl;
-import main.java.com.team1.server.MainServer;
-import main.java.com.team1.service.CustomerService;
-import main.java.com.team1.service.RentalService;
-import main.java.com.team1.service.UserService;
-import main.java.com.team1.service.VehicleService;
-
-import java.io.IOException;
-import java.util.List;
-
-public class Main {
-    public static void main(String[] args) throws IOException {
-        MainServer.startServer();
-
     }
 }

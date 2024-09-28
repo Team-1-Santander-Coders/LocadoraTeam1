@@ -2,6 +2,7 @@ package main.java.com.team1.dto;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.UUID;
 
 public abstract class CustomerDTO implements Serializable {
     @Serial
@@ -16,6 +17,7 @@ public abstract class CustomerDTO implements Serializable {
     private String name;
     private String address;
     private String phone;
+    private String id;
 
     /**
      * Construtor da classe abstrata, que será acessada via <code>super()</code> pelas classes filhas
@@ -25,7 +27,7 @@ public abstract class CustomerDTO implements Serializable {
      */
 
     protected CustomerDTO(String name, String address, String phone){
-
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -146,5 +148,9 @@ public abstract class CustomerDTO implements Serializable {
 
     public boolean isAdmin() {
         return false;
+    }
+
+    public String getEmail() {
+        return this.getPhone();
     }
 }

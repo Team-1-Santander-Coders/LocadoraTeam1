@@ -97,6 +97,7 @@ public class UserDTO extends CustomerDTO {
      * @return O email do usuário.
      */
 
+    @Override
     public String getEmail() {
         return email;
     }

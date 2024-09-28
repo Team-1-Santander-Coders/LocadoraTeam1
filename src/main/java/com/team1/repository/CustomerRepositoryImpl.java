@@ -54,6 +54,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                     throw new IllegalArgumentException("CPF invalido");
                 }
             }
+
             customersList.add(customer);
             FileUtil.writeToFile(customersList, CUSTOMERS_FILE);
         }
@@ -160,11 +161,10 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     private boolean isIncluded(CustomerDTO customerDTO) {
         List<CustomerDTO> customersList = findAll();
 
-        if (customersList.isEmpty()) return false;
-        for (CustomerDTO customer : customersList) {
-            if (customerDTO.hashCode() == customer.hashCode())
-                return true;
-        }
+        if(customersList.isEmpty()) return false;
+        for(CustomerDTO customer : customersList){
+                if(customer.getDocument().equals(customerDTO.getDocument())) return true;
+            }
         return false;
     }
 }
