@@ -34,9 +34,9 @@ public class RentalService {
                 .toList();
     }
 
-    public String returnRental(RentalDTO rentalDTO, AgencyDTO returnAgency, String returnDate) throws EntityNotFoundException, RentIllegalUpdateException {
+    public String returnRental(RentalDTO rentalDTO, AgencyDTO returnAgency, LocalDate returnDate) throws EntityNotFoundException, RentIllegalUpdateException {
         vehicleService.returnVehicle(rentalDTO.getVehicle().getPlaca(), returnAgency);
-        RentalDTO updatedRentalDTO = new RentalDTO(rentalDTO.getVehicle(), rentalDTO.getCustomer(), rentalDTO.getAgencyRental(), rentalDTO.getRentalDate(), returnAgency, DateUtil.converterTextoParaData(returnDate));
+        RentalDTO updatedRentalDTO = new RentalDTO(rentalDTO.getVehicle(), rentalDTO.getCustomer(), rentalDTO.getAgencyRental(), rentalDTO.getRentalDate(), returnAgency, returnDate);
         rentalRepository.update(updatedRentalDTO);
         return updatedRentalDTO.generateReceipt();
     }
@@ -45,12 +45,14 @@ public class RentalService {
         rentalRepository.delete(placa, document);
     }
 
-    public String getReceipt(String placa, String document) {
-        RentalDTO rentalDTO = getAllRentals().stream()
-                                             .filter(r -> r.vehiclePlate().equals(placa) && r.customerDocument().equals(document))
-                                             .toList().getFirst();
+    public RentalDTO getRental(String placa, String document, LocalDate rentalDate) {
+        return getAllRentals().stream()
+                .filter(r -> r.vehiclePlate().equals(placa) && r.customerDocument().equals(document) && r.getRentalDate() == rentalDate)
+                .toList().getFirst();
+    }
 
-        return rentalDTO.generateReceipt();
+    public String getReceipt(String placa, String document, LocalDate rentalDate) {
+        return getRental(placa, document, rentalDate).generateReceipt();
     }
 
     public List<RentalDTO> getRentalsByPage(int pageNumber, int pageSize) {

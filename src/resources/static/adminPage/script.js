@@ -8,29 +8,6 @@ document.addEventListener("DOMContentLoaded", function() {
 let allVehicles = [];
 
 
-document.getElementById('vehicleForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const type = document.getElementById('type').value;
-
-    const placa = document.getElementById('placa').value.replace(/[^a-z0-9]/gi, '');
-    const modelo = document.getElementById('modelo').value;
-    const marca = document.getElementById('marca').value;
-    const ano = document.getElementById('ano').value;
-
-    fetch('/vehicle', {
-        method: 'POST',
-        body: `${type},${placa},${marca},${modelo},${marca},${ano}`
-    }).then(response => {
-        if (response.ok) {
-            alert('Veículo cadastrado com sucesso!');
-            loadVehicles();
-            document.getElementById('vehicleForm').reset()
-        } else {
-            alert('Já existe um veículo cadastrado com essa placa.');
-        }
-    });
-});
-
 function loadVehicles() {
     fetch('/vehicles')
         .then(response => response.text())
