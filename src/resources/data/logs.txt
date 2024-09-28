@@ -128,3 +128,7 @@
 	at main.java.com.team1.entities.User.createUser(User.java:36)
 	at main.java.com.team1.Main.main(Main.java:50)
 
+28/09/2024 00:49:14 [Error] Usuário com este documento já cadastrado.
+	at main.java.com.team1.entities.User.createUser(User.java:36)
+	at main.java.com.team1.Main.main(Main.java:50)
+

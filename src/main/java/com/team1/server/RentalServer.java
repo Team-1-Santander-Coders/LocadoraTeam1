@@ -171,17 +171,7 @@ public class RentalServer {
                             RentalDTO rental;
                             String response = "";
                             if (!agencyReturnName.equals("Sem agência de devolução")) {
-
                                 rental = new RentalDTO(vehicle, customer, agencyRental, rentalDate, agencyReturn, returnDate);
-                                try {
-                                    rentalService.addRental(rental);
-                                } catch (Exception e) {
-                                    response = "Erro: " + e.getMessage();
-                                    exchange.sendResponseHeaders(409, response.length());
-                                    OutputStream os = exchange.getResponseBody();
-                                    os.write(response.getBytes());
-                                    os.close();
-                                }
                                 response = rental.toJson();
                                 exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
                                 OutputStream os = exchange.getResponseBody();
@@ -189,19 +179,19 @@ public class RentalServer {
                                 os.close();
                             } else {
                                 rental = new RentalDTO(vehicle, customer, agencyRental, rentalDate);
-                                try {
-                                    rentalService.addRental(rental);
-                                } catch (Exception e) {
-                                    response = "Erro: " + e.getMessage();
-                                    exchange.sendResponseHeaders(409, response.length());
-                                    OutputStream os = exchange.getResponseBody();
-                                    os.write(response.getBytes());
-                                    os.close();
-                                }
                                 response = rental.toJson();
                                 exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);
                                 OutputStream os = exchange.getResponseBody();
                                 os.write(response.getBytes(StandardCharsets.UTF_8));
+                                os.close();
+                            }
+                            try {
+                                rentalService.addRental(rental);
+                            } catch (Exception e) {
+                                response = "Erro: " + e.getMessage();
+                                exchange.sendResponseHeaders(409, response.length());
+                                OutputStream os = exchange.getResponseBody();
+                                os.write(response.getBytes());
                                 os.close();
                             }
                         } else {
