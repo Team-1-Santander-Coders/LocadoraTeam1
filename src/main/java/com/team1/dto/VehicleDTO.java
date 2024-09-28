@@ -120,6 +120,14 @@ public abstract class VehicleDTO implements Serializable {
                 '}';
     }
 
+    /**
+     * Converte uma string JSON em um objeto VehicleDTO.
+     *
+     * @param json A string JSON representando um veículo.
+     * @return Uma instância de VehicleDTO correspondente ao JSON.
+     * @throws IllegalArgumentException Se o tipo de veículo no JSON for desconhecido.
+     */
+
     public static VehicleDTO fromJson(String json) {
         String[] keyValuePairs = json.replaceAll("[{}\"]", "").split(",");
 
@@ -161,6 +169,20 @@ public abstract class VehicleDTO implements Serializable {
 
         return createVehicleByType(placa, modelo, marca, ano, disponivel, precoDiaria, tipo);
     }
+
+    /**
+     * Cria um objeto VehicleDTO específico com base no tipo de veículo.
+     *
+     * @param placa         A placa do veículo.
+     * @param modelo        O modelo do veículo.
+     * @param marca         A marca do veículo.
+     * @param ano           O ano de fabricação do veículo.
+     * @param disponivel    A disponibilidade do veículo.
+     * @param precoDiaria   O preço diário de locação do veículo.
+     * @param tipo          O tipo de veículo ("Carro", "Moto", "Caminhão").
+     * @return Uma instância de VehicleDTO correspondente ao tipo.
+     * @throws IllegalArgumentException Se o tipo de veículo for desconhecido.
+     */
 
     private static VehicleDTO createVehicleByType(String placa, String modelo, String marca, int ano,
                                                   boolean disponivel, double precoDiaria, String tipo) {

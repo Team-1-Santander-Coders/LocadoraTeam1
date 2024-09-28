@@ -78,6 +78,16 @@ public class PhysicalPersonDTO extends CustomerDTO {
                 "cpf= " + getCpf()  + "]";
     }
 
+    /**
+     * Retorna o tipo de cliente como "Física".
+     * <p>
+     * Este método sobrescreve a implementação genérica da classe base
+     * {@link CustomerDTO} e especifica que este cliente é do tipo "Física".
+     * </p>
+     *
+     * @return Uma string indicando que o tipo de cliente é "Física".
+     */
+
     @Override
     public String getTipo() {
         return "Física";

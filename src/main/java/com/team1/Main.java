@@ -76,21 +76,21 @@ public class Main {
 
 
         try {
-            User user1 = new User("Joao", "Rua A", "1234","j@mail.com", "21321456987", "123456", "Fisica");
-            userService.addUser(user1);
-            System.out.println(user1 + " adicionado!");
-            User user2 = new User("Joaquim", "Rua A", "1234","j@mail.com", "21321456987", "123456", "Fisica");
-            userService.addUser(user2);
-            System.out.println(user2 + " adicionado!");
-            User user3 = new User("Joao MEI", "Rua A", "1234","CNPJ", "j@mail.com", "123456", "Juridica");
-            userService.addUser(user3);
-            System.out.println(user3 + "adicionado!");
-            User user4 = new User("Joaquim MEI", "Rua A", "1234","CNPJ", "j@mail.com", "123456", "Juridica");
-            userService.addUser(user4);
-            System.out.println(user4 + "adicionado!");
+//            User user1 = new User("Joao", "Rua A", "1234","j@mail.com", "21321456987", "123456", "Fisica");
+//            userService.addUser(user1);
+//            System.out.println(user1 + " adicionado!");
+//            User user2 = new User("Joaquim", "Rua A", "1234","j@mail.com", "21321456987", "123456", "Fisica");
+//            userService.addUser(user2);
+//            System.out.println(user2 + " adicionado!");
+//            User user3 = new User("Joao MEI", "Rua A", "1234","CNPJ", "j@mail.com", "123456", "Juridica");
+//            userService.addUser(user3);
+//            System.out.println(user3 + "adicionado!");
+            User user6 = User.createUser("Joaquim MEI", "Rua A", "12341234","a@jkhgggmail.com", "21965427435", "15464848111111", "Juridica");
 
-            User userDuplicate = new User("Joao", "Rua A", "1234","RG", "j@mail.com", "123456", "Fisica");
-            userService.addUser(userDuplicate);
+            System.out.println(user6 + "adicionado!");
+
+//            User userDuplicate = new User("Joao", "Rua A", "1234","RG", "j@mail.com", "123456", "Fisica");
+//            userService.addUser(userDuplicate);
 
             customerService.getAll();
         } catch (Exception e) {
@@ -141,7 +141,7 @@ public class Main {
             System.out.println("Erro ao listar todos os veículos: " + e.getMessage());
         }
 
-       RentalDTO rentalDTO = new RentalDTO("XXX1234", "João", "RJ", 27-09-24);
+       //RentalDTO rentalDTO = new RentalDTO("XXX1234", "João", "RJ", 27-09-24);
 
 
         try {
