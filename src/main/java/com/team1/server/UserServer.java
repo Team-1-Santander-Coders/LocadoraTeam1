@@ -3,10 +3,11 @@ package main.java.com.team1.server;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import main.java.com.team1.dto.CustomerDTO;
 import main.java.com.team1.dto.UserDTO;
 import main.java.com.team1.entities.User;
-import main.java.com.team1.service.CustomerService;
 import main.java.com.team1.server.MainServer.StaticFileHandler;
+import main.java.com.team1.service.CustomerService;
 import main.java.com.team1.util.FileUtil;
 import main.java.com.team1.util.UserAuth;
 
@@ -15,6 +16,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpCookie;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UserServer {
     private static CustomerService customerService;
@@ -25,10 +29,11 @@ public class UserServer {
         customerService = new CustomerService();
 
         server.createContext("/usuario", new StaticFileHandler(page, "index.html"));
-        server.createContext("/usuario/script.js", new StaticFileHandler(page, "script.js"));
+        server.createContext("/usuario/veiculo.js", new StaticFileHandler(page, "veiculo.js"));
         server.createContext("/user", new UserCreateHandler());
+        server.createContext("/users", new UserListHandler());
         server.createContext("/userPage", new StaticFileHandler("userPage", "index.html"));
-        server.createContext("/userPage/script.js", new StaticFileHandler("userPage", "script.js"));
+        server.createContext("/userPage/veiculo.js", new StaticFileHandler("userPage", "veiculo.js"));
         server.createContext("/checkAuth", new SessionValidationHandler());
         server.createContext("/auth", new UserAuthHandler());
     }
@@ -153,6 +158,56 @@ public class UserServer {
                 }
             } else {
                 exchange.sendResponseHeaders(405, -1);
+            }
+        }
+    }
+
+
+    static class UserListHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            HttpCookie userIdCookie = null;
+            String cookieHeader = exchange.getRequestHeaders().getFirst("Cookie");
+            if (cookieHeader != null) {
+                for (String cookie : cookieHeader.split("; ")) {
+                    if (cookie.startsWith("userId=")) {
+                        userIdCookie = HttpCookie.parse(cookie).getFirst();
+                    }
+                }
+            }
+
+            if (userIdCookie != null) {
+                String userId = userIdCookie.getValue();
+                UserDTO user = null;
+                try {
+                    user = customerService.findUserByID(userId);
+                } catch (Exception e) {
+                    System.out.println("Erro ao encontrar usuário: " + e.getMessage());
+                    FileUtil.logError(e);
+                }
+                if (user != null && !user.isAdmin()) {
+                    Stream<CustomerDTO> customerDTOStream = customerService.getAllCustomers().stream().filter(customer -> !customer.isAdmin());
+                    String response = customerDTOStream
+                            .map(customerDTO -> customerDTO.getDocument() + " - " + customerDTO.getName() + " - " + customerDTO.getPhone())
+                            .collect(Collectors.joining("\n"));
+
+                    exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
+                    OutputStream os = exchange.getResponseBody();
+                    os.write(response.getBytes(StandardCharsets.UTF_8));
+                    os.close();
+                } else {
+                    String response = "Usuário não autorizado.";
+                    exchange.sendResponseHeaders(403, response.length());
+                    OutputStream os = exchange.getResponseBody();
+                    os.write(response.getBytes());
+                    os.close();
+                }
+            } else {
+                String response = "Usuário não autenticado.";
+                exchange.sendResponseHeaders(401, response.length());
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
             }
         }
     }

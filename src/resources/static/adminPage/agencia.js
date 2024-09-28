@@ -9,21 +9,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fetch('/agency', {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: `${name} / ${address}`,
             credentials: 'include',
         })
             .then(response => {
-                if (!response.ok) throw new Error('Erro ao adicionar agência');
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
+                    });
+                }
                 return response.text();
             })
             .then(message => {
                 alert(message);
                 loadAgencies();
-                document.getElementById('addAgencyForm').reset();
             })
             .catch(error => {
                 console.error('Erro:', error);
-                alert('Erro ao adicionar agência.');
+                alert(`Erro ao editar agência: ${error.message}`);
             });
     });
 });

@@ -21,6 +21,7 @@ public abstract class VehicleDTO implements Serializable {
     protected int ano;
     protected boolean disponivel;
     protected double precoDiaria;
+    protected AgencyDTO agency;
 
     /**
      * Construtor da classe VehicleDTO.
@@ -32,13 +33,14 @@ public abstract class VehicleDTO implements Serializable {
      * @param disponivel    A disponibilidade do veículo.
      * @param precoDiaria   O preço diário de locação do veículo.
      */
-    protected VehicleDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria) {
+    protected VehicleDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency) {
         this.placa = placa;
         this.modelo = modelo;
         this.marca = marca;
         this.ano = ano;
         this.disponivel = disponivel;
         this.precoDiaria = precoDiaria;
+        this.agency = agency;
     }
 
     /**
@@ -102,6 +104,10 @@ public abstract class VehicleDTO implements Serializable {
      */
     public abstract String getTipo();
 
+    public AgencyDTO getAgency() {
+        return agency;
+    }
+
     /**
      * Retorna uma representação em string do veículo, incluindo todas as suas propriedades.
      *
@@ -118,63 +124,5 @@ public abstract class VehicleDTO implements Serializable {
                 ", precoDiaria=" + precoDiaria +
                 ", tipo=" + getTipo() +
                 '}';
-    }
-
-    public static VehicleDTO fromJson(String json) {
-        String[] keyValuePairs = json.replaceAll("[{}\"]", "").split(",");
-
-        String placa = "", modelo = "", marca = "";
-        int ano = 0;
-        boolean disponivel = false;
-        double precoDiaria = 0.0;
-        String tipo = "";
-
-        for (String pair : keyValuePairs) {
-            String[] keyValue = pair.split(":");
-            String key = keyValue[0].trim();
-            String value = keyValue[1].trim();
-
-            switch (key) {
-                case "placa":
-                    placa = value;
-                    break;
-                case "modelo":
-                    modelo = value;
-                    break;
-                case "marca":
-                    marca = value;
-                    break;
-                case "ano":
-                    ano = Integer.parseInt(value);
-                    break;
-                case "disponivel":
-                    disponivel = Boolean.parseBoolean(value);
-                    break;
-                case "precoDiaria":
-                    precoDiaria = Double.parseDouble(value);
-                    break;
-                case "tipo":
-                    tipo = value;
-                    break;
-            }
-        }
-
-        return createVehicleByType(placa, modelo, marca, ano, disponivel, precoDiaria, tipo);
-    }
-
-    private static VehicleDTO createVehicleByType(String placa, String modelo, String marca, int ano,
-                                                  boolean disponivel, double precoDiaria, String tipo) {
-        switch (tipo) {
-            case "Carro" -> {
-                return new CarDTO(placa, modelo, marca, ano, disponivel, precoDiaria);
-            }
-            case "Moto" -> {
-                return new MotorcycleDTO(placa, modelo, marca, ano, disponivel, precoDiaria);
-            }
-            case "Caminhão" -> {
-                return new TruckDTO(placa, modelo, marca, ano, disponivel, precoDiaria);
-            }
-            default -> throw new IllegalArgumentException("Tipo de veículo desconhecido: " + tipo);
-        }
     }
 }

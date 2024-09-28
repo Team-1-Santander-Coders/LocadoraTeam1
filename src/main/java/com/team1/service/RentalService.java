@@ -35,7 +35,7 @@ public class RentalService {
     }
 
     public String returnRental(RentalDTO rentalDTO, AgencyDTO returnAgency, String returnDate) throws EntityNotFoundException, RentIllegalUpdateException {
-        vehicleService.returnVehicle(rentalDTO.getVehicle().getPlaca());
+        vehicleService.returnVehicle(rentalDTO.getVehicle().getPlaca(), returnAgency);
         RentalDTO updatedRentalDTO = new RentalDTO(rentalDTO.getVehicle(), rentalDTO.getCustomer(), rentalDTO.getAgencyRental(), rentalDTO.getRentalDate(), returnAgency, DateUtil.converterTextoParaData(returnDate));
         rentalRepository.update(updatedRentalDTO);
         return updatedRentalDTO.generateReceipt();

@@ -24,6 +24,7 @@ public class MainServer {
 
         AdminServer.createContexts();
         VehicleServer.createContexts();
+        RentalServer.createContexts();
         UserServer.createContexts();
         AgencyServer.createContexts();
         server.setExecutor(null);

@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     if (page.toLowerCase().includes("userpage") || page.toLowerCase().includes("adminpage")) {
-                        userMenu.innerHTML = `Olá, ${capitalizeFirstLetters(nome)}! Para sair clique aqui: <a id="logout" href="javascript:void(0)">Sair</a>`;
+                        userMenu.innerHTML = `Olá, ${capitalizeFirstLetters(nome)}! Para realizar logout clique aqui: <a id="logout" href="javascript:void(0)">Sair</a> | `;
                         if (loginMenu) {
                             loginMenu.remove();
                         }
@@ -66,8 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             window.location.href = "/";
                         });
                     }
-
-
                 }
 
                 if (data.isAdmin && page.includes('userPage')) {

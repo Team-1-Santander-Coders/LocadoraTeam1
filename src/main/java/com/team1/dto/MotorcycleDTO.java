@@ -25,8 +25,8 @@ public class MotorcycleDTO extends VehicleDTO {
      * @param disponivel  A disponibilidade da motocicleta.
      * @param precoDiaria O preço diário de locação da motocicleta.
      */
-    public MotorcycleDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria) {
-        super(placa, modelo, marca, ano, disponivel, precoDiaria);
+    public MotorcycleDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency) {
+        super(placa, modelo, marca, ano, disponivel, precoDiaria, agency);
     }
 
     /**

@@ -25,8 +25,8 @@ public class TruckDTO extends VehicleDTO {
      * @param disponivel  A disponibilidade do caminhão.
      * @param precoDiaria O preço diário de locação do caminhão.
      */
-    public TruckDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria) {
-        super(placa, modelo, marca, ano, disponivel, precoDiaria);
+    public TruckDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency) {
+        super(placa, modelo, marca, ano, disponivel, precoDiaria, agency);
     }
 
     /**

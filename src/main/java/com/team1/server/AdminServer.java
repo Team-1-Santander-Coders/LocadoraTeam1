@@ -11,8 +11,10 @@ public class AdminServer {
 
         server.createContext("/adminPage", new StaticFileHandler(page,"index.html"));
         server.createContext("/adminPage/veiculos", new StaticFileHandler(page,"veiculos.html"));
-        server.createContext("/adminPage/script.js", new StaticFileHandler(page,"script.js"));
+        server.createContext("/adminPage/veiculo.js", new StaticFileHandler(page,"veiculo.js"));
         server.createContext("/adminPage/agencias", new StaticFileHandler(page, "agencias.html"));
         server.createContext("/adminPage/agencia.js", new StaticFileHandler(page, "agencia.js"));
+        server.createContext("/adminPage/alugueis", new StaticFileHandler(page, "alugueis.html"));
+        server.createContext("/adminPage/aluguel.js", new StaticFileHandler(page, "aluguel.js"));
     }
 }

@@ -31,6 +31,7 @@ public class RentalServer {
     public static void createContexts() {
         HttpServer server = MainServer.getServer();
         server.createContext("/rentals", new RentalListHander());
+        server.createContext("/rent", new RentHandler());
     }
 
     static class RentalListHander implements HttpHandler {

@@ -54,13 +54,14 @@ public class AgencyServer {
                 jsonResponse.append("]");
 
                 String response = jsonResponse.toString();
-                exchange.getResponseHeaders().set("Content-Type", "application/json"); // Adicionando o cabeçalho
-                exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
+                byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
+                exchange.getResponseHeaders().set("Content-Type", "application/json");
+                exchange.sendResponseHeaders(200, responseBytes.length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes(StandardCharsets.UTF_8));
                 os.close();
             } else {
-                exchange.sendResponseHeaders(405, -1); // Método não permitido
+                exchange.sendResponseHeaders(405, -1);
             }
         }
     }
@@ -102,27 +103,27 @@ public class AgencyServer {
                             AgencyDTO agencyDTO = new AgencyDTO(name, address);
                             agencyService.addAgency(agencyDTO);
                             String response = "Agência cadastrada com sucesso!";
-                            exchange.sendResponseHeaders(200, response.length());
+                            exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
                             OutputStream os = exchange.getResponseBody();
                             os.write(response.getBytes());
                             os.close();
                         } catch (DuplicateEntityException e) {
                             String response = "Erro: Agência já existe.";
-                            exchange.sendResponseHeaders(409, response.length());
+                            exchange.sendResponseHeaders(409, response.getBytes(StandardCharsets.UTF_8).length);
                             OutputStream os = exchange.getResponseBody();
                             os.write(response.getBytes());
                             os.close();
                         }
                     } else {
                         String response = "Usuário não autorizado ou não encontrado.";
-                        exchange.sendResponseHeaders(403, response.length());
+                        exchange.sendResponseHeaders(403, response.getBytes(StandardCharsets.UTF_8).length);
                         OutputStream os = exchange.getResponseBody();
                         os.write(response.getBytes());
                         os.close();
                     }
                 } else {
                     String response = "Usuário não autenticado.";
-                    exchange.sendResponseHeaders(401, response.length());
+                    exchange.sendResponseHeaders(401, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes());
                     os.close();

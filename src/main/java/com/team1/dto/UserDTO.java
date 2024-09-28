@@ -55,6 +55,7 @@ public class UserDTO extends CustomerDTO {
         return password;
     }
 
+    @Override
     public String getDocument() {
         return document;
     }
@@ -63,6 +64,7 @@ public class UserDTO extends CustomerDTO {
         return id;
     }
 
+    @Override
     public boolean isAdmin(){
         return isAdmin;
     }

@@ -44,6 +44,9 @@
                 <label for="ano">Ano:</label>
                 <input type="number" id="ano" required>
             </div>
+            <label for="agency">Agência:</label>
+            <select id="agency" required>
+            </select>
             <button type="submit">Cadastrar</button>
         </form>
     </Cadastro>
@@ -51,7 +54,7 @@
         <h2>Lista de Veículos</h2>
         <div class="vehicle-search-box">
             <label for="search">Buscar veículo:</label>
-            <input type="text" id="search" placeholder="Pesquise veículos por placa, modelo, type ou ano">
+            <input type="text" id="search" placeholder="Pesquise veículos">
             <label for="disponibility">Disponibilidade</label>
             <select class="disponibility" id="disponibility">
                 <option value="">Todos</option>
@@ -63,7 +66,7 @@
         <p id="noVehiclesMessage" style="display:none;">Nenhum veículo disponível</p>
     </div>
 </div>
-<script src="/adminPage/script.js"></script>
+<script src="/adminPage/veiculo.js"></script>
 </body>
 <script src="/script.js"></script>
 </html>

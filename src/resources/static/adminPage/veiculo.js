@@ -1,6 +1,7 @@
 if (window.location.href.includes("veiculo")){
     document.addEventListener("DOMContentLoaded", function() {
         loadVehicles();
+        loadAgencies();
 
         document.getElementById('search').addEventListener('input', filterVehicles);
         document.getElementById('disponibility').addEventListener('change', filterVehicles);
@@ -10,15 +11,19 @@ if (window.location.href.includes("veiculo")){
 
     document.getElementById('vehicleForm').addEventListener('submit', function(event) {
         event.preventDefault();
+        const agencyData = document.getElementById('agency').value.split(" / ");
         const type = document.getElementById('type').value;
         const placa = document.getElementById('placa').value.replace(/[^a-z0-9]/gi, '');
         const modelo = document.getElementById('modelo').value;
         const marca = document.getElementById('marca').value;
         const ano = document.getElementById('ano').value;
+        const agencyName = agencyData[0];
+        const agencyAddress = agencyData[1];
+
 
         fetch('/vehicle', {
             method: 'POST',
-            body: `${type},${placa},${modelo},${marca},${ano}`,
+            body: `${type} / ${placa} / ${modelo} / ${marca} / ${ano} / ${agencyName} / ${agencyAddress}`,
             credentials: 'include',
         }).then(response => {
             if (response.ok) {
@@ -32,8 +37,16 @@ if (window.location.href.includes("veiculo")){
     });
 
     function loadVehicles() {
-        fetch('/vehicles')
-            .then(response => response.text())
+        fetch('http://localhost:8000/vehicles', {
+            method: 'GET',
+            credentials: 'include',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
             .then(data => {
                 const vehicleList = document.getElementById('vehicleList');
                 vehicleList.innerHTML = '';
@@ -44,8 +57,9 @@ if (window.location.href.includes("veiculo")){
                     document.getElementById('noVehiclesMessage').style.display = 'none';
 
                     allVehicles = data.split('\n').map(vehicle => {
-                        const [tipo, placa, modelo, ano, disponivel] = vehicle.split(' - ');
-                        return { tipo, placa, modelo, ano, disponivel };
+                        const [tipo, placa, modelo, ano, disponivel, agency] = vehicle.split(' - ');
+                        const [agencyName, agencyAddress] = agency.replace('{', '').replace('}', '').split(' - ');
+                        return { tipo, placa, modelo, ano, disponivel, agencyName, agencyAddress };
                     });
 
                     displayVehicles(allVehicles);
@@ -53,7 +67,7 @@ if (window.location.href.includes("veiculo")){
             })
             .catch(error => {
                 console.error('Erro ao carregar os veículos:', error);
-                document.getElementById("vehicleList").textContent = "Erro ao carregar veículos.";
+                document.getElementById("vehicleList").textContent = `Erro ao carregar veículos: ${error.message}`;
             });
     }
 
@@ -129,6 +143,32 @@ if (window.location.href.includes("veiculo")){
             console.error('Erro:', error);
             alert('Erro ao deletar veículo: ' + error.message);
         });
+    }
+
+    function loadAgencies() {
+        fetch('/agencies')
+            .then(response => {
+                if (!response.ok) throw new Error('Erro ao buscar agências');
+                return response.json();
+            })
+            .then(agencies => {
+                const agencyList = document.getElementById('agency');
+                agencyList.innerHTML = '';
+
+                if (agencies.length === 0) {
+                } else {
+                    agencies.forEach(agency => {
+                        const option = document.createElement('option');
+                        option.textContent = `${agency.name} - ${agency.address}`;
+                        option.value = `${agency.name} / ${agency.address}`
+                        agencyList.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao carregar agências.');
+            });
     }
 }
 
