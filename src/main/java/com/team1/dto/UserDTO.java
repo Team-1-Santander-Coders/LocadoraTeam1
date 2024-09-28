@@ -112,7 +112,7 @@ public class UserDTO extends CustomerDTO {
     /**
      * @return O documento do usuário.
      */
-
+    @Override
     public String getDocument() {
         return document;
     }

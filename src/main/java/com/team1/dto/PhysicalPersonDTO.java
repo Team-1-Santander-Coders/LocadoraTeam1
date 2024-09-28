@@ -92,4 +92,9 @@ public class PhysicalPersonDTO extends CustomerDTO {
     public String getTipo() {
         return "Física";
     }
+
+    @Override
+    public String getDocument() {
+        return this.getCpf();
+    }
 }

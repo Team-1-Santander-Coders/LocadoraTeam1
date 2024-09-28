@@ -18,7 +18,7 @@ Este código define um servidor HTTP simples que manipula operações relacionad
 Inicia o servidor na porta 8000 e configura os seguintes contextos (rotas):
 - **`/`**: Serve o arquivo HTML principal.
 - **`/style.css`**: Serve o arquivo CSS.
-- **`/script.js`**: Serve o arquivo JavaScript.
+- **`/veiculo.js`**: Serve o arquivo JavaScript.
 - **`/vehicles`**: Manipula requisições `GET` para listar veículos.
 - **`/vehicle`**: Manipula requisições `POST` para criar um veículo.
 - **`/vehicle/edit`**: Manipula requisições `PUT` para editar um veículo.

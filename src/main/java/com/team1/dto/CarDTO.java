@@ -25,8 +25,8 @@ public class CarDTO extends VehicleDTO {
      * @param disponivel  A disponibilidade do carro.
      * @param precoDiaria O preço diário de locação do carro.
      */
-    public CarDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria) {
-        super(placa, modelo, marca, ano, disponivel, precoDiaria);
+    public CarDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency) {
+        super(placa, modelo, marca, ano, disponivel, precoDiaria, agency);
     }
 
     /**

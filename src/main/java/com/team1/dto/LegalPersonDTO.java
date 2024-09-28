@@ -83,7 +83,12 @@ public class LegalPersonDTO extends CustomerDTO {
                 "name= " + getName() + ", " +
                 "address= " + getAddress() + ", " +
                 "phone= " + getPhone() + ", " +
-                "cpf= " + getCnpj()  + "]";
+                "cpnj= " + getCnpj()  + "]";
+    }
+
+    @Override
+    public String getDocument() {
+        return this.getCnpj();
     }
 
     /**

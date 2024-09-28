@@ -115,7 +115,7 @@ public abstract class CustomerDTO implements Serializable {
      */
 
     public boolean equals(CustomerDTO customerDTO){
-        return customerDTO.name.equals(this.name);
+        return customerDTO.getDocument().equals(this.getDocument());
     }
 
     /**
@@ -138,5 +138,13 @@ public abstract class CustomerDTO implements Serializable {
 
     public String getTipo() {
         return "Generic customer";
+    }
+
+    public String getDocument() {
+        return "Generic document";
+    }
+
+    public boolean isAdmin() {
+        return false;
     }
 }

@@ -22,14 +22,16 @@ public class MainServer {
         server.createContext("/style.css", new StaticFileHandler(page, "style.css"));
         server.createContext("/script.js", new StaticFileHandler(page, "script.js"));
 
+        AdminServer.createContexts();
         VehicleServer.createContexts();
+        RentalServer.createContexts();
         UserServer.createContexts();
+        AgencyServer.createContexts();
         server.setExecutor(null);
         server.start();
         System.out.println("Servidor iniciado http://localhost:" + port);
         System.out.println("User: http://localhost:" + port + "/usuario");
-        System.out.println("Vehicle: http://localhost:" + port + "/veiculo");
-
+        System.out.println("Vehicle: http://localhost:" + port + "/adminPage");
         System.out.println("User Page: http://localhost:" + port + "/userPage");
 
     }

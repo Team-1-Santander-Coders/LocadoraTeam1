@@ -48,6 +48,10 @@ public class AgencyService {
                 .toList();
     }
 
+    public AgencyDTO getAgencyByNameAndAddress(String name, String address) {
+        return agencyRepository.findAll().stream().filter(agencyDTO -> agencyDTO.name().equals(name) && agencyDTO.address().equals(address)).toList().getFirst();
+    }
+
     /**
      * Atualiza os dados de uma agência existente.
      *

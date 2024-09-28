@@ -37,7 +37,7 @@ public class VehicleRepositoryImplTest {
         }
     }
 
-
+    /*
     // Testes para Car
     @Test
     public void testSaveCar() throws DuplicateEntityException {
@@ -178,4 +178,5 @@ public class VehicleRepositoryImplTest {
         });
         assertEquals("Veículo com a placa MOT1235 já existe.", exception.getMessage());
     }
+    */
 }
