@@ -10,7 +10,6 @@ import main.java.com.team1.repository.VehicleRepositoryImpl;
 import main.java.com.team1.util.DateUtil;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RentalService {
@@ -24,25 +23,6 @@ public class RentalService {
 
     public List<RentalDTO> getAllRentals() {
         return rentalRepository.findAll();
-    }
-
-    /**
-     * Este método busca todas as locações associadas a um determinado usuário (cliente) com base no documento.
-     *
-     * @param name String que representa o nome do cliiente.
-     * @return Uma lista de locações (RentalDTO) do cliente, se encontradas.
-     */
-    public List<RentalDTO> getRentalByUsers(String name) {
-        List<RentalDTO> allRentals = getAllRentals();
-        List<RentalDTO> rentalsByUser = new ArrayList<>();
-
-        for (RentalDTO rental : allRentals) {
-            if (rental.getCustomer().getName().equals(name)) {
-                rentalsByUser.add(rental);
-            }
-        }
-
-        return rentalsByUser;
     }
 
     public List<RentalDTO> getRentalByDate(String date) {
