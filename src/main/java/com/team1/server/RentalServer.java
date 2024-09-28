@@ -112,19 +112,15 @@ public class RentalServer {
                 System.out.println(body);
                 String[] requestData = body.split(" / ");
                 String vehiclePlate = requestData[0];
-                String agencyRentalName = requestData[1];
-                String agencyRentalAddress = requestData[2];
+                String agencyRentalName = requestData[1].replace("{", "");;
+                String agencyRentalAddress = requestData[2].replace("}", "");;
                 LocalDate rentalDate = DateUtil.converterTextoParaData(requestData[3]);
-                //if(requestData[4] == null) requestData[4] = agencyRentalName;
-                //if(requestData[5] == null) requestData[5] = agencyRentalAddress;
+
 
                 String agencyReturnName = agencyRentalName;
                 String agencyReturnAddress = agencyRentalAddress;
 
-                //LocalDate returnDate = null;
-                //if (!requestData[6].equals("Sem data de devolução")) {
-                //    returnDate = DateUtil.converterTextoParaData(requestData[6]);
-                //}
+
                 LocalDate returnDate = rentalDate;
                 AgencyDTO agencyReturn = null;
                 if (!agencyReturnName.equals("Sem agência de devolução")) {

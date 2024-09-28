@@ -1,9 +1,24 @@
 document.addEventListener("DOMContentLoaded", function () {
     getAllVehicles();
+    document.getElementById('search').addEventListener('input', filterVehicles);
 
 });
 
 let allVehicles = []
+
+function filterVehicles() {
+    const searchTerm = document.getElementById('search').value.toLowerCase();
+
+    const filteredVehicles = allVehicles.filter(vehicle =>
+        vehicle.placa.toLowerCase().includes(searchTerm) ||
+        vehicle.modelo.toLowerCase().includes(searchTerm) ||
+        vehicle.tipo.toLowerCase().includes(searchTerm) ||
+        vehicle.ano.includes(searchTerm)
+    );
+
+    displayVehicles(filteredVehicles);
+
+}
 
 function getAllVehicles() {
     fetch("/vehicles")
@@ -16,8 +31,8 @@ function getAllVehicles() {
                 console.log(enderecoAgencia)
                 return {tipo, marca, placa, modelo, ano, disponivel, nomeAgencia, enderecoAgencia};
             });
-            console.log(vehicles)
-            displayVehicles(vehicles);
+            allVehicles = vehicles
+            filterVehicles(allVehicles);
         })
         .catch(error => {
             console.error('Erro ao carregar os veículos:', error);
@@ -25,24 +40,16 @@ function getAllVehicles() {
 }
 
 function displayVehicles(vehicles) {
-
+    const vehicle_container = document.getElementById('vehicle_container');
+    vehicle_container.innerHTML = '';
 
     vehicles.forEach(vehicle => {
-
         createVehicleCard(vehicle)
-        RentForm()
-
-
     });
 }
 
 function createVehicleCard(vehicle) {
-    const modelo = vehicle.modelo;
-    const ano = vehicle.ano
-    const tipo = vehicle.tipo;
-    const placa = vehicle.placa;
-    const marca = vehicle.marca;
-    const disponivel = vehicle.disponivel;
+
     const agencyName = vehicle.nomeAgencia.replace("{", "")
     const agencyAddress = vehicle.enderecoAgencia.replace("}", "");
 
@@ -59,7 +66,7 @@ function createVehicleCard(vehicle) {
     const vehicle_plate = document.createElement("h1")
     vehicle_plate.id= "placa"
     vehicle_plate.setAttribute("style", "display:none")
-    vehicle_plate.innerText = placa
+    vehicle_plate.innerText = vehicle.placa
 
     const vehicle_container = document.getElementById('vehicle_container');
 
@@ -69,22 +76,22 @@ function createVehicleCard(vehicle) {
     const vehicle_model = document.createElement('h1');
     vehicle_model.className = "vehicle_model";
     vehicle_model.id = "vehicle_model"
-    vehicle_model.innerText = modelo;
+    vehicle_model.innerText = vehicle.modelo;
 
     const vehicle_brand = document.createElement('h2');
     vehicle_brand.className = "vehicle_brand";
-    vehicle_brand.innerText = marca;
+    vehicle_brand.innerText = vehicle.marca;
 
     const vehicle_year = document.createElement('h2');
     vehicle_year.className = "vehicle_year";
     vehicle_year.id = "vehicle_year"
-    vehicle_year.innerText = "Ano: " + ano;
+    vehicle_year.innerText = "Ano: " + vehicle.ano;
 
     const vehicle_status = document.createElement('h2');
     vehicle_status.className = "vehicle_status";
-    vehicle_status.innerText = disponivel;
+    vehicle_status.innerText = vehicle.disponivel;
 
-    if (disponivel === "Disponível") {
+    if (vehicle.disponivel === "Disponível") {
         vehicle_status.setAttribute("style", "background-color: mediumseagreen; color:white;");
     } else {
         vehicle_status.setAttribute("style", "background-color: gray; color:white;");
@@ -92,13 +99,13 @@ function createVehicleCard(vehicle) {
 
     const vehicle_type = document.createElement('h3');
     vehicle_type.className = "vehicle_type";
-    vehicle_type.innerText = tipo;
+    vehicle_type.innerText = vehicle.tipo;
 
     const rent_vehicle_button = document.createElement('button');
     rent_vehicle_button.id = "rent_vehicle_button";
 
     rent_vehicle_button.innerText = "Alugar";
-    if (disponivel !== "Disponível") {
+    if (vehicle.disponivel !== "Disponível") {
         rent_vehicle_button.setAttribute("style", "pointer-events:none; background-color: gray");
     }
 
@@ -113,12 +120,13 @@ function createVehicleCard(vehicle) {
     vehicle_card.appendChild(rent_vehicle_button);
 
     vehicle_container.appendChild(vehicle_card);
+    RentForm(rent_vehicle_button, vehicle)
 }
 
-function RentForm() {
+function RentForm(rent_vehicle_button, vehicle) {
     const modelo = document.getElementById("vehicle_model").innerText
     const ano = document.getElementById("vehicle_year").innerText
-    const rent_vehicle_button = document.getElementById("rent_vehicle_button")
+
     rent_vehicle_button.addEventListener("click", event => {
         const body = document.getElementById("general_container");
         const bg_overlap = document.createElement("div");
@@ -132,37 +140,72 @@ function RentForm() {
             "z-index: 9999; " +
             "backdrop-filter: blur(10px); " +
             "box-shadow: 0 4px 6px rgba(0,0,0,0.1); " +
-            "border: 1px solid rgba(255, 255, 255, 0.18);"
+            "border: 1px solid rgba(255, 255, 255, 0.18);" +
+            "display:flex;" +
+            "align-items:center;" +
+            "justify-content:center;"
         );
 
         body.appendChild(bg_overlap);
 
         const rent_form = document.createElement("form");
         rent_form.className = "rent_form";
+        rent_form.setAttribute("style",
+            "display:flex;" +
+            "flex-direction:column;" +
+            "gap:0;" +
+            "min-width:20em;" +
+            "max_width:20em;" +
+            "min-height:30em;" +
+            "max-height:30em;")
+
+        const agencyDiv = document.createElement("div")
+        agencyDiv.setAttribute("style", "display:flex")
+        const agencyName = document.createElement("h3")
+        agencyName.innerText = vehicle.nomeAgencia.replace("{", "") + " - "
+
+        const agencyAddress = document.createElement("h3")
+        agencyAddress.innerText = vehicle.enderecoAgencia.replace("}", "")
+        agencyAddress.setAttribute("style", "font-weight:normal")
+
+        agencyDiv.appendChild(agencyName)
+        agencyDiv.appendChild(agencyAddress)
+
+        const rentDate_info = document.createElement("h1")
+        rentDate_info.setAttribute("style", "font-size:12px; font-weight:normal; margin-top:20px;")
+        rentDate_info.innerText = "Data de retirada"
 
         const rent_date = document.createElement("input");
         rent_date.id = "rent_date"
         rent_date.type = "date";
+        rent_date.setAttribute("style", "margin-bottom:40px")
 
         const vehicle_form_model = document.createElement("h1");
-        vehicle_form_model.innerText = modelo;
+        vehicle_form_model.innerText = vehicle.modelo;
+        vehicle_form_model.setAttribute("style", "margin:0;")
 
         const vehicle_form_year = document.createElement("h2");
-        vehicle_form_year.innerText = ano;
+        vehicle_form_year.innerText = vehicle.ano;
+        vehicle_form_year.setAttribute("style", "font-weight:normal;")
 
+        const exit_header = document.createElement("div")
+        exit_header.setAttribute("style", "width:100%; display:flex; justify-content:flex-end;")
         const exit = document.createElement("a");
         exit.className = "exit_button";
         exit.innerText = "x";
         exit.setAttribute("style", "cursor:pointer");
 
+
+        exit_header.appendChild(exit)
         const rent_vehicle_submit = document.createElement("button");
         rent_vehicle_submit.id = "rent_vehicle_submit"
         rent_vehicle_submit.innerText = "Alugar";
 
-
-        rent_form.appendChild(exit);
+        rent_form.appendChild(exit_header);
         rent_form.appendChild(vehicle_form_model);
         rent_form.appendChild(vehicle_form_year);
+        rent_form.appendChild(agencyDiv);
+        rent_form.appendChild(rentDate_info);
         rent_form.appendChild(rent_date);
         rent_form.appendChild(rent_vehicle_submit);
         bg_overlap.appendChild(rent_form);
@@ -173,19 +216,17 @@ function RentForm() {
         });
 
         rent_vehicle_submit.addEventListener("click", event =>{
-            rentVehicle()
+            rentVehicle(vehicle, rent_date)
         })
-
     })
 }
 
-function rentVehicle() {
-    const rent_date = document.getElementById("rent_date")
-    const placa = document.getElementById("placa").innerText
-    const agencyName = document.getElementById("vehicle_agency_name").innerText
-    const agencyAddress = document.getElementById("vehicle_agency_address").innerText
-    const userId = document.cookie.split(";")[0].split(":")[1]
+function rentVehicle(vehicle, rent_date) {
 
+    const placa = vehicle.placa
+    const agencyName = vehicle.nomeAgencia
+    const agencyAddress = vehicle.enderecoAgencia
+    const userId = document.cookie.split(";")[0].split(":")[1]
 
         const [year, month, day] = rent_date.value.split("-")
         const dataFormatada = `${day}/${month}/${year}`

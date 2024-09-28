@@ -95,6 +95,7 @@ if (window.location.href.includes("veiculo")){
     }
 
     function filterVehicles() {
+        document.getElementById('search').addEventListener('input', filterVehicles);
         const searchTerm = document.getElementById('search').value.toLowerCase();
 
         const filteredVehicles = allVehicles.filter(vehicle =>
