@@ -25,14 +25,12 @@ function getAllVehicles() {
         .then(response => response.text())
         .then(data => {
             console.log(data)
-            const vehicles = data.split('\n').map(vehicle => {
+            allVehicles = data.split('\n').map(vehicle => {
                 const [tipo, marca, placa, modelo, ano, disponivel, nomeAgencia, enderecoAgencia] = vehicle.split(' - ');
-                console.log(nomeAgencia)
-                console.log(enderecoAgencia)
                 return {tipo, marca, placa, modelo, ano, disponivel, nomeAgencia, enderecoAgencia};
-            });
-            allVehicles = vehicles
+            })
             filterVehicles(allVehicles);
+            console.log(allVehicles)
         })
         .catch(error => {
             console.error('Erro ao carregar os veículos:', error);

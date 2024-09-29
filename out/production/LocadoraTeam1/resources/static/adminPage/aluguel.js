@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     loadCustomers();
-    loadAvailableVehicles();
+    loadAvailableVehicles()
     loadAgencies();
 
     document.getElementById('rentalForm').addEventListener('submit', function (event) {
@@ -43,6 +43,28 @@ function fetchRent(vehiclePlaca, pickupAgencyName, pickupAgencyAddress, startDat
     });
 }
 
+function loadAvailableVehicles() {
+    fetch('/vehicles')
+        .then(response => response.text())
+        .then(data => {
+            const availableVehicles = data.split('\n').filter(vehicle => vehicle.includes('Disponível'));
+            const vehicleSelect = document.getElementById('vehicle');
+            vehicleSelect.innerHTML = '';
+
+            availableVehicles.forEach(vehicle => {
+                const [placa, modelo, tipo] = vehicle.split(' - ');
+                const option = document.createElement('option');
+                option.textContent = `${placa} / ${modelo} / ${tipo}`;
+                option.value = `${placa} / ${modelo} / ${tipo}`;
+                vehicleSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao carregar veículos disponíveis:', error);
+            alert('Erro ao carregar veículos disponíveis.');
+        });
+}
+
 function formatDate(dateString) {
     const dateParts = dateString.split('-');
     const year = dateParts[0];
@@ -61,7 +83,6 @@ function loadCustomers() {
             return response.json();
         })
         .then(customers => {
-            console.log('Resposta do servidor:', customers);
             const customerSelect = document.getElementById('customer');
             customerSelect.innerHTML = '';
 
@@ -71,7 +92,7 @@ function loadCustomers() {
                 const customerEmail = customer.email;
 
                 const option = document.createElement('option');
-                option.textContent = `${customerName} - ${customerEmail}`;
+                option.textContent = `${capitalizeFirstLetters(customerName)} - ${customerEmail}`;
                 option.value = `${customerName} / ${customerEmail} / ${customerDocument}`;
                 customerSelect.appendChild(option);
             });
@@ -82,38 +103,13 @@ function loadCustomers() {
         });
 }
 
-function loadAvailableVehicles() {
-    fetch('/vehicles')
-        .then(response => response.text())
-        .then(data => {
-            const selectedAgencyData = document.getElementById("pickupAgency").split(" / ");
-            const selectedAgencyName = selectedAgencyData[0];
-            const selectedAgencyAddress = selectedAgencyData[1];
-            const availableVehicles = data.split('\n').filter(vehicle => vehicle.includes('Disponível') && vehicle.includes(selectedAgencyAddress) && vehicle.includes(selectedAgencyName));
-            console.log(availableVehicles)
-            const vehicleSelect = document.getElementById('vehicle');
-            vehicleSelect.innerHTML = '';
-
-            availableVehicles.forEach(vehicle => {
-                const [placa, modelo, tipo] = vehicle.split(' - ');
-                const option = document.createElement('option');
-                option.textContent = `${placa} / ${modelo} / ${tipo}`;
-                option.value = `${placa} / ${modelo} / ${tipo}`;
-                vehicleSelect.appendChild(option);
-            });
-        })
-        .catch(error => {
-            console.error('Erro ao carregar veículos disponíveis:', error);
-            alert('Erro ao carregar veículos disponíveis.');
-        });
-}
 
 function loadAgencies() {
     fetch('/agencies')
         .then(response => response.json())
         .then(agencies => {
             const pickupAgencySelect = document.getElementById('pickupAgency');
-            const dropoffAgencySelect = document.getElementById('dropoffAgency');
+            const dropoffAgencySelect = document.getElementById('agencyReturn');
             pickupAgencySelect.innerHTML = '';
             dropoffAgencySelect.innerHTML = '';
             const option = document.createElement('option');
@@ -140,4 +136,4 @@ function loadAgencies() {
         });
 }
 
-loadRentals
+
