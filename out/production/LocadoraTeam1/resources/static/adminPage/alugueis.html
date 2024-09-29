@@ -13,7 +13,9 @@
             <li class="menu_item"><a class="menu_items" id="user_menu"></a></li>
             <li class="menu_item"><a class="menu_items" id="home" href="/">Home</a></li>
             <li class="menu_item"><a class="menu_items" id="adminpage" href="/adminPage">Painel Administrativo</a></li>
-            <li class="menu_item"><a class="menu_items" id="rentals" href="/adminPage/rentals">Criar Aluguel</a></li>
+            <li class="menu_item"><a class="menu_items" id="agencias" href="/adminPage/agencias">Gerenciamento de Agências</a></li>
+            <li class="menu_item"><a class="menu_items" id="veiculos" href="/adminPage/veiculos">Gerenciamento de Veículos</a></li>
+            <li class="menu_item"><a class="menu_items" id="alugueis" href="/adminPage/alugueis">Gerenciamento de Alugueis</a></li>
         </ul>
     </nav>
 </header>
@@ -30,20 +32,52 @@
             <label for="pickupAgency">Agência de Retirada:</label>
             <select id="pickupAgency" required></select>
 
-            <label for="dropoffAgency">Agência de Devolução:</label>
-            <select id="dropoffAgency"></select>
-
             <label for="startDate">Data de Início:</label>
             <input type="date" id="startDate" required>
-
-            <label for="endDate">Data de Término:</label>
-            <input type="date" id="endDate">
 
             <button type="submit">Criar Aluguel</button>
         </form>
     </Cadastro>
 </div>
-<script src="/adminPage/aluguel.js"></script>
+<div class="rental-list">
+    <h1>Aluguéis</h1>
+    <table id="rentalTable">
+        <thead>
+        <tr>
+            <th>Agência Retirada</th>
+            <th>Cliente</th>
+            <th>Veículo</th>
+            <th>Data de Retirada</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<div id="returnModal" class="modal">
+    <div class="modal-content">
+        <h2>Devolução de Aluguel</h2>
+        <form id="returnForm">
+            <p>Agência de Retirada: <span id="pickupAgencyReturn"></span></p>
+            <p>Cliente: <span id="customerReturn"></span></p>
+            <p>Veículo: <span id="vehicleReturn"></span></p>
+            <p>Data de Retirada: <span id="rentalDateReturn"></span></p>
+
+            <label for="agencyReturn">Agência de Devolução:</label>
+            <select id="agencyReturn"></select>
+            <label for="returnDate">Data de Devolução:</label>
+            <input type="date" id="returnDate" required>
+            <button type="submit">Confirmar Devolução</button>
+            <button type="button" id="closeModal">Cancelar</button>
+        </form>
+    </div>
+</div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="/adminPage/aluguel.js"></script>
 <script src="/script.js"></script>
 </html>

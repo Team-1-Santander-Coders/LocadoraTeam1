@@ -61,13 +61,13 @@ public class UserServer {
                     if (user.isAdmin()) {
                         response = "{\"success\": true, \"redirectUrl\": \"/adminPage/\"}";
                     }
-                    exchange.sendResponseHeaders(200, response.length());
+                    exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes());
                     os.close();
                 } else {
                     String response = "{\"success\": false, \"message\": \"Credenciais inválidas\"}";
-                    exchange.sendResponseHeaders(401, response.length());
+                    exchange.sendResponseHeaders(401, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes());
                     os.close();
@@ -203,14 +203,14 @@ public class UserServer {
                     os.close();
                 } else {
                     String response = "Usuário não autorizado.";
-                    exchange.sendResponseHeaders(403, response.length());
+                    exchange.sendResponseHeaders(403, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes());
                     os.close();
                 }
             } else {
                 String response = "Usuário não autenticado.";
-                exchange.sendResponseHeaders(401, response.length());
+                exchange.sendResponseHeaders(401, response.getBytes(StandardCharsets.UTF_8).length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());
                 os.close();

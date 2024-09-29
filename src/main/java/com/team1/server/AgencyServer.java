@@ -205,7 +205,7 @@ public class AgencyServer {
             if ("DELETE".equals(exchange.getRequestMethod())) {
                 InputStream inputStream = exchange.getRequestBody();
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-                String[] agencyData = body.trim().split(",");
+                String[] agencyData = body.trim().split(" / ");
                 String name = agencyData[0];
                 String address = agencyData[1];
 
@@ -234,27 +234,27 @@ public class AgencyServer {
                         try {
                             agencyService.deleteAgency(name, address);
                             String response = "Agência deletada com sucesso!";
-                            exchange.sendResponseHeaders(200, response.length());
+                            exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
                             OutputStream os = exchange.getResponseBody();
                             os.write(response.getBytes());
                             os.close();
                         } catch (EntityNotFoundException e) {
                             String response = "Erro: Agência não encontrada.";
-                            exchange.sendResponseHeaders(404, response.length());
+                            exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
                             OutputStream os = exchange.getResponseBody();
                             os.write(response.getBytes());
                             os.close();
                         }
                     } else {
                         String response = "Usuário não autorizado ou não encontrado.";
-                        exchange.sendResponseHeaders(403, response.length());
+                        exchange.sendResponseHeaders(403, response.getBytes(StandardCharsets.UTF_8).length);
                         OutputStream os = exchange.getResponseBody();
                         os.write(response.getBytes());
                         os.close();
                     }
                 } else {
                     String response = "Usuário não autenticado.";
-                    exchange.sendResponseHeaders(401, response.length());
+                    exchange.sendResponseHeaders(401, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes());
                     os.close();

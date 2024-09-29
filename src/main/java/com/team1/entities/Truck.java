@@ -30,6 +30,7 @@ public class Truck implements Vehicle {
      * @param modelo O modelo do caminhão.
      * @param marca  A marca do caminhão.
      * @param ano    O ano de fabricação do caminhão.
+     * @param agency Agência onde o caminhão está.
      */
     public Truck(String placa, String modelo, String marca, int ano, AgencyDTO agency) {
         this.placa = placa;
@@ -37,6 +38,7 @@ public class Truck implements Vehicle {
         this.marca = marca;
         this.ano = ano;
         this.disponivel = true;
+        this.agency = agency;
     }
 
     /**
@@ -111,9 +113,5 @@ public class Truck implements Vehicle {
 
     public AgencyDTO getAgency() {
         return agency;
-    }
-
-    public void setAgency(AgencyDTO agency) {
-        this.agency = agency;
     }
 }

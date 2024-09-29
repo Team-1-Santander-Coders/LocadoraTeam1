@@ -47,8 +47,11 @@ public class RentalService {
 
     public RentalDTO getRental(String placa, String document, LocalDate rentalDate) {
         return getAllRentals().stream()
-                .filter(r -> r.vehiclePlate().equals(placa) && r.customerDocument().equals(document) && r.getRentalDate() == rentalDate)
-                .toList().getFirst();
+                .filter(r -> r.vehiclePlate().equals(placa)
+                        && r.customerDocument().equals(document)
+                        && r.getRentalDate().isEqual(rentalDate))
+                .findFirst()
+                .orElse(null);
     }
 
     public String getReceipt(String placa, String document, LocalDate rentalDate) {
