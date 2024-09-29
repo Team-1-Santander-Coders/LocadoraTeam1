@@ -27,8 +27,6 @@ function getAllVehicles() {
             console.log(data)
             const vehicles = data.split('\n').map(vehicle => {
                 const [tipo, marca, placa, modelo, ano, disponivel, nomeAgencia, enderecoAgencia] = vehicle.split(' - ');
-                console.log(nomeAgencia)
-                console.log(enderecoAgencia)
                 return {tipo, marca, placa, modelo, ano, disponivel, nomeAgencia, enderecoAgencia};
             });
             allVehicles = vehicles

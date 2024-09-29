@@ -9,42 +9,39 @@ document.addEventListener("DOMContentLoaded", function () {
         const customerData = document.getElementById('customer').value.split(" / ");
         const vehicleData = document.getElementById('vehicle').value.split(" / ");
         const pickupAgencyData = document.getElementById('pickupAgency').value.split(" / ");
-        const dropoffAgencyData = document.getElementById('dropoffAgency').value.split(" / ");
         const startDate = formatDate(document.getElementById('startDate').value);
-        let endDate = document.getElementById('endDate').value;
+        let endDate = 'Sem data de devolução';
 
         const customerDocument = customerData[2];
         const vehiclePlaca = vehicleData[1];
         const pickupAgencyName = pickupAgencyData[0];
         const pickupAgencyAddress = pickupAgencyData[1];
-        let dropoffAgencyName = dropoffAgencyData[0];
-        let dropoffAgencyAddress = dropoffAgencyData[1];
+        const dropoffAgencyName = 'Sem agência de devolução';
+        const dropoffAgencyAddress = 'Sem agência de devolução';
 
-        if (!dropoffAgencyAddress || !dropoffAgencyName || !endDate) {
-            endDate = 'Sem data de devolução';
-            dropoffAgencyName = 'Sem agência de devolução';
-            dropoffAgencyAddress = 'Sem agência de devolução';
-        } else {
-            endDate = formatDate(endDate);
-        }
-
-        fetch('/rent', {
-            method: 'POST',
-            body: `${vehiclePlaca} / ${pickupAgencyName} / ${pickupAgencyAddress} / ${startDate} / ${dropoffAgencyName} / ${dropoffAgencyAddress} / ${endDate} / ${customerDocument}`,
-            credentials: 'include',
-        }).then(response => {
-            if (response.ok) {
-                alert('Aluguel criado com sucesso!');
-                document.getElementById('rentalForm').reset();
-            } else {
-                alert('Erro ao criar aluguel.');
-            }
-        }).catch(error => {
-            console.error('Erro ao fazer requisição:', error);
-            alert('Falha na comunicação com o servidor.');
-        });
+        fetchRent(vehiclePlaca, pickupAgencyName, pickupAgencyAddress, startDate, dropoffAgencyName, dropoffAgencyAddress, endDate, customerDocument);
     });
 });
+
+
+
+function fetchRent(vehiclePlaca, pickupAgencyName, pickupAgencyAddress, startDate, dropoffAgencyName, dropoffAgencyAddress, endDate, customerDocument) {
+    fetch('/rent', {
+        method: 'POST',
+        body: `${vehiclePlaca} / ${pickupAgencyName} / ${pickupAgencyAddress} / ${startDate} / ${dropoffAgencyName} / ${dropoffAgencyAddress} / ${endDate} / ${customerDocument}`,
+        credentials: 'include',
+    }).then(response => {
+        if (response.ok) {
+            alert('Aluguel criado com sucesso!');
+            document.getElementById('rentalForm').reset();
+        } else {
+            alert('Erro ao criar aluguel.');
+        }
+    }).catch(error => {
+        console.error('Erro ao fazer requisição:', error);
+        alert('Falha na comunicação com o servidor.');
+    });
+}
 
 function formatDate(dateString) {
     const dateParts = dateString.split('-');
@@ -89,7 +86,11 @@ function loadAvailableVehicles() {
     fetch('/vehicles')
         .then(response => response.text())
         .then(data => {
-            const availableVehicles = data.split('\n').filter(vehicle => vehicle.includes('Disponível'));
+            const selectedAgencyData = document.getElementById("pickupAgency").split(" / ");
+            const selectedAgencyName = selectedAgencyData[0];
+            const selectedAgencyAddress = selectedAgencyData[1];
+            const availableVehicles = data.split('\n').filter(vehicle => vehicle.includes('Disponível') && vehicle.includes(selectedAgencyAddress) && vehicle.includes(selectedAgencyName));
+            console.log(availableVehicles)
             const vehicleSelect = document.getElementById('vehicle');
             vehicleSelect.innerHTML = '';
 
@@ -138,3 +139,5 @@ function loadAgencies() {
             alert('Erro ao carregar agências.');
         });
 }
+
+loadRentals
