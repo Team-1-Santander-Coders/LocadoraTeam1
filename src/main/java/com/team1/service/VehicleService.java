@@ -1,15 +1,13 @@
 package main.java.com.team1.service;
 
-import main.java.com.team1.dto.CarDTO;
-import main.java.com.team1.dto.MotorcycleDTO;
-import main.java.com.team1.dto.TruckDTO;
-import main.java.com.team1.dto.VehicleDTO;
+import main.java.com.team1.dto.*;
 import main.java.com.team1.exception.DuplicateEntityException;
 import main.java.com.team1.exception.EntityNotFoundException;
 import main.java.com.team1.exception.RentIllegalUpdateException;
 import main.java.com.team1.repository.VehicleRepository;
 import main.java.com.team1.util.FileUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,12 +59,13 @@ public class VehicleService {
     }
 
     /**
-     * Aluga um veículo, alterando sua disponibilidade para não disponível.
+     * Aluga um veículo de acordo com sua placa, alterando sua disponibilidade para não disponível.
      *
-     * @param vehicleDTO os dados do veículo a ser alugado.
+     * @param placa a placa do .
      * @throws RentIllegalUpdateException se o veículo já estiver alugado.
      */
-    public void rentVehicle(VehicleDTO vehicleDTO) throws RentIllegalUpdateException {
+    public void rentVehicle(String placa) throws RentIllegalUpdateException, EntityNotFoundException {
+        VehicleDTO vehicleDTO = getVehicleByPlaca(placa);
         if (!vehicleDTO.isDisponivel()) {
             throw new RentIllegalUpdateException(vehicleDTO.getTipo() + " já está alugado.");
         }
@@ -74,29 +73,30 @@ public class VehicleService {
         switch (vehicleDTO.getTipo()) {
             case "Carro":
                 CarDTO rentedCar = new CarDTO(vehicleDTO.getPlaca(), vehicleDTO.getModelo(),
-                        vehicleDTO.getMarca(), vehicleDTO.getAno(), false, vehicleDTO.getPrecoDiaria());
+                        vehicleDTO.getMarca(), vehicleDTO.getAno(), false, vehicleDTO.getPrecoDiaria(), vehicleDTO.getAgency());
                 updateVehicleInRepository(rentedCar);
                 break;
             case "Moto":
                 MotorcycleDTO rentedMotorcycle = new MotorcycleDTO(vehicleDTO.getPlaca(), vehicleDTO.getModelo(),
-                        vehicleDTO.getMarca(), vehicleDTO.getAno(), false, vehicleDTO.getPrecoDiaria());
+                        vehicleDTO.getMarca(), vehicleDTO.getAno(), false, vehicleDTO.getPrecoDiaria(), vehicleDTO.getAgency());
                 updateVehicleInRepository(rentedMotorcycle);
                 break;
             case "Caminhão":
                 TruckDTO rentedTruck = new TruckDTO(vehicleDTO.getPlaca(), vehicleDTO.getModelo(),
-                        vehicleDTO.getMarca(), vehicleDTO.getAno(), false, vehicleDTO.getPrecoDiaria());
+                        vehicleDTO.getMarca(), vehicleDTO.getAno(), false, vehicleDTO.getPrecoDiaria(), vehicleDTO.getAgency());
                 updateVehicleInRepository(rentedTruck);
                 break;
         }
     }
 
     /**
-     * Devolve um veículo, alterando sua disponibilidade para disponível.
+     * Devolve um veículo baseado na placa, alterando sua disponibilidade para disponível.
      *
-     * @param vehicleDTO os dados do veículo a ser devolvido.
+     * @param placa os dados do veículo a ser devolvido.
      * @throws RentIllegalUpdateException se o veículo já estiver disponível.
      */
-    public void returnCar(VehicleDTO vehicleDTO) throws RentIllegalUpdateException {
+    public void returnVehicle(String placa, AgencyDTO agencyDTO) throws RentIllegalUpdateException, EntityNotFoundException {
+        VehicleDTO vehicleDTO = getVehicleByPlaca(placa);
         if (vehicleDTO.isDisponivel()) {
             throw new RentIllegalUpdateException(vehicleDTO.getTipo() + " já está disponível.");
         }
@@ -104,17 +104,17 @@ public class VehicleService {
         switch (vehicleDTO.getTipo()) {
             case "Carro":
                 CarDTO rentedCar = new CarDTO(vehicleDTO.getPlaca(), vehicleDTO.getModelo(),
-                        vehicleDTO.getMarca(), vehicleDTO.getAno(), true, vehicleDTO.getPrecoDiaria());
+                        vehicleDTO.getMarca(), vehicleDTO.getAno(), true, vehicleDTO.getPrecoDiaria(), agencyDTO);
                 updateVehicleInRepository(rentedCar);
                 break;
             case "Moto":
                 MotorcycleDTO rentedMotorcycle = new MotorcycleDTO(vehicleDTO.getPlaca(), vehicleDTO.getModelo(),
-                        vehicleDTO.getMarca(), vehicleDTO.getAno(), true, vehicleDTO.getPrecoDiaria());
+                        vehicleDTO.getMarca(), vehicleDTO.getAno(), true, vehicleDTO.getPrecoDiaria(), agencyDTO);
                 updateVehicleInRepository(rentedMotorcycle);
                 break;
             case "Caminhão":
                 TruckDTO rentedTruck = new TruckDTO(vehicleDTO.getPlaca(), vehicleDTO.getModelo(),
-                        vehicleDTO.getMarca(), vehicleDTO.getAno(), true, vehicleDTO.getPrecoDiaria());
+                        vehicleDTO.getMarca(), vehicleDTO.getAno(), true, vehicleDTO.getPrecoDiaria(), agencyDTO);
                 updateVehicleInRepository(rentedTruck);
                 break;
         }
@@ -177,4 +177,21 @@ public class VehicleService {
             FileUtil.logError(e);
         }
     }
-}
+
+    public List<VehicleDTO> getAllAvailableVehicles() {
+        List<VehicleDTO> availableVehicles = new ArrayList<>();
+
+        // Recupera todos os veículos do repositório
+        List<VehicleDTO> allVehicles = vehicleRepository.findAll();
+
+        // Adiciona apenas os veículos disponíveis à lista
+        for (VehicleDTO vehicle : allVehicles) {
+            if (vehicle.isDisponivel()) { // Verifica se o veículo está disponível
+                availableVehicles.add(vehicle);
+            }
+        }
+
+        return availableVehicles;
+        }
+    }
+

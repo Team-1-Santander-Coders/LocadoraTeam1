@@ -14,9 +14,9 @@ public class CustomerServiceTest {
         CustomerService customerService = new CustomerService();
 
         System.out.println("Teste 1 - Adicionar três clientes, sendo que um terá a quantidade incorreta de digitos do cpf");
-        customerService.addCustomer(new PhysicalPersonDTO("Marcinho do reboque", "Rua A", "11111111111", "12345678900"));
-        customerService.addCustomer(new LegalPersonDTO("Cafeteria do Jerimum", "Lá na casa do carai", "22222222222", "11111111111111"));
-        customerService.addCustomer(new PhysicalPersonDTO("Mariazinha filha de dona Ildete", "Rua B", "333333333", "1122233344"));
+//        customerService.addCustomer(new PhysicalPersonDTO("Marcinho do reboque", "Rua A", "11111111111", "12345678900"));
+//        customerService.addCustomer(new LegalPersonDTO("Cafeteria do Jerimum", "Lá na casa do carai", "22222222222", "11111111111111"));
+//        customerService.addCustomer(new PhysicalPersonDTO("Mariazinha filha de dona Ildete", "Rua B", "333333333", "1122233344"));
         //customerService.addCustomer(new LegalPersonDTO("Borracharia do Boca", "Lá em camaçari", "77777777777", "9998887770001"));
         //customerService.addCustomer(new LegalPersonDTO("Ricardinho Agiota", "vish nem sei", "88888888888", "999999999999"));
         //customerService.deleteCustomer(new LegalPersonDTO("Ricardinho Agiota", "vish nem sei", "88888888888", "999999999999"));

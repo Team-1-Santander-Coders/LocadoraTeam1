@@ -1,0 +1,32 @@
+@startuml
+!theme black-knight
+class AgencyDTO {
+    -String name
+    -String address
+}
+
+class AgencyRepository {
+    +save(Agency agency)
+    +delete(Agency agency)
+    +findByNameAndAddress(String name, String address) Agency
+    +findAll() List<Agency>
+}
+
+class AgencyRepositoryImpl {
+    +save(Agency agency)
+    +delete(Agency agency)
+    +findByNameAndAddress(String name, String address) Agency
+    +findAll() List<Agency>
+}
+
+class AgencyService {
+    +createAgency(AgencyDTO agencyDTO)
+    +updateAgency(String oldName, String oldAddress, AgencyDTO agencyDTO)
+    +deleteAgency(AgencyDTO agencyDTO)
+    +getAgencyByNameAndAddress(String name, String address) Agency
+}
+
+AgencyService --> AgencyDTO
+AgencyService --> AgencyRepository
+AgencyRepository <|.. AgencyRepositoryImpl
+@enduml

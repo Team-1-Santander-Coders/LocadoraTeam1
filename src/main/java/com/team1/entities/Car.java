@@ -1,5 +1,7 @@
 package main.java.com.team1.entities;
 
+import main.java.com.team1.dto.AgencyDTO;
+
 import java.io.Serial;
 
 /**
@@ -18,6 +20,7 @@ public class Car implements Vehicle {
     private final int ano;
     private boolean disponivel;
     private static final double precoDiaria = 150.00;
+    private AgencyDTO agency;
 
     /**
      * Construtor da classe Car.
@@ -26,12 +29,14 @@ public class Car implements Vehicle {
      * @param modelo O modelo do carro.
      * @param marca  A marca do carro.
      * @param ano    O ano de fabricação do carro.
+     * @param agency    A agência que o carro está associado.
      */
-    public Car(String placa, String modelo, String marca, int ano) {
+    public Car(String placa, String modelo, String marca, int ano, AgencyDTO agency) {
         this.placa = placa;
         this.modelo = modelo;
         this.marca = marca;
         this.ano = ano;
+        this.agency = agency;
         this.disponivel = true;
     }
 
@@ -42,7 +47,7 @@ public class Car implements Vehicle {
      */
     @Override
     public String getPlaca() {
-        return placa;
+        return placa.toUpperCase();
     }
 
     /**
@@ -103,5 +108,9 @@ public class Car implements Vehicle {
     @Override
     public String getTipo() {
         return "Carro";
+    }
+
+    public AgencyDTO getAgency() {
+        return agency;
     }
 }

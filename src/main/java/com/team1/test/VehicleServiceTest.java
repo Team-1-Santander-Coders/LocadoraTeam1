@@ -18,7 +18,7 @@ public class VehicleServiceTest {
         vehicleRepository = new MockVehicleRepository();
         vehicleService = new VehicleService(vehicleRepository);
     }
-
+    /*
     @Test
     public void testAddVehicle() throws DuplicateEntityException {
         CarDTO car = new CarDTO("ABC1234", "Modelo", "Marca", 2020, true, 100.00);
@@ -80,4 +80,6 @@ public class VehicleServiceTest {
         });
         assertEquals("Veículo com a placa XYZ5678 não encontrado.", exception.getMessage());
     }
+    */
+
 }

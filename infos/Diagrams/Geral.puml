@@ -1,0 +1,261 @@
+@startuml
+class AgencyDTO {
+    -String name
+    -String address
+}
+
+class AgencyRepository {
+    +save(Agency agency)
+    +delete(Agency agency)
+    +findByNameAndAddress(String name, String address) Agency
+    +findAll() List<Agency>
+}
+
+class AgencyRepositoryImpl {
+    +save(Agency agency)
+    +delete(Agency agency)
+    +findByNameAndAddress(String name, String address) Agency
+    +findAll() List<Agency>
+}
+
+class AgencyService {
+    +createAgency(AgencyDTO agencyDTO)
+    +updateAgency(String oldName, String oldAddress, AgencyDTO agencyDTO)
+    +deleteAgency(AgencyDTO agencyDTO)
+    +getAgencyByNameAndAddress(String name, String address) Agency
+}
+
+AgencyService --> AgencyDTO
+AgencyService --> AgencyRepository
+AgencyRepository <|.. AgencyRepositoryImpl
+
+class Rental {
+    -VehicleDTO vehicle
+    -CustomerDTO customer
+    -AgencyDTO agencyRental
+    -AgencyDTO agencyReturn
+    -LocalDate rentalDate
+    -LocalDate returnDate
+    -boolean isReturned
+    -double totalCost
+    +finalizarAluguel(AgencyDTO agencyReturn, LocalDate returnDate)
+    +calcularCustoTotal()
+    +toString()
+    +getters
+}
+
+class RentalRepository {
+    +save(RentalDTO rentalDTO)
+    +findAll()
+    +update(RentalDTO updatedRentalDTO)
+    +delete(String vehiclePlate, String customerDocument)
+}
+
+class RentalRepositoryImpl {
+    +save(RentalDTO rentalDTO)
+    +findAll()
+    +update(RentalDTO updatedRentalDTO)
+    +delete(String vehiclePlate, String customerDocument)
+}
+
+class VehicleDTO {
+    -String placa
+    -String modelo
+    -String marca
+    -int ano
+    -boolean disponivel
+    -double precoDiaria
+    -AgencyDTO agency
+}
+
+class CustomerDTO {
+    -String document
+    -String name
+    -String contact
+}
+
+class AgencyDTO {
+    -String name
+    -String address
+}
+
+DataAccessObject <|.. RentalRepositoryImpl
+
+Rental "1" *-- "1" VehicleDTO : vehicle
+Rental "1" *-- "1" CustomerDTO : customer
+Rental "1" *-- "1" AgencyDTO : agencyRental
+Rental "1" *-- "1" AgencyDTO : agencyReturn
+
+abstract class CustomerDTO {
+    +String name
+    +String address
+    +String phone
+    +String id
+    +String getDocument()
+    +String getName()
+    +void setName(String name)
+    +String getAddress()
+    +void setAddress(String address)
+    +String getPhone()
+    +void setPhone(String phone)
+    +boolean equals(CustomerDTO customerDTO)
+    +int hashCode()
+    +String toString()
+    +String getTipo()
+    +String getEmail()
+}
+
+class PhysicalPersonDTO {
+    +String cpf
+    +String getCpf()
+    +void setCpf(String cpf)
+    +boolean equals(CustomerDTO customerDTO)
+    +int hashCode()
+    +String toString()
+    +String getTipo()
+    +String getDocument()
+}
+
+class LegalPersonDTO {
+    +String cnpj
+    +String getCnpj()
+    +void setCnpj(String cnpj)
+    +boolean equals(CustomerDTO customerDTO)
+    +int hashCode()
+    +String toString()
+    +String getTipo()
+    +String getDocument()
+}
+
+class UserDTO {
+    +String id
+    +String email
+    +String password
+    +String document
+    +String type
+    -boolean isAdmin
+    +String getEmail()
+    +String getPassword()
+    +String getDocument()
+    +String getId()
+    +boolean isAdmin()
+    +String getTipo()
+    +String toString()
+}
+
+interface CustomerRepository {
+    +void save(CustomerDTO customerDTO)
+    +List<CustomerDTO> findAll()
+    +void update(CustomerDTO customer, String newName, String newAddress, String newPhone)
+    +void delete(CustomerDTO customerDTO)
+    +CustomerDTO findByDocument(String document)
+}
+
+class CustomerRepositoryImpl {
+    -String CUSTOMERS_FILE
+    +void save(CustomerDTO customer)
+    +List<CustomerDTO> findAll()
+    +void update(CustomerDTO customer, String newName, String newAddress, String newPhone)
+    +void delete(CustomerDTO customer)
+    +CustomerDTO findByDocument(String document)
+    -boolean isIncluded(CustomerDTO customerDTO)
+}
+
+class CustomerService {
+    -CustomerRepositoryImpl customerRepository
+    +void addCustomer(CustomerDTO customerDTO)
+    +void updateCustomer(CustomerDTO customerDTO, String newName, String newAddress, String newPhone)
+    +List<CustomerDTO> getAllCustomers()
+    +void deleteCustomer(CustomerDTO customerDTO)
+    +CustomerDTO searchCustomerByName(String name)
+    +List<CustomerDTO> getCustomersByPage(int pageNumber, int pageSize)
+    +List<CustomerDTO> getAll()
+    +CustomerDTO findCustomerByDocument(String document)
+    +UserDTO findUserByID(String id)
+}
+
+CustomerDTO <|-- PhysicalPersonDTO
+CustomerDTO <|-- LegalPersonDTO
+CustomerDTO <|-- UserDTO
+CustomerService --> CustomerDTO
+CustomerRepository <|.. CustomerRepositoryImpl
+CustomerService --> CustomerRepositoryImpl
+
+abstract class VehicleDTO {
+    +String placa
+    +String modelo
+    +String marca
+    +int ano
+    +boolean disponivel
+    +double precoDiaria
+    +AgencyDTO agency
+}
+
+class CarDTO {
+    +CarDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency)
+}
+
+class MotorcycleDTO {
+    +MotorcycleDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency)
+}
+
+class TruckDTO {
+    +TruckDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency)
+}
+
+class VehicleRepository {
+    +void save(VehicleDTO vehicleDTO)
+    +List<VehicleDTO> findAll()
+    +void update(VehicleDTO vehicleDTO)
+    +void delete(String placa)
+    +VehicleDTO findByPlaca(String placa)
+    +List<VehicleDTO> findByNome(String nome)
+}
+
+class VehicleRepositoryImpl {
+    +void save(VehicleDTO vehicleDTO)
+    +List<VehicleDTO> findAll()
+    +void update(VehicleDTO vehicleDTO)
+    +void delete(String placa)
+    +VehicleDTO findByPlaca(String placa)
+    +List<VehicleDTO> findByNome(String nome)
+}
+
+class VehicleService {
+    -VehicleRepository vehicleRepository
+    +VehicleService(VehicleRepository vehicleRepository)
+    +void addVehicle(VehicleDTO vehicleDTO)
+    +List<VehicleDTO> getAllVehicles()
+    +void updateVehicle(VehicleDTO vehicleDTO)
+    +void rentVehicle(String placa)
+    +void returnVehicle(String placa, AgencyDTO agencyDTO)
+    +void deleteVehicle(String placa)
+    +VehicleDTO getVehicleByPlaca(String placa)
+    +List<VehicleDTO> searchVehicleByName(String nome)
+    +List<VehicleDTO> getVehiclesByPage(int pageNumber, int pageSize)
+    +List<VehicleDTO> getAllAvailableVehicles()
+}
+
+class DuplicateEntityException {
+    +DuplicateEntityException(String message)
+}
+
+class EntityNotFoundException {
+    +EntityNotFoundException(String message)
+}
+
+class RentIllegalUpdateException {
+    +RentIllegalUpdateException(String message)
+}
+
+VehicleDTO <|-- CarDTO
+VehicleDTO <|-- MotorcycleDTO
+VehicleDTO <|-- TruckDTO
+VehicleService --> VehicleRepository
+VehicleService --> VehicleDTO
+VehicleService --> AgencyDTO
+VehicleService --> DuplicateEntityException
+VehicleService --> EntityNotFoundException
+VehicleService --> RentIllegalUpdateException
+VehicleRepository <|.. VehicleRepositoryImpl
+@enduml

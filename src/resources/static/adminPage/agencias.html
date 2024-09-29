@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title>Gerenciamento de Agências</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul class="header_ul">
+            <li class="menu_item"><a class="menu_items" id="user_menu"></a></li>
+            <li class="menu_item"><a class="menu_items" id="home" href="/">Home</a></li>
+            <li class="menu_item"><a class="menu_items" id="adminpage" href="/adminPage">Painel Administrativo</a></li>
+            <li class="menu_item"><a class="menu_items" id="agencias" href="/adminPage/agencias">Gerenciamento de Agências</a></li>
+            <li class="menu_item"><a class="menu_items" id="veiculos" href="/adminPage/veiculos">Gerenciamento de Veículos</a></li>
+            <li class="menu_item"><a class="menu_items" id="alugueis" href="/adminPage/alugueis">Gerenciamento de Alugueis</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="form-list-wrapper">
+    <Cadastro>
+        <h1>Cadastro de Agências</h1>
+        <form id="addAgencyForm">
+            <div class="form-item-wrap">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-item-wrap">
+                <label for="address">Endereço:</label>
+                <input type="text" id="address" required>
+            </div>
+            <button type="submit">Adicionar Agência</button>
+        </form>
+    </Cadastro>
+
+    <div class="agency-list">
+        <h2>Lista de Agências</h2>
+        <div class="agency-search-box">
+            <label for="search">Buscar agência:</label>
+            <input type="text" id="search" placeholder="Pesquise agências por nome ou endereço">
+        </div>
+        <ul id="agencyList"></ul>
+        <p id="noAgenciesMessage" style="display:none;">Nenhuma agência disponível</p>
+    </div>
+</div>
+
+<div id="editDialog" style="display:none;">
+    <h3>Editar Agência</h3>
+    <p>Nome antigo: <span id="oldName"></span></p>
+    <p>Endereço antigo: <span id="oldAddress"></span></p>
+    <div class="form-item-wrap">
+        <label for="newName">Novo nome:</label>
+        <input type="text" id="newName" required>
+    </div>
+    <div class="form-item-wrap">
+        <label for="newAddress">Novo endereço:</label>
+        <input type="text" id="newAddress" required>
+    </div>
+    <button id="confirmEdit">Confirmar</button>
+    <button id="cancelEdit">Cancelar</button>
+</div>
+
+<div id="deleteDialog" style="display:none;">
+    <p>Você tem certeza que deseja deletar esta agência?</p>
+    <button id="confirmDelete">Confirmar</button>
+    <button id="cancelDelete">Cancelar</button>
+</div>
+
+<script src="/adminPage/veiculo.js"></script>
+<script src="/adminPage/agencia.js"></script>
+<script src="/script.js"></script>
+</body>
+</html>

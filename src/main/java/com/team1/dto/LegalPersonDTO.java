@@ -32,6 +32,7 @@ public class LegalPersonDTO extends CustomerDTO {
      * Método de acesso à String privada Cnpj
      * @return String cnpj
      */
+
     public String getCnpj() {
         return cnpj;
     }
@@ -40,6 +41,7 @@ public class LegalPersonDTO extends CustomerDTO {
      * Método usado para definir o valor da String privada Cnpj
      * @param cnpj
      */
+
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
@@ -51,6 +53,7 @@ public class LegalPersonDTO extends CustomerDTO {
      * @param customerDTO
      * @return ((LegalPersonDTO) customerDTO).getCnpj().equals(this.getCnpj())
      */
+
     @Override
     public boolean equals(CustomerDTO customerDTO) {
         if(customerDTO instanceof LegalPersonDTO) {
@@ -64,6 +67,7 @@ public class LegalPersonDTO extends CustomerDTO {
      * caso dois objetos da classe LegalPersonDTO possuam o mesmo cnpj, ambos terão o mesmo hashCode
      * @return (31*this.cnpj.hashCode()) + this.cnpj.hashCode();
      */
+
     public int hashCode(){
         return (31*this.cnpj.hashCode()) + this.cnpj.hashCode();
     }
@@ -72,16 +76,35 @@ public class LegalPersonDTO extends CustomerDTO {
      * Sobrescrita do método toString, para garantir que a informação do CNPJ seja visualizada
      * @return String toString
      */
+
     @Override
     public String toString() {
         return "[ " + typeOf() + " ] " +
                 "name= " + getName() + ", " +
                 "address= " + getAddress() + ", " +
                 "phone= " + getPhone() + ", " +
-                "cpf= " + getCnpj()  + "]";
+                "cpnj= " + getCnpj()  + "]";
     }
 
+    @Override
+    public String getDocument() {
+        return this.getCnpj();
+    }
 
+    /**
+     * Retorna o tipo de cliente como "Física".
+     * <p>
+     * Este método sobrescreve a implementação genérica da classe base
+     * {@link CustomerDTO} e especifica que este cliente é do tipo "Jurídica".
+     * </p>
+     *
+     * @return Uma string indicando que o tipo de cliente é "Jurídica".
+     */
+
+    @Override
+    public String getTipo() {
+        return "Jurídica";
+    }
 }
 
 

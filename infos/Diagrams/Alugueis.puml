@@ -1,0 +1,59 @@
+@startuml
+!theme black-knight
+class Rental {
+    -VehicleDTO vehicle
+    -CustomerDTO customer
+    -AgencyDTO agencyRental
+    -AgencyDTO agencyReturn
+    -LocalDate rentalDate
+    -LocalDate returnDate
+    -boolean isReturned
+    -double totalCost
+    +finalizarAluguel(AgencyDTO agencyReturn, LocalDate returnDate)
+    +calcularCustoTotal()
+    +toString()
+    +getters
+}
+
+class RentalRepository {
+    +save(RentalDTO rentalDTO)
+    +findAll()
+    +update(RentalDTO updatedRentalDTO)
+    +delete(String vehiclePlate, String customerDocument)
+}
+
+class RentalRepositoryImpl {
+    +save(RentalDTO rentalDTO)
+    +findAll()
+    +update(RentalDTO updatedRentalDTO)
+    +delete(String vehiclePlate, String customerDocument)
+}
+
+class VehicleDTO {
+    -String placa
+    -String modelo
+    -String marca
+    -int ano
+    -boolean disponivel
+    -double precoDiaria
+    -AgencyDTO agency
+}
+
+class CustomerDTO {
+    -String document
+    -String name
+    -String contact
+}
+
+class AgencyDTO {
+    -String name
+    -String address
+}
+
+DataAccessObject <|.. RentalRepositoryImpl
+
+Rental "1" *-- "1" VehicleDTO : vehicle
+Rental "1" *-- "1" CustomerDTO : customer
+Rental "1" *-- "1" AgencyDTO : agencyRental
+Rental "1" *-- "1" AgencyDTO : agencyReturn
+@enduml

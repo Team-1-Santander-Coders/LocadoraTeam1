@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title>Cadastro de Veículos</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul class="header_ul">
+            <li class="menu_item"><a class="menu_items" id="user_menu"></a></li>
+            <li class="menu_item"><a class="menu_items" id="home" href="/">Home</a></li>
+            <li class="menu_item"><a class="menu_items" id="adminpage" href="/adminPage">Painel Administrativo</a></li>
+            <li class="menu_item"><a class="menu_items" id="agencias" href="/adminPage/agencias">Gerenciamento de Agências</a></li>
+            <li class="menu_item"><a class="menu_items" id="veiculos" href="/adminPage/veiculos">Gerenciamento de Veículos</a></li>
+            <li class="menu_item"><a class="menu_items" id="alugueis" href="/adminPage/alugueis">Gerenciamento de Alugueis</a></li>
+        </ul>
+    </nav>
+</header>
+<div>
+    <div id="vehicleChartContainer">
+        <h2 class="chart-title">Gráfico de disponibilidade dos veículos</h2>
+        <canvas id="vehicleChart"></canvas>
+    </div>
+    <div id="rentalChartContainer">
+        <h2 class="chart-title">Gráfico de Aluguéis por Tipo de Veículo</h2>
+        <canvas id="rentalChart"></canvas>
+        <p id="totalCost" class="total-cost">Valor total dos aluguéis: R$ 0,00</p>
+    </div>
+</div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/adminPage/script.js"></script>
+<script src="/script.js"></script>
+</html>

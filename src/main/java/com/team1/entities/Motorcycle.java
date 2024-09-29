@@ -1,5 +1,7 @@
 package main.java.com.team1.entities;
 
+import main.java.com.team1.dto.AgencyDTO;
+
 import java.io.Serial;
 
 /**
@@ -20,6 +22,7 @@ public class Motorcycle implements Vehicle {
     private final int ano;
     private boolean disponivel;
     private static final double precoDiaria = 100.00;
+    private AgencyDTO agency;
 
     /**
      * Construtor da classe Motorcycle.
@@ -29,11 +32,12 @@ public class Motorcycle implements Vehicle {
      * @param marca  A marca da motocicleta.
      * @param ano    O ano de fabricação da motocicleta.
      */
-    public Motorcycle(String placa, String modelo, String marca, int ano) {
+    public Motorcycle(String placa, String modelo, String marca, int ano, AgencyDTO agency) {
         this.placa = placa;
         this.modelo = modelo;
         this.marca = marca;
         this.ano = ano;
+        this.agency = agency;
         this.disponivel = true;
     }
 
@@ -44,7 +48,7 @@ public class Motorcycle implements Vehicle {
      */
     @Override
     public String getPlaca() {
-        return placa; // Retorna a placa da motocicleta
+        return placa.toUpperCase();
     }
 
     /**
@@ -105,5 +109,13 @@ public class Motorcycle implements Vehicle {
     @Override
     public String getTipo() {
         return "Moto";
+    }
+
+    public AgencyDTO getAgency() {
+        return agency;
+    }
+
+    public void setAgency(AgencyDTO agency) {
+        this.agency = agency;
     }
 }

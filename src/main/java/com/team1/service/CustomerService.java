@@ -1,6 +1,7 @@
 package main.java.com.team1.service;
 
 import main.java.com.team1.dto.CustomerDTO;
+import main.java.com.team1.dto.UserDTO;
 import main.java.com.team1.exception.DuplicateEntityException;
 import main.java.com.team1.exception.EntityNotFoundException;
 import main.java.com.team1.repository.CustomerRepositoryImpl;
@@ -107,11 +108,20 @@ public class CustomerService {
 
     /**
      * Implementa o método findAll() da classe <code>CustomerRepositoryImpl</code>
-     * @return List
+     * @return List<CustomerDTO>
      */
     public List<CustomerDTO> getAll(){
         return customerRepository.findAll();
     }
 
+    public CustomerDTO findCustomerByDocument(String document) {
+        return customerRepository.findByDocument(document);
+    }
 
+    public UserDTO findUserByID(String id) {
+        return (UserDTO) getAllCustomers().stream()
+                .filter(u -> u instanceof UserDTO && ((UserDTO) u).getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
 }
