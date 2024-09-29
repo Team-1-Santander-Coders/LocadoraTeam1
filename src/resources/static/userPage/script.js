@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
     getAllVehicles();
     document.getElementById('search').addEventListener('input', filterVehicles);
+    document.getElementById("reservas").addEventListener("click",loadRentals)
 
 });
 
 let allVehicles = []
+let allRents = []
 
 function filterVehicles() {
     const searchTerm = document.getElementById('search').value.toLowerCase();
@@ -24,13 +26,12 @@ function getAllVehicles() {
     fetch("/vehicles")
         .then(response => response.text())
         .then(data => {
-            console.log(data)
+
             allVehicles = data.split('\n').map(vehicle => {
                 const [tipo, marca, placa, modelo, ano, disponivel, nomeAgencia, enderecoAgencia] = vehicle.split(' - ');
                 return {tipo, marca, placa, modelo, ano, disponivel, nomeAgencia, enderecoAgencia};
             })
             filterVehicles(allVehicles);
-            console.log(allVehicles)
         })
         .catch(error => {
             console.error('Erro ao carregar os veículos:', error);
@@ -43,7 +44,8 @@ function displayVehicles(vehicles) {
 
     vehicles.forEach(vehicle => {
         createVehicleCard(vehicle)
-    });
+    })
+
 }
 
 function createVehicleCard(vehicle) {
@@ -224,7 +226,11 @@ function rentVehicle(vehicle, rent_date) {
     const placa = vehicle.placa
     const agencyName = vehicle.nomeAgencia
     const agencyAddress = vehicle.enderecoAgencia
-    const userId = document.cookie.split(";")[0].split(":")[1]
+    const returnAgencyName = "Sem agência de devolução";
+    const returnAgencyAddress = null;
+    const returnDate = "Sem data de devolução"
+    const userId = document.cookie.split(";")[0].split("=")[1]
+
 
         const [year, month, day] = rent_date.value.split("-")
         const dataFormatada = `${day}/${month}/${year}`
@@ -232,7 +238,7 @@ function rentVehicle(vehicle, rent_date) {
 
         fetch("/rent", {
             method: "POST",
-            body: `${placa} / ${agencyName} / ${agencyAddress} / ${dataFormatada} / ${agencyName} / ${agencyAddress} / ${dataFormatada} / ${userId}`,
+            body: `${placa} / ${agencyName} / ${agencyAddress} / ${dataFormatada} / ${returnAgencyName} / ${returnAgencyAddress} / ${returnDate} / ${userId}`,
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -240,7 +246,7 @@ function rentVehicle(vehicle, rent_date) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert("Aoba, deu bom!");
+                    console.log("Aluguel registrado")
                 } else {
                     alert("Vish...");
                 }
@@ -250,4 +256,200 @@ function rentVehicle(vehicle, rent_date) {
                 alert("Erro ao realizar a requisição.");
             });
 
+}
+
+function loadRentals() {
+    fetch('/rentals')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro na resposta: ${response.statusText}`);
+            }
+            return response.text();
+        })
+        .then(text => {
+            try {
+                const cleanedText = text.trim();
+                const rentals = JSON.parse(cleanedText);
+                console.log(rentals)
+                createRentalsDiv(rentals)
+
+            } catch (error) {
+                console.error('Erro ao analisar JSON:', error);
+                alert('Erro ao analisar os dados recebidos.');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao carregar aluguéis:', error);
+            alert('Erro ao carregar aluguéis.');
+        });
+}
+
+function createRentalsDiv(rentals){
+
+        const body = document.getElementById("general_container");
+        const bg_overlap = document.createElement("div");
+        bg_overlap.className = "bg_overlap";
+        bg_overlap.setAttribute("style",
+            "position: fixed; " +
+            "background-color: rgba(255, 255, 255, 0.1); " +
+            "width: 100vw; height: 100vh; " +
+            "top: 0; " +
+            "left: 0; " +
+            "z-index: 9999; " +
+            "backdrop-filter: blur(10px); " +
+            "display:flex;" +
+            "align-items:center;" +
+            "justify-content:center;"
+        );
+        body.appendChild(bg_overlap);
+
+
+    const rentalDiv = document.createElement("div");
+    rentalDiv.setAttribute("style",
+        "position:relative;" +
+        "display:flex;" +
+        "flex-direction:column;" +
+        "background-color:white; " +
+        "width:70em; " +
+        "min-height:min-content; " +
+        "max-height:40em; " +
+        "border-radius:20px;" +
+        "box-shadow: 0 4px 6px rgba(0,0,0,0.1); " +
+        "border: 1px solid rgba(255, 255, 255, 0.18);" +
+        "padding: 1em;"
+    );
+
+    const exit_header = document.createElement("div");
+    exit_header.setAttribute("style",
+        "position:absolute;" +
+        "top: 0.6em;" +
+        "right: 1em;" +
+        "display:flex; " +
+        "justify-content:flex-end;" +
+        "width:auto;" +
+        "height:min-content;"
+
+    );
+
+    const exit = document.createElement("a");
+    exit.className = "exit_button";
+    exit.innerText = "x";
+    exit.setAttribute("style",
+        "cursor:pointer;" +
+        "font-size:1.2em;" +
+        "color:black;" +
+        "padding: 0.5em;" +
+        "text-decoration:none;"
+    );
+
+    exit_header.appendChild(exit)
+    rentalDiv.appendChild(exit_header)
+
+    exit.addEventListener("click", event=>{
+        bg_overlap.setAttribute("style", "display:none")
+    })
+
+    const rentalList = document.createElement("ul")
+    rentalList.setAttribute("style",
+        "display:flex;" +
+        "flex-direction:column;" +
+        "min-width:90%; " +
+        "min-height:10em;" +
+        "list-style:none;" +
+        "padding:1em;"
+        )
+
+        rentalList.id = "rentalList"
+
+        rentalDiv.appendChild(exit_header)
+        rentalDiv.appendChild(rentalList)
+        bg_overlap.appendChild(rentalDiv)
+
+    if(rentals.length === 0){
+        rentalList.innerText = "Sem reservas para o seu usuário"
+    }
+        createRentalsList(rentals)
+    }
+
+function createRentalsList(rentals){
+    rentals.forEach(rental => {
+        const rentalList = document.getElementById("rentalList")
+        const rentalListItem = document.createElement("li")
+        rentalListItem.setAttribute("style",
+            "display:flex;" +
+            "justify-content:space-between;" +  // Distribui os itens igualmente
+            "align-items:center;" +
+            "background-color:#f2f2f2;" +
+            "border-radius:15px;" +
+            "padding:1em;" +
+            "margin:0.5em 0;" +  // Espaçamento entre os itens
+            "box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" // Adiciona sombra leve
+        )
+        rentalList.appendChild(rentalListItem)
+
+        const vehicle = document.createElement("div")
+        vehicle.setAttribute("style", "display:flex;align-items:flex-start; flex-direction:column; max-width:30%; min-width:30%;")
+
+        const vehicle_text = document.createElement("h3")
+        vehicle_text.setAttribute("style", "font-size:0.9em; font-weight:normal; margin-bottom:0em; color:#333;")
+        vehicle_text.innerText = "Veículo"
+
+        const vehicle_info = document.createElement("h2")
+        vehicle_info.setAttribute("style", "font-size:1em; margin:0; padding:0; color:#555;")
+        vehicle_info.innerText = rental.veiculo
+
+        vehicle.appendChild(vehicle_text)
+        vehicle.appendChild(vehicle_info)
+        rentalListItem.appendChild(vehicle)
+
+
+        const agency = document.createElement("div")
+        agency.setAttribute("style", "display:flex; align-items:flex-start; flex-direction:column; max-width:25%; min-width:25%;")
+
+        const agency_text = document.createElement("h3")
+        agency_text.setAttribute("style", "font-size:0.9em; font-weight:normal; margin-bottom:0.2em; color:#333;")
+        agency_text.innerText = "Agência"
+
+        const agency_info = document.createElement("h2")
+        agency_info.setAttribute("style", "font-size:1em; margin:0; padding:0; color:#555;")
+        agency_info.innerText = rental.agenciaRetirada
+
+        agency.appendChild(agency_text)
+        agency.appendChild(agency_info)
+        rentalListItem.appendChild(agency)
+
+
+        const rentalDate = document.createElement("div")
+        rentalDate.setAttribute("style", "display:flex; align-items:flex-start; flex-direction:column; max-width:20%; min-width:20%;")
+
+        const rentalDate_text = document.createElement("h3")
+        rentalDate_text.setAttribute("style", "font-size:0.9em; font-weight:normal; margin-bottom:0.2em; color:#333;")
+        rentalDate_text.innerText = "Retirada"
+
+        const rentalDate_info = document.createElement("h2")
+        rentalDate_info.setAttribute("style", "font-size:1em; margin:0; padding:0; color:#555;")
+        rentalDate_info.innerText = rental.dataRetirada
+
+        rentalDate.appendChild(rentalDate_text)
+        rentalDate.appendChild(rentalDate_info)
+        rentalListItem.appendChild(rentalDate)
+
+        const status = document.createElement("div")
+        status.setAttribute("style", "display:flex; align-items:flex-start; flex-direction:column; max-width:20%; min-width:20%;")
+
+        const status_text = document.createElement("h3")
+        status_text.setAttribute("style", "font-size:0.9em; font-weight:normal; margin-bottom:0.2em; color:#333;")
+        status_text.innerText = "Status"
+
+        const status_info = document.createElement("h2")
+        status_info.setAttribute("style", "font-size:1em; margin:0; padding:0; color:#555;")
+        status_info.innerText = rental.situacao
+
+        status.appendChild(status_text)
+        status.appendChild(status_info)
+        rentalListItem.appendChild(status)
+
+
+
+    })
 }

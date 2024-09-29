@@ -153,7 +153,6 @@ function loadRentals() {
             return response.text();
         })
         .then(text => {
-            console.log('Texto recebido:', text);
             try {
                 const cleanedText = text.trim();
                 const rentals = JSON.parse(cleanedText);

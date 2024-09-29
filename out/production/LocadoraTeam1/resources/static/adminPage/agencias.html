@@ -21,20 +21,20 @@
 </header>
 
 <div class="form-list-wrapper">
-    <h1>Agências</h1>
-
-    <div class="add-agency">
-        <h2>Adicionar Agência</h2>
+    <Cadastro>
+        <h1>Cadastro de Agências</h1>
         <form id="addAgencyForm">
-            <label for="name">Nome:</label>
-            <input type="text" id="name" required>
-
-            <label for="address">Endereço:</label>
-            <input type="text" id="address" required>
-
+            <div class="form-item-wrap">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-item-wrap">
+                <label for="address">Endereço:</label>
+                <input type="text" id="address" required>
+            </div>
             <button type="submit">Adicionar Agência</button>
         </form>
-    </div>
+    </Cadastro>
 
     <div class="agency-list">
         <h2>Lista de Agências</h2>
@@ -45,32 +45,28 @@
         <ul id="agencyList"></ul>
         <p id="noAgenciesMessage" style="display:none;">Nenhuma agência disponível</p>
     </div>
+</div>
 
-    <div class="edit-agency" id="editAgencyDialog" style="display:none;">
-        <h2>Editar Agência</h2>
-        <form id="editAgencyForm">
-            <label for="oldName">Nome Antigo:</label>
-            <input type="text" id="oldName" required readonly>
-
-            <label for="oldAddress">Endereço Antigo:</label>
-            <input type="text" id="oldAddress" required readonly>
-
-            <label for="newName">Nome Novo:</label>
-            <input type="text" id="newName" required>
-
-            <label for="newAddress">Endereço Novo:</label>
-            <input type="text" id="newAddress" required>
-
-            <button type="submit">Editar Agência</button>
-            <button type="button" onclick="closeEditDialog()">Cancelar</button>
-        </form>
+<div id="editDialog" style="display:none;">
+    <h3>Editar Agência</h3>
+    <p>Nome antigo: <span id="oldName"></span></p>
+    <p>Endereço antigo: <span id="oldAddress"></span></p>
+    <div class="form-item-wrap">
+        <label for="newName">Novo nome:</label>
+        <input type="text" id="newName" required>
     </div>
-
-    <div id="deleteDialog" style="display:none;">
-        <p>Você tem certeza que deseja deletar esta agência?</p>
-        <button id="confirmDelete">Confirmar</button>
-        <button id="cancelDelete">Cancelar</button>
+    <div class="form-item-wrap">
+        <label for="newAddress">Novo endereço:</label>
+        <input type="text" id="newAddress" required>
     </div>
+    <button id="confirmEdit">Confirmar</button>
+    <button id="cancelEdit">Cancelar</button>
+</div>
+
+<div id="deleteDialog" style="display:none;">
+    <p>Você tem certeza que deseja deletar esta agência?</p>
+    <button id="confirmDelete">Confirmar</button>
+    <button id="cancelDelete">Cancelar</button>
 </div>
 
 <script src="/adminPage/veiculo.js"></script>

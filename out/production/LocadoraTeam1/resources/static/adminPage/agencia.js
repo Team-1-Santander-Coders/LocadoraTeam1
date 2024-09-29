@@ -26,12 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.text();
             })
             .then(message => {
-                alert(message);
                 loadAgencies();
             })
             .catch(error => {
                 console.error('Erro:', error);
-                alert(`Erro ao editar agência: ${error.message}`);
             });
     });
 
@@ -51,7 +49,6 @@ function loadAgencies() {
         })
         .catch(error => {
             console.error('Erro:', error);
-            alert('Erro ao carregar agências.');
         });
 }
 
@@ -112,13 +109,11 @@ function confirmDeleteAgency() {
             return response.text();
         })
         .then(message => {
-            alert(message);
             closeDeleteDialog();
             loadAgencies();
         })
         .catch(error => {
             console.error('Erro:', error);
-            alert(`Erro ao deletar agência: ${error.message}`);
         });
 }
 
