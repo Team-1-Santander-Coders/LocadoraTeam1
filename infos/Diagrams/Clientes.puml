@@ -1,26 +1,66 @@
 @startuml
-class Customer {
-    -String nome
-    -String endereco
-    -String telefone
-    +getters e setters
-    +getTipoCliente() String
-}
-class PhysicalPerson
-class LegalPerson {
-    -String cnpj
-    +getters e setters
-    +getTipoCliente() String
-}
-class CustomerDAO
+    class CustomerDTO {
+            +String name
+            +String address
+            +String phone
+            +String getDocument()
+        }
 
-Customer <|-- PhysicalPerson
-Customer <|-- LegalPerson
-DataAccessObject <|.. CustomerDAO
+        class PhysicalPersonDTO {
+            +String cpf
+        }
+
+        class LegalPersonDTO {
+            +String cnpj
+        }
+
+        class UserDTO {
+            +String document
+        }
+
+        class CustomerRepository {
+            +void save(CustomerDTO customerDTO)
+            +List<CustomerDTO> findAll()
+            +void update(CustomerDTO customerDTO, String newName, String newAddress, String newPhone)
+            +void delete(CustomerDTO customerDTO)
+            +CustomerDTO findByDocument(String document)
+        }
+
+        class CustomerRepositoryImpl {
+            +void save(CustomerDTO customerDTO)
+            +List<CustomerDTO> findAll()
+            +void update(CustomerDTO customerDTO, String newName, String newAddress, String newPhone)
+            +void delete(CustomerDTO customerDTO)
+            +CustomerDTO findByDocument(String document)
+        }
+
+        class CustomerService {
+            +void addCustomer(CustomerDTO customerDTO)
+            +void updateCustomer(CustomerDTO customerDTO, String newName, String newAddress, String newPhone)
+            +List<CustomerDTO> getAllCustomers()
+            +void deleteCustomer(CustomerDTO customerDTO)
+            +CustomerDTO searchCustomerByName(String name)
+            +List<CustomerDTO> getCustomersByPage(int pageNumber, int pageSize)
+            +CustomerDTO findCustomerByDocument(String document)
+        }
+
+        CustomerDTO <|-- PhysicalPersonDTO
+        CustomerDTO <|-- LegalPersonDTO
+        CustomerDTO <|-- UserDTO
+
+        CustomerRepository <|.. CustomerRepositoryImpl
+        CustomerService --> CustomerRepository
+
+@enduml
+
 
 note "Clientes não podem estar duplicados." as N1
 Customer .. N1
 
 note "Clientes não podem estar duplicados." as N2
 CustomerDAO .. N2
+
+note "UserService gerencia operações de usuário e utiliza CustomerService." as N3
+UserService .. N3
+
 @enduml

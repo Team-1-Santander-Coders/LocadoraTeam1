@@ -1,94 +1,81 @@
 @startuml
 
-package "Entities" {
-    class Vehicle {
-        +getPlaca()
-        +getModelo()
-        +getMarca()
-        +getAno()
-        +isDisponivel()
-        +getTipo()
-        +getPrecoDiaria()
-    }
-
-    class VehicleDTO {
-        +placa
-        +modelo
-        +marca
-        +ano
-        +disponivel
-        +precoDiaria
-        +getTipo()
-    }
-
-    class CarDTO {
-        +metodoCarro()
-    }
-
-    class MotorcycleDTO {
-        +metodoMoto()
-    }
-
-    class TruckDTO {
-        +metodoCaminhao()
-    }
-
-    Vehicle <|-- VehicleDTO
-    VehicleDTO <|-- CarDTO
-    VehicleDTO <|-- MotorcycleDTO
-    VehicleDTO <|-- TruckDTO
+abstract class VehicleDTO {
+    +String placa
+    +String modelo
+    +String marca
+    +int ano
+    +boolean disponivel
+    +double precoDiaria
+    +AgencyDTO agency
 }
 
-package "Services" {
-    class VehicleService {
-        +addVehicle(vehicleDTO: VehicleDTO)
-        +getAllVehicles()
-        +updateVehicle(vehicleDTO: VehicleDTO)
-        +rentVehicle(vehicleDTO: VehicleDTO)
-        +returnCar(vehicleDTO: VehicleDTO)
-        +deleteVehicle(placa: String)
-        +getVehicleByPlaca(placa: String)
-        +searchVehicleByName(nome: String)
-        +getVehiclesByPage(pageNumber: int, pageSize: int)
-    }
+class CarDTO {
+    +CarDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency)
 }
 
-package "Repositories" {
-    interface VehicleRepository {
-        +save(vehicleDTO: VehicleDTO)
-        +findAll(): List<VehicleDTO>
-        +update(updatedVehicleDTO: VehicleDTO)
-        +delete(placa: String)
-        +findByPlaca(placa: String): VehicleDTO
-        +findByNome(nome: String): List<VehicleDTO>
-    }
-
-    class VehicleRepositoryImpl {
-        +save(vehicleDTO: VehicleDTO)
-        +findAll(): List<VehicleDTO>
-        +update(updatedVehicleDTO: VehicleDTO)
-        +delete(placa: String)
-        +findByPlaca(placa: String): VehicleDTO
-        +findByNome(nome: String): List<VehicleDTO>
-    }
+class MotorcycleDTO {
+    +MotorcycleDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency)
 }
 
-package "Utils" {
-    class FileUtil {
-        +logError(e: Exception)
-        +serialize(objects: List<VehicleDTO>, fileName: String)
-        +deserialize(fileName: String): List<VehicleDTO>
-    }
-
-    class Exception {
-        +DuplicateEntityException
-        +EntityNotFoundException
-        +RentIllegalUpdateException
-    }
+class TruckDTO {
+    +TruckDTO(String placa, String modelo, String marca, int ano, boolean disponivel, double precoDiaria, AgencyDTO agency)
 }
 
+class VehicleRepository {
+    +void save(VehicleDTO vehicleDTO)
+    +List<VehicleDTO> findAll()
+    +void update(VehicleDTO vehicleDTO)
+    +void delete(String placa)
+    +VehicleDTO findByPlaca(String placa)
+    +List<VehicleDTO> findByNome(String nome)
+}
+
+class VehicleRepositoryImpl {
+    +void save(VehicleDTO vehicleDTO)
+    +List<VehicleDTO> findAll()
+    +void update(VehicleDTO vehicleDTO)
+    +void delete(String placa)
+    +VehicleDTO findByPlaca(String placa)
+    +List<VehicleDTO> findByNome(String nome)
+}
+
+class VehicleService {
+    -VehicleRepository vehicleRepository
+    +VehicleService(VehicleRepository vehicleRepository)
+    +void addVehicle(VehicleDTO vehicleDTO)
+    +List<VehicleDTO> getAllVehicles()
+    +void updateVehicle(VehicleDTO vehicleDTO)
+    +void rentVehicle(String placa)
+    +void returnVehicle(String placa, AgencyDTO agencyDTO)
+    +void deleteVehicle(String placa)
+    +VehicleDTO getVehicleByPlaca(String placa)
+    +List<VehicleDTO> searchVehicleByName(String nome)
+    +List<VehicleDTO> getVehiclesByPage(int pageNumber, int pageSize)
+    +List<VehicleDTO> getAllAvailableVehicles()
+}
+
+class DuplicateEntityException {
+    +DuplicateEntityException(String message)
+}
+
+class EntityNotFoundException {
+    +EntityNotFoundException(String message)
+}
+
+class RentIllegalUpdateException {
+    +RentIllegalUpdateException(String message)
+}
+
+VehicleDTO <|-- CarDTO
+VehicleDTO <|-- MotorcycleDTO
+VehicleDTO <|-- TruckDTO
 VehicleService --> VehicleRepository
-VehicleRepositoryImpl ..|> VehicleRepository
-VehicleRepositoryImpl --> FileUtil
+VehicleService --> VehicleDTO
+VehicleService --> AgencyDTO
+VehicleService --> DuplicateEntityException
+VehicleService --> EntityNotFoundException
+VehicleService --> RentIllegalUpdateException
+VehicleRepository <|.. VehicleRepositoryImpl
 
 @enduml

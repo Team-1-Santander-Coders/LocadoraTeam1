@@ -21,6 +21,7 @@ public class MainServer {
         server.createContext("/", new StaticFileHandler(page,"index.html"));
         server.createContext("/style.css", new StaticFileHandler(page, "style.css"));
         server.createContext("/script.js", new StaticFileHandler(page, "script.js"));
+        server.createContext("/favicon.ico", new StaticFileHandler(page, "favicon.ico"));
 
         AdminServer.createContexts();
         VehicleServer.createContexts();

@@ -3,9 +3,17 @@
 })();
 
 document.getElementById('sendCodeButton').addEventListener('click', function(event) {
+    function isValidEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
     event.preventDefault();
 
     const email = document.getElementById('email').value;
+    if (isValidEmail(email)) {
+
+    }
     const code = Math.floor(1000 + Math.random() * 9000);
 
     emailjs.send("service_h01md0f", "template_3tscxhn", {

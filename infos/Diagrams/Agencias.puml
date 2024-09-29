@@ -1,17 +1,43 @@
 @startuml
 class Agency {
-    -String id
-    -String nome
-    -String endereco
+    -String name
+    -String address
     +getters e setters
 }
-class AgencyDAO
 
-DataAccessObject <|.. AgencyDAO
+class AgencyDTO {
+    -String name
+    -String address
+}
 
-note "Agências não podem estar duplicadas." as N1
+class AgencyRepository {
+    +save(Agency agency)
+    +delete(Agency agency)
+    +findByNameAndAddress(String name, String address) Agency
+    +findAll() List<Agency>
+}
+
+class AgencyRepositoryImpl {
+    +save(Agency agency)
+    +delete(Agency agency)
+    +findByNameAndAddress(String name, String address) Agency
+    +findAll() List<Agency>
+}
+
+class AgencyService {
+    +createAgency(AgencyDTO agencyDTO)
+    +updateAgency(String oldName, String oldAddress, AgencyDTO agencyDTO)
+    +deleteAgency(AgencyDTO agencyDTO)
+    +getAgencyByNameAndAddress(String name, String address) Agency
+}
+
+AgencyService --> AgencyRepository
+AgencyRepository <|.. AgencyRepositoryImpl
+
+note "As agências devem ser únicas." as N1
 Agency .. N1
 
-note "Agências não podem estar duplicadas." as N2
-AgencyDAO .. N2
+note "AgencyService gerencia operações de agência." as N2
+AgencyService .. N2
+
 @enduml

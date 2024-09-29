@@ -321,6 +321,7 @@ div {
 }
 
 #loginForm button {
+    width: 80%;
     margin-top: 1em;
     border-radius: 20px;
     background-color: #f2f2f2;
@@ -658,4 +659,16 @@ th:last-child, td:last-child {
 .agency-search-box div {
     flex-direction: column;
     align-items: center;
+}
+
+#loginForm a {
+    color: #186ba2;
+    text-decoration: none;
+    margin-top: 15px;
+    font-family: "Roboto", system-ui;
+    font-weight: bold;
+}
+
+#loginForm a:hover {
+    color: #3498db;
 }
