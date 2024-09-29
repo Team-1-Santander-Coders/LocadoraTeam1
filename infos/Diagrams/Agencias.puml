@@ -1,10 +1,4 @@
 @startuml
-class Agency {
-    -String name
-    -String address
-    +getters e setters
-}
-
 class AgencyDTO {
     -String name
     -String address
@@ -31,13 +25,7 @@ class AgencyService {
     +getAgencyByNameAndAddress(String name, String address) Agency
 }
 
+AgencyService --> AgencyDTO
 AgencyService --> AgencyRepository
 AgencyRepository <|.. AgencyRepositoryImpl
-
-note "As agências devem ser únicas." as N1
-Agency .. N1
-
-note "AgencyService gerencia operações de agência." as N2
-AgencyService .. N2
-
 @enduml

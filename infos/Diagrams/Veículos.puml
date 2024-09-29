@@ -77,5 +77,4 @@ VehicleService --> DuplicateEntityException
 VehicleService --> EntityNotFoundException
 VehicleService --> RentIllegalUpdateException
 VehicleRepository <|.. VehicleRepositoryImpl
-
 @enduml

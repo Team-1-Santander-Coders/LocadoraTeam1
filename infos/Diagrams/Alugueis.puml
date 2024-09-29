@@ -55,11 +55,4 @@ Rental "1" *-- "1" VehicleDTO : vehicle
 Rental "1" *-- "1" CustomerDTO : customer
 Rental "1" *-- "1" AgencyDTO : agencyRental
 Rental "1" *-- "1" AgencyDTO : agencyReturn
-
-note "Os aluguéis terão o local, data e horário.\nRegras de devolução:\n- Caso pessoa física tenha ficado com o carro mais que 5 dias terá direito a 5% de desconto.\n- Caso pessoa jurídica tenha ficado com o carro mais que 3 dias terá direito a 10% de desconto.\nValores base da diária por tipo de veículo:\n- Moto: R$ 100.00\n- Carro: R$ 150.00\n- Caminhão: R$ 200.00" as N1
-Rental .. N1
-
-note "Os aluguéis e devoluções terão o local, data e horário." as N2
-RentalRepository .. N2
-
 @enduml

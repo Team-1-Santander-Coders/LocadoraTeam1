@@ -1,66 +1,96 @@
 @startuml
-    class CustomerDTO {
-            +String name
-            +String address
-            +String phone
-            +String getDocument()
-        }
+abstract class CustomerDTO {
+    +String name
+    +String address
+    +String phone
+    +String id
+    +String getDocument()
+    +String getName()
+    +void setName(String name)
+    +String getAddress()
+    +void setAddress(String address)
+    +String getPhone()
+    +void setPhone(String phone)
+    +boolean equals(CustomerDTO customerDTO)
+    +int hashCode()
+    +String toString()
+    +String getTipo()
+    +String getEmail()
+}
 
-        class PhysicalPersonDTO {
-            +String cpf
-        }
+class PhysicalPersonDTO {
+    +String cpf
+    +String getCpf()
+    +void setCpf(String cpf)
+    +boolean equals(CustomerDTO customerDTO)
+    +int hashCode()
+    +String toString()
+    +String getTipo()
+    +String getDocument()
+}
 
-        class LegalPersonDTO {
-            +String cnpj
-        }
+class LegalPersonDTO {
+    +String cnpj
+    +String getCnpj()
+    +void setCnpj(String cnpj)
+    +boolean equals(CustomerDTO customerDTO)
+    +int hashCode()
+    +String toString()
+    +String getTipo()
+    +String getDocument()
+}
 
-        class UserDTO {
-            +String document
-        }
+class UserDTO {
+    +String id
+    +String email
+    +String password
+    +String document
+    +String type
+    -boolean isAdmin
+    +String getEmail()
+    +String getPassword()
+    +String getDocument()
+    +String getId()
+    +boolean isAdmin()
+    +String getTipo()
+    +String toString()
+}
 
-        class CustomerRepository {
-            +void save(CustomerDTO customerDTO)
-            +List<CustomerDTO> findAll()
-            +void update(CustomerDTO customerDTO, String newName, String newAddress, String newPhone)
-            +void delete(CustomerDTO customerDTO)
-            +CustomerDTO findByDocument(String document)
-        }
+interface CustomerRepository {
+    +void save(CustomerDTO customerDTO)
+    +List<CustomerDTO> findAll()
+    +void update(CustomerDTO customer, String newName, String newAddress, String newPhone)
+    +void delete(CustomerDTO customerDTO)
+    +CustomerDTO findByDocument(String document)
+}
 
-        class CustomerRepositoryImpl {
-            +void save(CustomerDTO customerDTO)
-            +List<CustomerDTO> findAll()
-            +void update(CustomerDTO customerDTO, String newName, String newAddress, String newPhone)
-            +void delete(CustomerDTO customerDTO)
-            +CustomerDTO findByDocument(String document)
-        }
+class CustomerRepositoryImpl {
+    -String CUSTOMERS_FILE
+    +void save(CustomerDTO customer)
+    +List<CustomerDTO> findAll()
+    +void update(CustomerDTO customer, String newName, String newAddress, String newPhone)
+    +void delete(CustomerDTO customer)
+    +CustomerDTO findByDocument(String document)
+    -boolean isIncluded(CustomerDTO customerDTO)
+}
 
-        class CustomerService {
-            +void addCustomer(CustomerDTO customerDTO)
-            +void updateCustomer(CustomerDTO customerDTO, String newName, String newAddress, String newPhone)
-            +List<CustomerDTO> getAllCustomers()
-            +void deleteCustomer(CustomerDTO customerDTO)
-            +CustomerDTO searchCustomerByName(String name)
-            +List<CustomerDTO> getCustomersByPage(int pageNumber, int pageSize)
-            +CustomerDTO findCustomerByDocument(String document)
-        }
+class CustomerService {
+    -CustomerRepositoryImpl customerRepository
+    +void addCustomer(CustomerDTO customerDTO)
+    +void updateCustomer(CustomerDTO customerDTO, String newName, String newAddress, String newPhone)
+    +List<CustomerDTO> getAllCustomers()
+    +void deleteCustomer(CustomerDTO customerDTO)
+    +CustomerDTO searchCustomerByName(String name)
+    +List<CustomerDTO> getCustomersByPage(int pageNumber, int pageSize)
+    +List<CustomerDTO> getAll()
+    +CustomerDTO findCustomerByDocument(String document)
+    +UserDTO findUserByID(String id)
+}
 
-        CustomerDTO <|-- PhysicalPersonDTO
-        CustomerDTO <|-- LegalPersonDTO
-        CustomerDTO <|-- UserDTO
-
-        CustomerRepository <|.. CustomerRepositoryImpl
-        CustomerService --> CustomerRepository
-
-@enduml
-
-
-note "Clientes não podem estar duplicados." as N1
-Customer .. N1
-
-note "Clientes não podem estar duplicados." as N2
-CustomerDAO .. N2
-
-note "UserService gerencia operações de usuário e utiliza CustomerService." as N3
-UserService .. N3
-
+CustomerDTO <|-- PhysicalPersonDTO
+CustomerDTO <|-- LegalPersonDTO
+CustomerDTO <|-- UserDTO
+CustomerService --> CustomerDTO
+CustomerRepository <|.. CustomerRepositoryImpl
+CustomerService --> CustomerRepositoryImpl
 @enduml
