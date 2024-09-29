@@ -170,7 +170,7 @@ public class RentalDTO extends Rental implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof RentalDTO rentalDTO)) return false;
-        if (((RentalDTO) o).isReturned() || this.isReturned()) return false;
+        if (this.isReturned()) return false;
         return Objects.equals(vehiclePlate(), rentalDTO.vehiclePlate()) && Objects.equals(customerDocument(), rentalDTO.customerDocument());
     }
 
