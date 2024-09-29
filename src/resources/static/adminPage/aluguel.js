@@ -37,12 +37,12 @@ function fetchRent(vehiclePlaca, pickupAgencyName, pickupAgencyAddress, startDat
         credentials: 'include',
     }).then(response => {
         if (response.ok) {
-            alert('Aluguel criado com sucesso!');
+            alert('Operação realizada com sucesso!');
             document.getElementById('rentalForm').reset();
             loadAvailableVehicles();
             loadRentals();
         } else {
-            alert('Erro ao criar aluguel.');
+            alert('Erro ao realizar operação aluguel.');
         }
     }).catch(error => {
         console.error('Erro ao fazer requisição:', error);

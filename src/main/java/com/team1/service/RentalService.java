@@ -35,6 +35,9 @@ public class RentalService {
     }
 
     public String returnRental(RentalDTO rentalDTO, AgencyDTO returnAgency, LocalDate returnDate) throws EntityNotFoundException, RentIllegalUpdateException {
+        if (returnDate.isBefore(rentalDTO.getRentalDate())) {
+            throw new RentIllegalUpdateException("Data de devolução não pode ser menor que data de retirada.");
+        }
         vehicleService.returnVehicle(rentalDTO.getVehicle().getPlaca(), returnAgency);
         RentalDTO updatedRentalDTO = new RentalDTO(rentalDTO.getVehicle(), rentalDTO.getCustomer(), rentalDTO.getAgencyRental(), rentalDTO.getRentalDate(), returnAgency, returnDate);
         rentalRepository.update(updatedRentalDTO);

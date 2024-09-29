@@ -404,8 +404,6 @@ div {
     margin-top:0;
     margin-bottom:40px;
     font-weight: lighter;
-
-
 }
 
 .vehicle_year{
@@ -428,29 +426,57 @@ div {
     border-radius: 20px;
 }
 
+.form-list-wrapper-rental {
+    display: grid;
+    flex-direction: row;
+}
+
 .rent_form{
     display:flex;
 }
 
 .rental-list {
+    display: grid;
+    flex-direction: row;
     margin: 20px;
-    font-family: Arial, sans-serif;
+    font-family: "Roboto" , system-ui;
+    padding: 15px;
+    background-color: white;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#vehicleList li {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 table {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
+    border: 2px solid rgba(200, 200, 200, 0.8);
+    border-radius: 8px;
 }
 
 th, td {
     padding: 15px;
-    text-align: left;
     border-bottom: 1px solid #ddd;
+    white-space: nowrap;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid rgba(224, 224, 224, 0.5);
+    align-items: center;
+    text-align: center;
 }
 
 th {
     background-color: #3498db;
     color: white;
+}
+th:last-child, td:last-child {
+    border-right: none;
 }
 
 .modal {
@@ -552,4 +578,84 @@ th {
     border-color: #3498db;
     box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
     outline: none;
+}
+
+#vehicleChartContainer {
+    display: grid;
+    flex-direction: row;
+    max-width: 80%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#vehicleChart {
+    width: 100%;
+    height: 400px;
+}
+
+.chart-title {
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+#rentalChartContainer {
+    display: grid;
+    flex-direction: row;
+    max-width: 80%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#rentalChart {
+    width: 100%;
+    height: 400px;
+}
+
+.total-cost {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.agency-list-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0 auto;
+    width: 80vw;
+}
+
+.agency-list {
+    display: grid;
+    flex-direction: row;
+}
+
+.agency-search-box {
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+    display: grid;
+    gap: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.agency-search-box div {
+    flex-direction: column;
+    align-items: center;
 }

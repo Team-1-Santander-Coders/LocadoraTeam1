@@ -10,6 +10,7 @@ public class AdminServer {
         HttpServer server = MainServer.getServer();
 
         server.createContext("/adminPage", new StaticFileHandler(page,"index.html"));
+        server.createContext("/adminPage/script.js", new StaticFileHandler(page,"script.js"));
         server.createContext("/adminPage/veiculos", new StaticFileHandler(page,"veiculos.html"));
         server.createContext("/adminPage/veiculo.js", new StaticFileHandler(page,"veiculo.js"));
         server.createContext("/adminPage/agencias", new StaticFileHandler(page, "agencias.html"));

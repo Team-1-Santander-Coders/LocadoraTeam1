@@ -48,7 +48,7 @@ public class Motorcycle implements Vehicle {
      */
     @Override
     public String getPlaca() {
-        return placa;
+        return placa.toUpperCase();
     }
 
     /**

@@ -212,7 +212,7 @@ public class RentalServer {
         }
 
         private void sendErrorResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
-            exchange.sendResponseHeaders(statusCode, message.length());
+            exchange.sendResponseHeaders(statusCode, message.getBytes(StandardCharsets.UTF_8).length);
             try (OutputStream os = exchange.getResponseBody()) {
                 os.write(message.getBytes(StandardCharsets.UTF_8));
             }

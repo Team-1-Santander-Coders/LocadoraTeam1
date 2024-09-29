@@ -19,7 +19,7 @@
         </ul>
     </nav>
 </header>
-<div class="form-list-wrapper">
+<div class="form-list-wrapper-rental">
     <Cadastro>
         <h1>Criação de Aluguel</h1>
         <form id="rentalForm">
@@ -38,24 +38,25 @@
             <button type="submit">Criar Aluguel</button>
         </form>
     </Cadastro>
+    <div class="rental-list">
+        <h1>Lista de aluguéis</h1>
+        <table id="rentalTable">
+            <thead>
+            <tr>
+                <th>Agência Retirada</th>
+                <th>Cliente</th>
+                <th>Veículo</th>
+                <th>Data de Retirada</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 </div>
-<div class="rental-list">
-    <h1>Aluguéis</h1>
-    <table id="rentalTable">
-        <thead>
-        <tr>
-            <th>Agência Retirada</th>
-            <th>Cliente</th>
-            <th>Veículo</th>
-            <th>Data de Retirada</th>
-            <th>Status</th>
-            <th>Ações</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
+
 
 <div id="returnModal" class="modal">
     <div class="modal-content">

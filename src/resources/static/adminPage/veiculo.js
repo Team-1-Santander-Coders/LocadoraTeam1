@@ -3,6 +3,11 @@ if (window.location.href.includes("veiculo")){
         loadVehicles();
         loadAgencies();
 
+        const currentYear = new Date().getFullYear();
+        const yearInput = document.getElementById('ano');
+        yearInput.max = currentYear + 1;
+        yearInput.min = 1886;
+
         document.getElementById('search').addEventListener('input', filterVehicles);
         document.getElementById('disponibility').addEventListener('change', filterVehicles);
     });
