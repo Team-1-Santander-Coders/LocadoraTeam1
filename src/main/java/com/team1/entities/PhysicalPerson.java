@@ -1,12 +1,25 @@
 package main.java.com.team1.entities;
 
-public class PhysicalPerson implements Customer{
+/**
+ * Representa uma pessoa física como cliente.
+ * Esta classe implementa a interface Customer e encapsula
+ * os detalhes do cliente, como nome, endereço, telefone e CPF (Cadastro de Pessoas Físicas).
+ */
+public class PhysicalPerson implements Customer {
 
     private String name;
     private String address;
     private String phone;
     private String cpf;
 
+    /**
+     * Constrói um objeto PhysicalPerson com os detalhes especificados.
+     *
+     * @param name    o nome da pessoa física
+     * @param address o endereço da pessoa física
+     * @param phone   o número de telefone da pessoa física
+     * @param cpf     o CPF da pessoa física
+     */
     public PhysicalPerson(String name, String address, String phone, String cpf) {
         this.name = name;
         this.address = address;
@@ -14,6 +27,11 @@ public class PhysicalPerson implements Customer{
         this.cpf = cpf;
     }
 
+    /**
+     * Obtém o nome da pessoa física.
+     *
+     * @return o nome da pessoa física
+     */
     public String getName() {
         return name;
     }
@@ -43,13 +61,20 @@ public class PhysicalPerson implements Customer{
         this.phone = phone;
     }
 
+    /**
+     * Compara esta pessoa física com outro cliente para verificar igualdade
+     * com base no CPF.
+     *
+     * @param customer o cliente a ser comparado
+     * @return true se o CPF de ambos os clientes for igual, false caso contrário
+     */
     @Override
     public boolean equals(Customer customer) {
-        return this.cpf.equals(((PhysicalPerson)customer).cpf);
+        return this.cpf.equals(((PhysicalPerson) customer).cpf);
     }
 
     @Override
     public int hashCode() {
-        return (31*cpf.hashCode()) + cpf.hashCode();
+        return (31 * cpf.hashCode()) + cpf.hashCode();
     }
 }

@@ -113,8 +113,4 @@ public class Car implements Vehicle {
     public AgencyDTO getAgency() {
         return agency;
     }
-
-    public void setAgency(AgencyDTO agency) {
-        this.agency = agency;
-    }
 }
