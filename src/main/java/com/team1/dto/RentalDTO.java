@@ -61,8 +61,6 @@ public class RentalDTO extends Rental implements Serializable {
      * @param agencyReturn A agência onde o veículo será devolvido.
      * @param returnDate A data de devolução do veículo.
      */
-
-
     public RentalDTO(VehicleDTO vehicle, CustomerDTO customer, AgencyDTO agencyRental, LocalDate rentalDate, AgencyDTO agencyReturn, LocalDate returnDate) {
         super(vehicle, customer, agencyRental, rentalDate);
         finalizarAluguel(agencyReturn, returnDate);
@@ -73,7 +71,6 @@ public class RentalDTO extends Rental implements Serializable {
      *
      * @return A placa do veículo.
      */
-
     public String vehiclePlate(){
         return getVehicle().getPlaca();
     }
@@ -84,19 +81,10 @@ public class RentalDTO extends Rental implements Serializable {
      * Se o cliente for uma pessoa jurídica, retorna o CNPJ; se for pessoa física, retorna o CPF.
      * </p>
      *
-     * @return O documento do cliente, ou "Usuário inválido" se o cliente não for válido.
+     * @return O documento do cliente.
      */
-
     public String customerDocument() {
-        CustomerDTO customer = getCustomer();
-        if (customer instanceof LegalPersonDTO) {
-            return ((LegalPersonDTO) customer).getCnpj();
-        } else if (customer instanceof PhysicalPersonDTO) {
-            return ((PhysicalPersonDTO) customer).getCpf();
-        } else if (customer instanceof UserDTO) {
-            return ((UserDTO) customer).getDocument();
-        }
-        return "Usuário inválido";
+        return getCustomer().getDocument();
     }
 
     /**
@@ -114,7 +102,6 @@ public class RentalDTO extends Rental implements Serializable {
      *
      * @return O nome da agência de devolução.
      */
-
     public String agencyReturnName() {
         return getAgencyReturn().name();
     }
@@ -208,16 +195,27 @@ public class RentalDTO extends Rental implements Serializable {
     }
 
     public String toJson() {
-        return "{\n" +
-                "  \"veiculo\": \"" + this.vehiclePlate() + " - " + getVehicle().getModelo() + "\",\n" +
-                "  \"cliente\": \"" + this.customerDocument() + "\",\n" +
-                "  \"agenciaRetirada\": \"" + this.agencyRentalName() + "\",\n" +
-                //"  \"agenciaDevolucao\": \"" + (isReturned() ? this.agencyReturnName() : "Não devolvido.") + "\",\n" +
-                //"  \"dataRetirada\": \"" + DateUtil.formatarData(getRentalDate()) + "\",\n" +
-                //"  \"dataDevolucao\": \"" + (isReturned() ? DateUtil.formatarData(getReturnDate()) : "Não devolvido.") + "\",\n" +
-                //"  \"custoTotal\": \"" + (isReturned() ? String.format("%.2f", this.calcularCustoTotal()) : "0") + "\"\n" +
-                "  \"situacao\": \"" + (isReturned() ? "Fechado" : "Em aberto") + "\"\n" +
-                "}";
-    }
+        StringBuilder json = new StringBuilder();
+        json.append("{\n");
+        json.append("  \"veiculo\": \"").append(this.vehiclePlate()).append(" - ").append(getVehicle().getModelo()).append("\",\n");
+        json.append("  \"cliente\": \"").append(this.customerDocument()).append(" - ").append(this.getCustomer().getName()).append(" - ").append(this.getCustomer().getEmail()).append("\",\n");
+        json.append("  \"agenciaRetirada\": \"").append(this.agencyRentalName()).append(" - ").append(this.getAgencyRental().address()).append("\",\n");
 
+        if (!isReturned()) {
+            json.append("  \"agenciaDevolucao\": \"Não devolvido.\",\n");
+            json.append("  \"dataRetirada\": \"").append(DateUtil.formatarData(getRentalDate())).append("\",\n");
+            json.append("  \"dataDevolucao\": \"Não devolvido.\",\n");
+            json.append("  \"custoTotal\": \"0\",\n");
+            json.append("  \"situacao\": \"Em aberto.\"\n");
+        } else {
+            json.append("  \"agenciaDevolucao\": \"").append(this.agencyReturnName()).append(" - ").append(this.getAgencyRental().address()).append("\",\n");
+            json.append("  \"dataRetirada\": \"").append(DateUtil.formatarData(getRentalDate())).append("\",\n");
+            json.append("  \"dataDevolucao\": \"").append(DateUtil.formatarData(getReturnDate())).append("\",\n");
+            json.append("  \"custoTotal\": \"").append(String.format("%.2f", this.calcularCustoTotal())).append("\",\n");
+            json.append("  \"situacao\": \"Devolvido.\"\n");
+        }
+
+        json.append("}");
+        return json.toString();
+    }
 }

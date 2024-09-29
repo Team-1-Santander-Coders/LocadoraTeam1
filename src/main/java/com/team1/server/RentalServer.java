@@ -64,41 +64,42 @@ public class RentalServer {
                     }
 
                     if (user != null) {
+                        List<RentalDTO> filteredRentals;
                         if (user.isAdmin()) {
-                            String response = rentals.stream()
-                                    .map(RentalDTO::toJson)
-                                    .collect(Collectors.joining("\n"));
-                            exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
-                            OutputStream os = exchange.getResponseBody();
-                            os.write(response.getBytes(StandardCharsets.UTF_8));
-                            os.close();
+                            filteredRentals = rentals;
                         } else {
                             UserDTO finalUser = user;
-                            String response = rentals.stream()
-                                    .filter(RentalDTO -> RentalDTO.getCustomer().equals(finalUser))
-                                    .map(RentalDTO::toJson)
-                                    .collect(Collectors.joining("\n"));
-                            exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
-                            OutputStream os = exchange.getResponseBody();
+                            filteredRentals = rentals.stream()
+                                    .filter(rental -> rental.getCustomer().equals(finalUser))
+                                    .collect(Collectors.toList());
+                        }
+
+                        String response = "[" + filteredRentals.stream()
+                                .map(RentalDTO::toJson)
+                                .collect(Collectors.joining(",\n")) + "]";
+
+                        exchange.getResponseHeaders().set("Content-Type", "application/json");
+                        exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
+                        try (OutputStream os = exchange.getResponseBody()) {
                             os.write(response.getBytes(StandardCharsets.UTF_8));
-                            os.close();
                         }
                     } else {
-                        String response = "Usuário não encontrado.";
-                        exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
-                        OutputStream os = exchange.getResponseBody();
-                        os.write(response.getBytes());
-                        os.close();
+                        sendErrorResponse(exchange, 404, "Usuário não encontrado.");
                     }
                 } else {
-                    String response = "Usuário não autenticado.";
-                    exchange.sendResponseHeaders(401, response.length());
-                    OutputStream os = exchange.getResponseBody();
-                    os.write(response.getBytes());
-                    os.close();
+                    sendErrorResponse(exchange, 401, "Usuário não autenticado.");
                 }
             } else {
                 exchange.sendResponseHeaders(405, -1);
+            }
+        }
+
+        private void sendErrorResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
+            exchange.getResponseHeaders().set("Content-Type", "application/json");
+            String response = "{\"error\": \"" + message + "\"}";
+            exchange.sendResponseHeaders(statusCode, response.getBytes(StandardCharsets.UTF_8).length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes(StandardCharsets.UTF_8));
             }
         }
     }
@@ -109,125 +110,111 @@ public class RentalServer {
             if ("POST".equals(exchange.getRequestMethod())) {
                 InputStream inputStream = exchange.getRequestBody();
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-                System.out.println(body);
                 String[] requestData = body.split(" / ");
+
                 String vehiclePlate = requestData[0];
                 String agencyRentalName = requestData[1].replace("{", "");;
                 String agencyRentalAddress = requestData[2].replace("}", "");;
                 LocalDate rentalDate = DateUtil.converterTextoParaData(requestData[3]);
                 String agencyReturnName = requestData[4];
                 String agencyReturnAddress = requestData[5];
+                String returnDateStr = requestData[6];
+                String customerDocument = requestData[7];
+
                 LocalDate returnDate = null;
-                if (!requestData[6].equals("Sem data de devolução")) {
-                    returnDate = DateUtil.converterTextoParaData(requestData[6]);
-                }
-                AgencyDTO agencyReturn = null;
-                if (!agencyReturnName.equals("Sem agência de devolução")) {
-                    agencyService.getAgencyByNameAndAddress(agencyReturnName, agencyReturnAddress);
+                if (!returnDateStr.equals("Sem data de devolução")) {
+                    returnDate = DateUtil.converterTextoParaData(returnDateStr);
                 }
 
                 AgencyDTO agencyRental = agencyService.getAgencyByNameAndAddress(agencyRentalName, agencyRentalAddress);
-
-                String customerDocument = requestData[7];
-
-                HttpCookie userIdCookie = null;
-                String cookieHeader = exchange.getRequestHeaders().getFirst("Cookie");
-
-                if (cookieHeader != null) {
-                    for (String cookie : cookieHeader.split("; ")) {
-                        if (cookie.startsWith("userId=")) {
-                            userIdCookie = HttpCookie.parse(cookie).getFirst();
-                        }
-                    }
+                AgencyDTO agencyReturn = null;
+                if (!agencyReturnName.equals("Sem agência de devolução")) {
+                    agencyReturn = agencyService.getAgencyByNameAndAddress(agencyReturnName, agencyReturnAddress);
                 }
 
-                if (userIdCookie != null) {
-                    String userId = userIdCookie.getValue();
-                    UserDTO user = null;
-                    try {
-                        user = customerService.findUserByID(userId);
-                    } catch (Exception e) {
-                        System.out.println("Erro ao encontrar usuário: " + e.getMessage());
-                        FileUtil.logError(e);
-                    }
+                UserDTO user = getUserFromCookie(exchange);
 
-                    if (user != null) {
-                        VehicleDTO vehicle = null;
+                if (user != null) {
+                    VehicleDTO vehicle = getVehicle(vehiclePlate);
+                    CustomerDTO customer = getCustomer(user, customerDocument);
+
+                    if (customer != null && vehicle != null && agencyRental != null) {
                         try {
-                            vehicle = vehicleService.getVehicleByPlaca(vehiclePlate);
-                        } catch (EntityNotFoundException e) {
-                            FileUtil.logError(e);
-                        }
-                        CustomerDTO customer = null;
-
-                        if (user.isAdmin()) {
-                            customer = customerService.findCustomerByDocument(customerDocument);
-                        } else {
-                            customer = user;
-                        }
-
-
-                        if (customer != null && vehicle != null && agencyRental != null) {
-                            RentalDTO rental;
-                            String response = "";
-                            if (!agencyReturnName.equals("Sem agência de devolução")) {
-                                rental = rentalService.getRental(vehiclePlate, customer.getDocument(), rentalDate);
-                                try {
-                                    rentalService.returnRental(rental, agencyReturn, returnDate);
-                                    response = rental.toJson();
-                                    exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
-                                    OutputStream os = exchange.getResponseBody();
-                                    os.write(response.getBytes(StandardCharsets.UTF_8));
-                                    os.close();
-                                } catch (Exception e) {
-                                    response = "Erro: " + e.getMessage();
-                                    exchange.sendResponseHeaders(409, response.length());
-                                    OutputStream os = exchange.getResponseBody();
-                                    os.write(response.getBytes());
-                                    os.close();
+                            String response;
+                            if (agencyReturn != null && returnDate != null) {
+                                RentalDTO rental = rentalService.getRental(vehiclePlate, customer.getDocument(), rentalDate);
+                                if (rental == null) {
+                                    throw new EntityNotFoundException("Aluguel não encontrado");
                                 }
-
+                                if (rental.getReturnDate() != null) {
+                                    throw new RentIllegalUpdateException("Este aluguel já foi devolvido");
+                                }
+                                response = rentalService.returnRental(rental, agencyReturn, returnDate);
+                                exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
                             } else {
-                                rental = new RentalDTO(vehicle, customer, agencyRental, rentalDate);
-                                try {
-                                    rentalService.addRental(rental);
-                                } catch (Exception e) {
-                                    response = "Erro: " + e.getMessage();
-                                    exchange.sendResponseHeaders(409, response.length());
-                                    OutputStream os = exchange.getResponseBody();
-                                    os.write(response.getBytes());
-                                    os.close();
-                                }
+                                RentalDTO rental = new RentalDTO(vehicle, customer, agencyRental, rentalDate);
+                                rentalService.addRental(rental);
                                 response = rental.toJson();
                                 exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);
-                                OutputStream os = exchange.getResponseBody();
-                                os.write(response.getBytes(StandardCharsets.UTF_8));
-                                os.close();
                             }
 
-                        } else {
-                            String response = "Erro: Dados inválidos.";
-                            exchange.sendResponseHeaders(400, response.length());
-                            OutputStream os = exchange.getResponseBody();
-                            os.write(response.getBytes());
-                            os.close();
+                            sendResponse(exchange, response);
+                        } catch (Exception e) {
+                            FileUtil.logError(e);
+                            sendErrorResponse(exchange, 409, "Erro: " + e.getMessage());
                         }
                     } else {
-                        String response = "Usuário não encontrado.";
-                        exchange.sendResponseHeaders(404, response.length());
-                        OutputStream os = exchange.getResponseBody();
-                        os.write(response.getBytes());
-                        os.close();
+                        sendErrorResponse(exchange, 400, "Erro: Dados inválidos.");
                     }
                 } else {
-                    String response = "Usuário não autenticado.";
-                    exchange.sendResponseHeaders(401, response.length());
-                    OutputStream os = exchange.getResponseBody();
-                    os.write(response.getBytes());
-                    os.close();
+                    sendErrorResponse(exchange, 401, "Usuário não autenticado.");
                 }
             } else {
                 exchange.sendResponseHeaders(405, -1);
+            }
+        }
+
+        private UserDTO getUserFromCookie(HttpExchange exchange) {
+            String cookieHeader = exchange.getRequestHeaders().getFirst("Cookie");
+            if (cookieHeader != null) {
+                for (String cookie : cookieHeader.split("; ")) {
+                    if (cookie.startsWith("userId=")) {
+                        String userId = HttpCookie.parse(cookie).getFirst().getValue();
+                        try {
+                            return customerService.findUserByID(userId);
+                        } catch (Exception e) {
+                            System.out.println("Erro ao encontrar usuário: " + e.getMessage());
+                            FileUtil.logError(e);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        private VehicleDTO getVehicle(String vehiclePlate) {
+            try {
+                return vehicleService.getVehicleByPlaca(vehiclePlate);
+            } catch (EntityNotFoundException e) {
+                FileUtil.logError(e);
+                return null;
+            }
+        }
+
+        private CustomerDTO getCustomer(UserDTO user, String customerDocument) {
+            return user.isAdmin() ? customerService.findCustomerByDocument(customerDocument) : user;
+        }
+
+        private void sendResponse(HttpExchange exchange, String response) throws IOException {
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes(StandardCharsets.UTF_8));
+            }
+        }
+
+        private void sendErrorResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
+            exchange.sendResponseHeaders(statusCode, message.length());
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(message.getBytes(StandardCharsets.UTF_8));
             }
         }
     }

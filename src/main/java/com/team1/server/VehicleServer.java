@@ -53,7 +53,6 @@ public class VehicleServer {
                     }
                 }
             }
-
             if (userIdCookie != null) {
                 String userId = userIdCookie.getValue();
                 UserDTO user = null;
@@ -63,7 +62,6 @@ public class VehicleServer {
                     System.out.println("Erro ao encontrar usuário: " + e.getMessage());
                     FileUtil.logError(e);
                 }
-
                 if (user != null) {
                     List<VehicleDTO> vehicles = vehicleService.getAllVehicles();
                     Stream<VehicleDTO> vehicleStream = vehicles.stream();
@@ -77,21 +75,20 @@ public class VehicleServer {
                                     " - " + (vehicle.isDisponivel() ? "Disponível" : "Indisponível") + " - {" + vehicle.getAgency().name() + " - " + vehicle.getAgency().address() + "}")
                             .collect(Collectors.joining("\n"));
 
-
                     exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes(StandardCharsets.UTF_8));
                     os.close();
                 } else {
                     String response = "Usuário não encontrado.";
-                    exchange.sendResponseHeaders(404, response.length());
+                    exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes());
                     os.close();
                 }
             } else {
                 String response = "Usuário não autenticado.";
-                exchange.sendResponseHeaders(401, response.length());
+                exchange.sendResponseHeaders(401, response.getBytes(StandardCharsets.UTF_8).length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());
                 os.close();
@@ -154,34 +151,34 @@ public class VehicleServer {
                                     vehicleService.addVehicle(truckDTO);
                                 }
                                 String response = tipo + " cadastrado com sucesso!";
-                                exchange.sendResponseHeaders(200, response.length());
+                                exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
                                 OutputStream os = exchange.getResponseBody();
                                 os.write(response.getBytes());
                                 os.close();
                             } catch (DuplicateEntityException e) {
                                 String response = "Erro: Veículo com a placa já existe.";
-                                exchange.sendResponseHeaders(409, response.length());
+                                exchange.sendResponseHeaders(409, response.getBytes(StandardCharsets.UTF_8).length);
                                 OutputStream os = exchange.getResponseBody();
                                 os.write(response.getBytes());
                                 os.close();
                             }
                         } else {
                             String response = "Usuário não é administrador.";
-                            exchange.sendResponseHeaders(403, response.length());
+                            exchange.sendResponseHeaders(403, response.getBytes(StandardCharsets.UTF_8).length);
                             OutputStream os = exchange.getResponseBody();
                             os.write(response.getBytes());
                             os.close();
                         }
                     } else {
                         String response = "Usuário não encontrado.";
-                        exchange.sendResponseHeaders(404, response.length());
+                        exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
                         OutputStream os = exchange.getResponseBody();
                         os.write(response.getBytes());
                         os.close();
                     }
                 } else {
                     String response = "Usuário não autenticado.";
-                    exchange.sendResponseHeaders(401, response.length());
+                    exchange.sendResponseHeaders(401, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes());
                     os.close();
@@ -227,34 +224,34 @@ public class VehicleServer {
                             try {
                                 vehicleService.deleteVehicle(placa);
                                 String response = "Veículo deletado com sucesso!";
-                                exchange.sendResponseHeaders(200, response.length());
+                                exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
                                 OutputStream os = exchange.getResponseBody();
                                 os.write(response.getBytes());
                                 os.close();
                             } catch (EntityNotFoundException e) {
                                 String response = "Erro: Veículo não encontrado.";
-                                exchange.sendResponseHeaders(404, response.length());
+                                exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
                                 OutputStream os = exchange.getResponseBody();
                                 os.write(response.getBytes());
                                 os.close();
                             }
                         } else {
                             String response = "Usuário não é administrador.";
-                            exchange.sendResponseHeaders(403, response.length());
+                            exchange.sendResponseHeaders(403, response.getBytes(StandardCharsets.UTF_8).length);
                             OutputStream os = exchange.getResponseBody();
                             os.write(response.getBytes());
                             os.close();
                         }
                     } else {
                         String response = "Usuário não encontrado.";
-                        exchange.sendResponseHeaders(404, response.length());
+                        exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
                         OutputStream os = exchange.getResponseBody();
                         os.write(response.getBytes());
                         os.close();
                     }
                 } else {
                     String response = "Usuário não autenticado.";
-                    exchange.sendResponseHeaders(401, response.length());
+                    exchange.sendResponseHeaders(401, response.getBytes(StandardCharsets.UTF_8).length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes());
                     os.close();

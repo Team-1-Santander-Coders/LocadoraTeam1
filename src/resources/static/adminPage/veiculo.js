@@ -67,7 +67,7 @@ if (window.location.href.includes("veiculo")){
             })
             .catch(error => {
                 console.error('Erro ao carregar os veículos:', error);
-                document.getElementById("vehicleList").textContent = `Erro ao carregar veículos: ${error.message}`;
+                document.getElementById("vehicleList").textContent = `Erro ao carregar veículos`;
             });
     }
 

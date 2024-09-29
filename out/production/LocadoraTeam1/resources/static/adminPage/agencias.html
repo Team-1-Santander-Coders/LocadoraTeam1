@@ -36,13 +36,15 @@
         </form>
     </div>
 
-    <div class="agency-search-box">
-        <label for="search">Buscar agência:</label>
-        <input type="text" id="search" placeholder="Pesquise agências por nome ou endereço">
+    <div class="agency-list">
+        <h2>Lista de Agências</h2>
+        <div class="agency-search-box">
+            <label for="search">Buscar agência:</label>
+            <input type="text" id="search" placeholder="Pesquise agências por nome ou endereço">
+        </div>
+        <ul id="agencyList"></ul>
+        <p id="noAgenciesMessage" style="display:none;">Nenhuma agência disponível</p>
     </div>
-
-    <ul id="agencyList"></ul>
-    <p id="noAgenciesMessage" style="display:none;">Nenhuma agência disponível</p>
 
     <div class="edit-agency" id="editAgencyDialog" style="display:none;">
         <h2>Editar Agência</h2>
