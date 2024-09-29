@@ -109,6 +109,7 @@ if (window.location.href === "http://localhost:8000/" || window.location.href ==
                 if (data.success) {
                     window.location.href = data.redirectUrl;
                 } else {
+                    alert("Usuário ou senha incorretos")
                     console.error('Erro:', data);
                 }
             })
