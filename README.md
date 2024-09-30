@@ -87,13 +87,26 @@ O projeto é estruturado nas seguintes pastas principais:
 ## Diagramas de Classes
 
 **Todos diagramas de classe estão diponíveis na pasta [Diagrams](/infos/diagrams) no formato .puml**
+
 ### Diagrama da Classe Agency
 ![Agency diagram](images/agency.png)
+
 ### Diagrama da Classe Rental
 ![Rental diagram](images/rental.png)
+
 ### Diagrama da Classe Customer
 ![Customer diagram](images/customer.png)
+
 ### Diagrama da Classe Vehicle
 ![Vehicle diagram](images/vehicle.png)
+
+## Projeto desenvolvido por:
+
+[<img alt="Alecsandro Auer" height="75px" src="https://avatars.githubusercontent.com/u/54159302?v=4" width="75px"/>](https://github.com/aleschopf)
+[<img alt="Christina Carvalho" height="75px" src="https://avatars.githubusercontent.com/u/175761726?v=4" width="75px"/>](https://github.com/ChristinaC-dev)
+[<img alt="Lucas Moraes" height="75px" src="https://avatars.githubusercontent.com/u/106927402?v=4" width="75px"/>](https://github.com/lsmoraes16)
+[<img alt="Maria Eduarda" height="75px" src="https://avatars.githubusercontent.com/u/134453107?v=4" width="75px"/>](https://github.com/mariaemrqs)
+[<img alt="Matheus Lima" height="75px" src="https://avatars.githubusercontent.com/u/102155883?v=4" width="75px"/>](https://github.com/mathlimam)
+
 ## Licença
 Este projeto é licenciado sob a [MIT License](LICENSE).
