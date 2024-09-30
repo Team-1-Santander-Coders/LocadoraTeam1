@@ -60,21 +60,27 @@
 
 
 <div id="returnModal" class="modal">
+
     <div class="modal-content">
         <h2>Devolução de Aluguel</h2>
-        <form id="returnForm">
-            <p>Agência de Retirada: <span id="pickupAgencyReturn"></span></p>
-            <p>Cliente: <span id="customerReturn"></span></p>
-            <p>Veículo: <span id="vehicleReturn"></span></p>
-            <p>Data de Retirada: <span id="rentalDateReturn"></span></p>
+        <div>
+            <form id="returnForm">
+                <p>Agência de Retirada: <span id="pickupAgencyReturn"></span></p>
+                <p>Cliente: <span id="customerReturn"></span></p>
+                <p>Veículo: <span id="vehicleReturn"></span></p>
+                <p>Data de Retirada: <span id="rentalDateReturn"></span></p>
 
-            <label for="agencyReturn">Agência de Devolução:</label>
-            <select id="agencyReturn"></select>
-            <label for="returnDate">Data de Devolução:</label>
-            <input type="date" id="returnDate" required>
-            <button type="submit">Confirmar Devolução</button>
-            <button type="button" id="closeModal">Cancelar</button>
-        </form>
+                <label for="agencyReturn">Agência de Devolução:</label>
+                <select id="agencyReturn"></select>
+                <label for="returnDate">Data de Devolução:</label>
+                <input type="date" id="returnDate" required>
+                <div class="returnModalButtons">
+                    <button type="button" id="closeModal">Cancelar</button>
+                    <button type="submit">Confirmar devolução</button>
+                </div>
+            </form>
+
+        </div>
     </div>
 </div>
 </body>

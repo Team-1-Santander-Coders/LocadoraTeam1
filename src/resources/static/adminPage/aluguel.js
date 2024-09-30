@@ -287,6 +287,7 @@ function openReturnModal(rental) {
 
         fetchRent(vehiclePlate, agencyPickupName, agencyPickupAddress, rental.dataRetirada, agencyReturnName, agencyReturnAddress, formatDate(returnDate), customerDocument);
         document.getElementById('returnModal').style.display = 'none';
+        document.getElementById('returnForm').reset();
         loadRentals()
     }
 

@@ -1,13 +1,13 @@
-<div style="align-items: center; justify-content: center; display: flex">
-  <img src="/images/logo.png" style="width: 200px; border-radius: 20px">
+<div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+  <img alt="Logo Locadora Team One" src="/images/logo.png" style="width: 200px; border-radius: 20px; margin: auto;">
 </div>
 
 ---
 
 # Locadora Team One 🚗
 
-<div style="align-items: center; justify-content: center; display: flex" >
-  <img src="images/landingpage.gif" alt="Locadora Team One">
+<div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+  <img src="images/landingpage.gif" alt="Locadora Team One" style="margin: auto;">
 </div>
 
 ## Descrição

@@ -672,3 +672,95 @@ th:last-child, td:last-child {
 #loginForm a:hover {
     color: #3498db;
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #f4f7f6;
+    display: grid;
+    flex-direction: row;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#returnForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#returnForm p {
+    margin: 0;
+    font-weight: bold;
+}
+
+#returnForm span {
+    font-weight: normal;
+}
+
+#returnForm label {
+    font-weight: bold;
+    color: #34495e;
+}
+
+#returnForm select, #returnForm input[type="date"] {
+    width: 90%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+#returnForm button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#returnForm button[type="submit"] {
+    background-color: #3498db;
+    color: white;
+}
+
+#returnForm button[type="submit"]:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+#closeModal {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#closeModal:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+}
+
+.returnModalButtons {
+    display: flex;
+}

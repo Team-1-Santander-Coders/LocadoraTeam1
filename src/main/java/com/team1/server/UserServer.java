@@ -20,10 +20,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Classe responsável por gerenciar as operações relacionadas aos usuários.
+ * Esta classe integra a lógica de autenticação, criação e listagem de usuários.
+ * Utiliza o serviço de clientes para realizar operações de manipulação de dados
+ * relacionados a usuários. A variável 'page' armazena a página padrão para
+ * onde os usuários serão redirecionados após a autenticação.
+ */
 public class UserServer {
     private static CustomerService customerService;
     private static final String page = "user";
 
+    /**
+     * Método responsável por criar os contextos do servidor relacionados a usuários.
+     * Ele registra as rotas para servir páginas e scripts estáticos, criação de usuários,
+     * listagem de usuários, validação de sessão e autenticação.
+     * - /usuario: serve a página de criação de usuário.
+     * - /usuario/script.js: serve o script JavaScript da página de criação de usuário.
+     * - /user: rota para criação de novos usuários (POST).
+     * - /users: rota para listagem de usuários (GET).
+     * - /userPage: serve a página principal do usuário.
+     * - /userPage/script.js: serve o script JavaScript da página principal do usuário.
+     * - /checkAuth: rota para validação de sessão (GET).
+     * - /auth: rota para autenticação de usuários (POST).
+     *
+     * @throws IOException em caso de erro ao criar os contextos.
+     */
     public static void createContexts() throws IOException {
         HttpServer server = MainServer.getServer();
         customerService = new CustomerService();
@@ -38,6 +60,14 @@ public class UserServer {
         server.createContext("/auth", new UserAuthHandler());
     }
 
+    /**
+     * Classe responsável por autenticar um usuário.
+     * O método handle processa uma requisição POST contendo email e senha,
+     * realiza a autenticação e cria um cookie de sessão com o ID do usuário.
+     * Dependendo do tipo de usuário (admin ou não), redireciona para a página correspondente.
+     *
+     * Método aceito: POST.
+     */
     static class UserAuthHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -78,6 +108,12 @@ public class UserServer {
         }
     }
 
+    /**
+     * Classe responsável por validar a sessão de um usuário.
+     * O método handle verifica se existe um cookie com o ID do usuário,
+     * busca os dados do usuário associado e responde com um JSON contendo
+     * o nome do usuário e se ele é admin.
+     */
     static class SessionValidationHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -119,6 +155,12 @@ public class UserServer {
         }
     }
 
+    /**
+     * Classe responsável por criar novos usuários.
+     * O método handle processa uma requisição POST contendo os dados do usuário
+     * e cria o usuário correspondente no sistema, registrando-o no serviço de clientes.
+     * Método aceito: POST.
+     */
     static class UserCreateHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -162,7 +204,12 @@ public class UserServer {
         }
     }
 
-
+    /**
+     * Classe responsável por listar usuários cadastrados.
+     * O método handle verifica se o usuário é admin, e caso seja,
+     * retorna uma lista de clientes em formato JSON. Caso contrário,
+     * responde com erro de autorização.
+     */
     static class UserListHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {

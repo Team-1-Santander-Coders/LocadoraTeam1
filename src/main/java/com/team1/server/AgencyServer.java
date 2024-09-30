@@ -19,10 +19,21 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Classe responsável por gerenciar as rotas relacionadas a agências no servidor HTTP.
+ * Implementa rotas para listar, criar, editar e deletar agências.
+ * Utiliza `AgencyService` e `CustomerService` para manipular as operações de agência e verificar permissões de usuário.
+ */
 public class AgencyServer {
     private static final AgencyService agencyService = new AgencyService();
     private static final CustomerService customerService = new CustomerService();
 
+    /**
+     * Cria os contextos (rotas) no servidor para manipulação das operações de agências.
+     * As rotas incluem listagem, criação, edição e exclusão de agências.
+     *
+     * @throws IOException se ocorrer um erro ao criar os contextos no servidor.
+     */
     public static void createContexts() throws IOException {
         HttpServer server = MainServer.getServer();
         server.createContext("/agencies", new AgencyListHandler());
@@ -31,6 +42,11 @@ public class AgencyServer {
         server.createContext("/agency/edit", new AgencyEditHandler());
     }
 
+    /**
+     * Handler responsável por listar todas as agências disponíveis.
+     * Responde com um JSON contendo os nomes e endereços das agências.
+     * Método aceito: GET.
+     */
     static class AgencyListHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -66,6 +82,11 @@ public class AgencyServer {
         }
     }
 
+    /**
+     * Handler responsável por criar uma nova agência.
+     * Verifica se o usuário está autenticado e é um administrador antes de permitir a criação.
+     * Método aceito: POST.
+     */
     static class AgencyCreateHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -134,6 +155,11 @@ public class AgencyServer {
         }
     }
 
+    /**
+     * Handler responsável por editar uma agência existente.
+     * Verifica se o usuário está autenticado e é um administrador antes de permitir a edição.
+     * Método aceito: PUT.
+     */
     static class AgencyEditHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -199,6 +225,11 @@ public class AgencyServer {
         }
     }
 
+    /**
+     * Handler responsável por deletar uma agência.
+     * Verifica se o usuário está autenticado e é um administrador antes de permitir a exclusão.
+     * Método aceito: DELETE.
+     */
     static class AgencyDeleteHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
