@@ -181,6 +181,9 @@ function RentForm(rent_vehicle_button, vehicle) {
         rent_date.type = "date";
         rent_date.setAttribute("style", "margin-bottom:40px")
 
+        const today = new Date().toISOString().split('T')[0];
+        rent_date.setAttribute('min', today);
+
         const vehicle_form_model = document.createElement("h1");
         vehicle_form_model.innerText = vehicle.modelo;
         vehicle_form_model.setAttribute("style", "margin:0;")
@@ -215,10 +218,12 @@ function RentForm(rent_vehicle_button, vehicle) {
             bg_overlap.style.display = "none";
 
         });
+        function handleRentVehicle(event) {
+            rentVehicle(vehicle, rent_date);
+            rent_vehicle_submit.removeEventListener("click", handleRentVehicle);
+        }
 
-        rent_vehicle_submit.addEventListener("click", event =>{
-            rentVehicle(vehicle, rent_date)
-        })
+        rent_vehicle_submit.addEventListener("click", handleRentVehicle)
     })
 }
 
@@ -231,6 +236,7 @@ function rentVehicle(vehicle, rent_date) {
     const returnAgencyAddress = null;
     const returnDate = "Sem data de devolução"
     const userId = document.cookie.split(";")[0].split("=")[1]
+
 
 
         const [year, month, day] = rent_date.value.split("-")
@@ -247,9 +253,9 @@ function rentVehicle(vehicle, rent_date) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    console.log("Aluguel registrado")
+                    alert("Aluguel registrado com sucesso!")
                 } else {
-                    console.log("")
+
                 }
             })
             .catch(error => {
@@ -312,12 +318,14 @@ function createRentalsDiv(rentals){
         "flex-direction:column;" +
         "background-color:white; " +
         "width:70em; " +
-        "min-height:min-content; " +
+        "min-height:50em; " +
         "max-height:40em; " +
         "border-radius:20px;" +
         "box-shadow: 0 4px 6px rgba(0,0,0,0.1); " +
         "border: 1px solid rgba(255, 255, 255, 0.18);" +
-        "padding: 1em;"
+        "padding: 1em;" +
+        "box-sizing: border-box;"+
+        "overflow-x: auto;"
     );
 
     const exit_header = document.createElement("div");
@@ -347,7 +355,7 @@ function createRentalsDiv(rentals){
     rentalDiv.appendChild(exit_header)
 
     exit.addEventListener("click", event=>{
-        bg_overlap.setAttribute("style", "display:none")
+        body.removeChild(bg_overlap)
     })
 
     const rentalList = document.createElement("ul")
@@ -449,8 +457,6 @@ function createRentalsList(rentals){
         status.appendChild(status_text)
         status.appendChild(status_info)
         rentalListItem.appendChild(status)
-
-
 
     })
 }
