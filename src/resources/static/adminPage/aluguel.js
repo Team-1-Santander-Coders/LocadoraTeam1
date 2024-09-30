@@ -248,9 +248,17 @@ function generateReceipt(rental) {
     const barcodeCanvas = document.getElementById("barcodeCanvas");
     JsBarcode(barcodeCanvas, "123904567898765432109876543210123", { format: "CODE128" });
 
-    doc.setFontSize(12);
+    const pixCode = "00020126360014BR.GOV.BCB.PIX0114+55119999999950203PIX5204000053039865405123.455802BR5925Locadora Team One6009Sao Paulo61080540900062120512********6304ABCD"; // Exemplo de código PIX
 
-    let yPosition = 20;
+    const qr = new QRious({
+        value: pixCode,
+        size: 100
+    });
+
+    const imgData = qr.toDataURL();
+
+    doc.setFontSize(12);
+    let yPosition = 10;
 
     doc.text("===========================================================", 20, yPosition);
     yPosition += 10;
@@ -282,8 +290,8 @@ function generateReceipt(rental) {
     doc.text("Linha Digitável: " + boletoData.linhaDigitavel, 20, yPosition);
     yPosition += 20;
 
-    const imgData = barcodeCanvas.toDataURL("image/png");
-    doc.addImage(imgData, "PNG", 20, yPosition, 160, 20);
+    const barcodeImgData = barcodeCanvas.toDataURL("image/png");
+    doc.addImage(barcodeImgData, "PNG", 20, yPosition, 160, 20);
     yPosition += 30;
 
     doc.text("===========================================================", 20, yPosition);
@@ -305,6 +313,11 @@ function generateReceipt(rental) {
     yPosition += 10;
 
     doc.text("===========================================================", 20, yPosition);
+    yPosition += 10;
+
+    doc.text("QR Code para pagamento via PIX:", 20, yPosition);
+    yPosition += 10;
+    doc.addImage(imgData, "PNG", 20, yPosition, 48, 48);
 
     doc.save('boleto.pdf');
 }
