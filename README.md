@@ -86,7 +86,7 @@ O projeto é estruturado nas seguintes pastas principais:
 
 ## Diagramas de Classes
 
-**Todos diagramas de classe estão diponíveis na pasta [Diagrams](/infos/diagrams) no formato .puml**
+**Todos diagramas de classe estão diponíveis na pasta [Diagrams](/infos/Diagrams) no formato .puml**
 
 ### Diagrama da Classe Agency
 ![Agency diagram](images/agency.png)
