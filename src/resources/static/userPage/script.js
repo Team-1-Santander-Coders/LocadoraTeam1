@@ -13,6 +13,7 @@ function filterVehicles() {
 
     const filteredVehicles = allVehicles.filter(vehicle =>
         vehicle.placa.toLowerCase().includes(searchTerm) ||
+        vehicle.marca.toLowerCase().includes(searchTerm) ||
         vehicle.modelo.toLowerCase().includes(searchTerm) ||
         vehicle.tipo.toLowerCase().includes(searchTerm) ||
         vehicle.ano.includes(searchTerm)
@@ -248,7 +249,7 @@ function rentVehicle(vehicle, rent_date) {
                 if (data.success) {
                     console.log("Aluguel registrado")
                 } else {
-                    alert("Vish...");
+                    console.log("")
                 }
             })
             .catch(error => {
