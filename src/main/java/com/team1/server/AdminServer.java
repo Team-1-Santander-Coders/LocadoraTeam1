@@ -13,20 +13,25 @@ import com.sun.net.httpserver.HttpServer;
  * aluguéis. Cada contexto é associado a um manipulador de arquivos estáticos
  * que serve os recursos correspondentes.</p>
  *
- * <p>Os contextos criados incluem:</p>
- * <ul>
- *     <li>/adminPage - Página principal do administrador</li>
- *     <li>/adminPage/script.js - Script JavaScript da página principal</li>
- *     <li>/adminPage/veiculos - Página para gerenciar veículos</li>
- *     <li>/adminPage/veiculo.js - Script JavaScript para gerenciamento de veículos</li>
- *     <li>/adminPage/agencias - Página para gerenciar agências</li>
- *     <li>/adminPage/agencia.js - Script JavaScript para gerenciamento de agências</li>
- *     <li>/adminPage/alugueis - Página para gerenciar aluguéis</li>
- *     <li>/adminPage/aluguel.js - Script JavaScript para gerenciamento de aluguéis</li>
- * </ul>
  */
 public class AdminServer {
     private static final String page = "adminPage";
+    /**
+     * Cria os contextos no servidor HTTP, mapeando cada URL para o manipulador de
+     * arquivos estáticos correspondente. Esses contextos servem as páginas HTML e
+     * os scripts JavaScript da interface administrativa.
+     * <p>Os contextos criados incluem:</p>
+     * <ul>
+     *     <li>/adminPage - Página principal do administrador</li>
+     *     <li>/adminPage/script.js - Script JavaScript da página principal</li>
+     *     <li>/adminPage/veiculos - Página para gerenciar veículos</li>
+     *     <li>/adminPage/veiculo.js - Script JavaScript para gerenciamento de veículos</li>
+     *     <li>/adminPage/agencias - Página para gerenciar agências</li>
+     *     <li>/adminPage/agencia.js - Script JavaScript para gerenciamento de agências</li>
+     *     <li>/adminPage/alugueis - Página para gerenciar aluguéis</li>
+     *     <li>/adminPage/aluguel.js - Script JavaScript para gerenciamento de aluguéis</li>
+     * </ul>
+     */
     public static void createContexts() {
         HttpServer server = MainServer.getServer();
         server.createContext("/adminPage", new StaticFileHandler(page,"index.html"));

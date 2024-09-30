@@ -24,18 +24,31 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Classe RentalServer responsável por definir os manipuladores de requisição HTTP para gerenciamento de aluguéis.
+ * Fornece endpoints para listagem de aluguéis e criação/devolução de aluguéis.
+ */
 public class RentalServer {
     private static final RentalService rentalService = new RentalService();
     private static final CustomerService customerService = new CustomerService();
     private static final AgencyService agencyService = new AgencyService();
     private static final VehicleService vehicleService = new VehicleService(new VehicleRepositoryImpl());
 
+    /**
+     * Cria os contextos (endpoints) do servidor HTTP relacionados ao aluguel.
+     * Define os endpoints para listar aluguéis e realizar ações de aluguel.
+     */
     public static void createContexts() {
         HttpServer server = MainServer.getServer();
         server.createContext("/rentals", new RentalListHandler());
         server.createContext("/rent", new RentHandler());
     }
 
+    /**
+     * Manipulador de requisição para listar os aluguéis.
+     * Permite que usuários administradores visualizem todos os aluguéis e usuários normais vejam apenas os seus próprios.
+     * Método aceito: GET.
+     */
     static class RentalListHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -94,6 +107,13 @@ public class RentalServer {
             }
         }
 
+        /**
+         * Envia uma resposta de erro em formato JSON.
+         *
+         * @param exchange   Instância de HttpExchange para enviar a resposta.
+         * @param statusCode Código de status HTTP.
+         * @param message    Mensagem de erro a ser enviada.
+         */
         private void sendErrorResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
             exchange.getResponseHeaders().set("Content-Type", "application/json");
             String response = "{\"error\": \"" + message + "\"}";
@@ -104,6 +124,11 @@ public class RentalServer {
         }
     }
 
+    /**
+     * Manipulador de requisição para criar ou devolver um aluguel.
+     * Permite alugar um veículo ou registrar a devolução de um aluguel.
+     * Método aceito: POST.
+     */
     static class RentHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -174,6 +199,12 @@ public class RentalServer {
             }
         }
 
+        /**
+         * Obtém o usuário autenticado a partir do cookie.
+         *
+         * @param exchange Instância de HttpExchange que contém os cookies.
+         * @return O usuário autenticado ou null se não estiver autenticado.
+         */
         private UserDTO getUserFromCookie(HttpExchange exchange) {
             String cookieHeader = exchange.getRequestHeaders().getFirst("Cookie");
             if (cookieHeader != null) {
@@ -192,6 +223,12 @@ public class RentalServer {
             return null;
         }
 
+        /**
+         * Obtém um veículo pelo número da placa.
+         *
+         * @param vehiclePlate Número da placa do veículo.
+         * @return O veículo correspondente ou null se não encontrado.
+         */
         private VehicleDTO getVehicle(String vehiclePlate) {
             try {
                 return vehicleService.getVehicleByPlaca(vehiclePlate);
@@ -201,16 +238,36 @@ public class RentalServer {
             }
         }
 
+        /**
+         * Obtém o cliente com base no usuário e no documento informado.
+         *
+         * @param user             O usuário autenticado.
+         * @param customerDocument Documento do cliente a ser buscado.
+         * @return O cliente correspondente ou null se não encontrado.
+         */
         private CustomerDTO getCustomer(UserDTO user, String customerDocument) {
             return user.isAdmin() ? customerService.findCustomerByDocument(customerDocument) : user;
         }
 
+        /**
+         * Envia uma resposta com o conteúdo fornecido.
+         *
+         * @param exchange Instância de HttpExchange para enviar a resposta.
+         * @param response Resposta a ser enviada.
+         */
         private void sendResponse(HttpExchange exchange, String response) throws IOException {
             try (OutputStream os = exchange.getResponseBody()) {
                 os.write(response.getBytes(StandardCharsets.UTF_8));
             }
         }
 
+        /**
+         * Envia uma resposta de erro em formato JSON.
+         *
+         * @param exchange   Instância de HttpExchange para enviar a resposta.
+         * @param statusCode Código de status HTTP.
+         * @param message    Mensagem de erro a ser enviada.
+         */
         private void sendErrorResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
             exchange.sendResponseHeaders(statusCode, message.getBytes(StandardCharsets.UTF_8).length);
             try (OutputStream os = exchange.getResponseBody()) {

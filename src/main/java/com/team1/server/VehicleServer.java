@@ -28,11 +28,24 @@ import java.util.stream.Stream;
 
 import main.java.com.team1.util.FileUtil;
 
+/**
+ * Classe VehicleServer responsável por gerenciar as rotas relacionadas a veículos.
+ * O servidor manipula as requisições HTTP para listar, criar e deletar veículos.
+ */
 public class VehicleServer {
     private static VehicleService vehicleService;
     private static final CustomerService customerService = new CustomerService();
     private static final AgencyService agencyService = new AgencyService();
 
+    /**
+     * Método responsável por criar os contextos do servidor relacionados aos veículos.
+     * Ele registra as rotas para listar, criar e deletar veículos, associando cada rota ao seu respectivo handler.
+     * - /vehicles: lista todos os veículos (GET).
+     * - /vehicle: cria um novo veículo (POST).
+     * - /vehicle/delete: deleta um veículo (DELETE).
+     *
+     * @throws IOException em caso de erro ao criar os contextos.
+     */
     public static void createContexts() throws IOException {
         vehicleService = new VehicleService(new VehicleRepositoryImpl());
         HttpServer server = MainServer.getServer();
@@ -41,6 +54,12 @@ public class VehicleServer {
         server.createContext("/vehicle/delete", new VehicleDeleteHandler());
     }
 
+    /**
+     * VehicleListHandler lida com requisições GET para listar todos os veículos.
+     * O administrador vê todos os veículos, enquanto usuários normais veem apenas veículos disponíveis.
+     *
+     * Método aceito: GET.
+     */
     static class VehicleListHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -96,6 +115,12 @@ public class VehicleServer {
         }
     }
 
+    /**
+     * VehicleCreateHandler lida com requisições POST para criar um novo veículo.
+     * Somente administradores podem cadastrar novos veículos, que podem ser do tipo Carro, Moto ou Caminhão.
+     *
+     * Método aceito: POST.
+     */
     static class VehicleCreateHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -189,6 +214,12 @@ public class VehicleServer {
         }
     }
 
+    /**
+     * VehicleDeleteHandler lida com requisições DELETE para deletar um veículo.
+     * Somente administradores podem deletar veículos utilizando o número da placa.
+     *
+     * Método aceito: DELETE.
+     */
     static class VehicleDeleteHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {

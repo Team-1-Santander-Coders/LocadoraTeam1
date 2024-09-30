@@ -10,11 +10,30 @@ import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-
+/**
+ * A classe MainServer é responsável por iniciar e configurar o servidor HTTP
+ * principal da aplicação de locação de veículos. Ela cria os contextos das
+ * rotas iniciais, além de iniciar contextos de servidores secundários como
+ * AdminServer, VehicleServer, RentalServer, UserServer e AgencyServer.
+ *
+ * <p>O servidor escuta na porta 8000 e serve arquivos estáticos como HTML, CSS
+ * e JavaScript, além de configurar rotas específicas para funcionalidades
+ * relacionadas a usuários, veículos, agências e aluguéis.</p>
+ */
 public class MainServer {
     private static HttpServer server;
     private static final String page = "home";
 
+    /**
+     * Inicializa o servidor HTTP na porta 8000 e define os contextos de arquivos
+     * estáticos e os contextos administrativos do sistema.
+     *
+     * <p>Além das rotas principais, como a página inicial e o favicon, são
+     * configurados também contextos de servidores auxiliares que gerenciam
+     * diferentes funcionalidades da aplicação.</p>
+     *
+     * @throws IOException se ocorrer algum erro ao criar o servidor.
+     */
     public static void startServer() throws IOException {
         int port = 8000;
         server = HttpServer.create(new InetSocketAddress(port), 0);
@@ -31,16 +50,23 @@ public class MainServer {
         server.setExecutor(null);
         server.start();
         System.out.println("Servidor iniciado http://localhost:" + port);
-        System.out.println("User: http://localhost:" + port + "/usuario");
-        System.out.println("Vehicle: http://localhost:" + port + "/adminPage");
-        System.out.println("User Page: http://localhost:" + port + "/userPage");
-
     }
 
+    /**
+     * Retorna a instância do servidor HTTP atualmente em execução.
+     *
+     * @return a instância do servidor HTTP.
+     */
     public static HttpServer getServer() {
         return server;
     }
 
+    /**
+     * A classe StaticFileHandler é responsável por lidar com as requisições HTTP
+     * de arquivos estáticos como HTML, CSS e JavaScript. Ela busca os arquivos
+     * no diretório apropriado e envia a resposta ao cliente com o conteúdo e o
+     * tipo MIME correto.
+     */
     public static class StaticFileHandler implements HttpHandler {
         private final String page;
         private final String fileName;
