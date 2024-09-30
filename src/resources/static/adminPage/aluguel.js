@@ -266,34 +266,38 @@ function sendRentalReceipt(rental) {
 }
 
 function openReturnModal(rental) {
+    currentRental = rental;
     document.getElementById('pickupAgencyReturn').textContent = rental.agenciaRetirada;
     document.getElementById('customerReturn').textContent = rental.cliente;
     document.getElementById('vehicleReturn').textContent = rental.veiculo;
     document.getElementById('rentalDateReturn').textContent = rental.dataRetirada;
 
-    const returnForm = document.getElementById('returnForm');
-
-    returnForm.removeEventListener('submit', submitHandler);
-
-    function submitHandler(event) {
-        event.preventDefault();
-        const vehiclePlate = rental.veiculo.split(" - ")[0];
-        const agencyPickupName = rental.agenciaRetirada.split(" - ")[0];
-        const agencyPickupAddress = rental.agenciaRetirada.split(" - ")[1];
-        const returnDate = document.getElementById('returnDate').value;
-        const agencyReturnName = document.getElementById('agencyReturn').value.split(" / ")[0];
-        const agencyReturnAddress = document.getElementById('agencyReturn').value.split(" / ")[1];
-        const customerDocument = rental.cliente.split(" - ")[0];
-
-        fetchRent(vehiclePlate, agencyPickupName, agencyPickupAddress, rental.dataRetirada, agencyReturnName, agencyReturnAddress, formatDate(returnDate), customerDocument);
-        document.getElementById('returnModal').style.display = 'none';
-        document.getElementById('returnForm').reset();
-        loadRentals()
-    }
-
-    returnForm.addEventListener('submit', submitHandler);
     document.getElementById('returnModal').style.display = 'block';
 }
+
+function submitHandler(event) {
+    event.preventDefault();
+    if (!currentRental) return;
+
+    const vehiclePlate = currentRental.veiculo.split(" - ")[0];
+    const agencyPickupName = currentRental.agenciaRetirada.split(" - ")[0];
+    const agencyPickupAddress = currentRental.agenciaRetirada.split(" - ")[1];
+    const returnDate = document.getElementById('returnDate').value;
+    const agencyReturnName = document.getElementById('agencyReturn').value.split(" / ")[0];
+    const agencyReturnAddress = document.getElementById('agencyReturn').value.split(" / ")[1];
+    const customerDocument = currentRental.cliente.split(" - ")[0];
+
+    fetchRent(vehiclePlate, agencyPickupName, agencyPickupAddress, currentRental.dataRetirada, agencyReturnName, agencyReturnAddress, formatDate(returnDate), customerDocument);
+    document.getElementById('returnModal').style.display = 'none';
+    document.getElementById('returnForm').reset();
+    loadRentals();
+    currentRental = null;
+}
+
+document.getElementById('returnForm').addEventListener('submit', submitHandler);
+document.getElementById('closeModal').addEventListener('click', function () {
+    document.getElementById('returnModal').style.display = 'none';
+});
 
 document.getElementById('closeModal').addEventListener('click', function () {
     document.getElementById('returnModal').style.display = 'none';
