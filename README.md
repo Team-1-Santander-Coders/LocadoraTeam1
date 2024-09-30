@@ -16,6 +16,18 @@
 - **OTP**: Técnica utilizada para garantir a segurança e autenticidade das transações.
 - **API RESTful**: Estrutura utilizada para a comunicação entre o cliente e o servidor, permitindo operações CRUD (Criar, Ler, Atualizar, Deletar).
 
+## Regras de negócio do projeto
+
+- **RN1:** Os veículos não podem ser repetidos (Placa é o delimitador);
+- **RN2:** Tipos de veículos que serão considerados: Carro, Moto, Caminhões;
+- **RN3:** Os aluguéis e devoluções terão o local e data;
+- **RN4:** Os veículos que estiverem alugados não poderão estar disponíveis;
+- **RN5:** Agências não podem estar duplicadas (Nome e endereço serão os delimitadores);
+- **RN6:** Clientes não podem estar duplicados (Documento é o delimitador);
+- **RN7:** Regras de devolução:
+  - Caso pessoa fisica tenha ficado com o carro mais que 5 dias terá direito a 5% de desconto.
+  - Caso pessoa juridica tenha ficado com o carro mais que 3 dias terá direito a 10% de desconto.
+
 ## Instalação
 ### Pré-requisitos
 - Java Development Kit (JDK) instalado.
@@ -25,7 +37,6 @@
 1. Clone o repositório do projeto:
    ```bash
    git clone https://github.com/Team-1-Santander-Coders/LocadoraTeam1
-   cd locadora-team-one
    ```
 2. Abra o projeto na sua IDE preferida.
 3. Compile o projeto e execute o servidor.
@@ -54,9 +65,18 @@ A aplicação permite o gerenciamento de veículos, usuários e agências. As se
 
 ### Admin page
 
-**A interface permite a visualização da quantidade de veículos, quantidade de aluguel por veículos e a situação deles
+**A home possui uma interface permite a visualização da quantidade de veículos, quantidade de aluguel por veículos e a situação deles
 para ter um panorama geral dos dados:**
 ![Admin page](images/adminpage.png)
+
+**Interface de administração de Agências:**
+![Interface de administração de Agências](images/admin_agency.png)
+
+**Interface de administração de Veículos:**
+![Interface de administração de Veículos](images/admin_vehicle.png)
+
+**Interface de administração de Veículos:**
+![Interface de administração de Alugueis](images/admin_rentals.png)
 
 ### User page
 
@@ -76,6 +96,37 @@ para ter um panorama geral dos dados:**
 - **/agencies**: Consultar agências disponíveis.
 - **/vehicles**: Consultar veículos disponíveis.
 - **/rentals**: Realizar reservas e consultas de aluguel.
+
+Aqui está a versão ajustada com todos os princípios SOLID mencionados:
+
+---
+
+## 🛠 Desafios e Soluções
+
+Durante o desenvolvimento do projeto **Locadora Team One**, enfrentamos e superamos diversos desafios técnicos, o que resultou em um código mais robusto e bem estruturado.
+
+### Principais Desafios:
+
+1. **Autenticação e gerenciamento de sessões:**
+  - Implementamos uma autenticação eficiente sem o uso de bibliotecas externas, utilizando cookies para manter o estado de login e diferenciar usuários comuns de administradores.
+
+2. **Desenvolvimento sem frameworks externos:**
+  - O backend foi desenvolvido completamente em Java puro, sem o uso de frameworks. Isso exigiu um esforço adicional para lidar com requisições HTTP e garantir a modularidade do sistema.
+
+3. **Garantia de integridade dos dados:**
+  - Implementamos verificações de duplicidade no cadastro de veículos e clientes, garantindo que informações como placas de veículos e dados únicos de clientes fossem corretamente validadas.
+
+### Princípios SOLID Aplicados:
+
+Os princípios SOLID foram fundamentais para garantir uma arquitetura de software bem organizada e escalável:
+
+- **Responsabilidade Única (SRP):** Cada classe foi projetada com uma única responsabilidade clara, como as classes de serviço (`VehicleService`, `CustomerService`), que lidam exclusivamente com a lógica de negócios.
+- **Aberto/Fechado (OCP):** As classes foram projetadas para serem facilmente extensíveis sem a necessidade de modificação no código existente, permitindo futuras expansões de forma simples.
+- **Substituição de Liskov (LSP):** As classes que implementam interfaces, como `Vehicle` e `Customer`, podem ser substituídas sem alterar o comportamento esperado do sistema.
+- **Segregação de Interface (ISP):** As interfaces foram criadas de forma que as classes implementassem apenas os métodos necessários para sua funcionalidade, evitando a sobrecarga de métodos irrelevantes.
+- **Inversão de Dependência (DIP):** As dependências foram gerenciadas através de interfaces em repositórios e serviços, promovendo um código desacoplado e de fácil manutenção.
+
+Esses princípios foram aplicados de forma consistente ao longo do projeto, garantindo a qualidade do código e facilitando futuras manutenções e expansões.
 
 ## Funcionalidades
 - Cadastro e gerenciamento de veículos e agências.

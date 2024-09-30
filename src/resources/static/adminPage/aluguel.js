@@ -230,16 +230,83 @@ function generateReceipt(rental) {
     const doc = new jsPDF();
 
     const customerName = capitalizeFirstLetters(rental.cliente.split(" - ")[1]);
-    doc.text("===== RECIBO DE ALUGUEL =====", 10, 10);
-    doc.text("Veículo: " + rental.veiculo, 10, 20);
-    doc.text("Cliente: " + customerName, 10, 30);
-    doc.text("Agência de Retirada: " + rental.agenciaRetirada, 10, 40);
-    doc.text("Agência de Devolução: " + rental.agenciaDevolucao, 10, 50);
-    doc.text("Data de Retirada: " + rental.dataRetirada, 10, 60);
-    doc.text("Data de Devolução: " + rental.dataDevolucao, 10, 70);
-    doc.text("Custo Total: R$ " + rental.custoTotal, 10, 80);
-    doc.text("=============================", 10, 90);
-    doc.save('recibo.pdf');
+
+    const devolucaoDate = new Date(rental.dataDevolucao.split("/").reverse().join("-"));
+    devolucaoDate.setDate(devolucaoDate.getDate() + 5);
+    const vencimentoDate = devolucaoDate.toLocaleDateString("pt-BR");
+
+    const boletoData = {
+        banco: "Banco Fictício - 123",
+        cedente: "Locadora Team One",
+        sacado: customerName,
+        nossoNumero: "98765432101",
+        agencia: "5678-9",
+        conta: "98765-4",
+        linhaDigitavel: "12390.45678 98765.432109 87654.321012 3 12340000015000"
+    };
+
+    const barcodeCanvas = document.getElementById("barcodeCanvas");
+    JsBarcode(barcodeCanvas, "123904567898765432109876543210123", { format: "CODE128" });
+
+    doc.setFontSize(12);
+
+    let yPosition = 20;
+
+    doc.text("===========================================================", 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Banco: " + boletoData.banco, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Cedente: " + boletoData.cedente, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Nosso Número: " + boletoData.nossoNumero, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Agência/Código Cedente: " + boletoData.agencia + "/" + boletoData.conta, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Data de Vencimento: " + vencimentoDate, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Valor: R$ " + rental.custoTotal, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("===========================================================", 20, yPosition);
+    yPosition += 20;
+
+    doc.text("Sacado: " + boletoData.sacado, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Linha Digitável: " + boletoData.linhaDigitavel, 20, yPosition);
+    yPosition += 20;
+
+    const imgData = barcodeCanvas.toDataURL("image/png");
+    doc.addImage(imgData, "PNG", 20, yPosition, 160, 20);
+    yPosition += 30;
+
+    doc.text("===========================================================", 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Veículo: " + rental.veiculo, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Agência de Retirada: " + rental.agenciaRetirada, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Agência de Devolução: " + rental.agenciaDevolucao, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Data de Retirada: " + rental.dataRetirada, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("Data de Devolução: " + rental.dataDevolucao, 20, yPosition);
+    yPosition += 10;
+
+    doc.text("===========================================================", 20, yPosition);
+
+    doc.save('boleto.pdf');
 }
 
 function sendRentalReceipt(rental) {
