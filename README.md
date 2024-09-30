@@ -1,14 +1,12 @@
-<div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-  <img alt="Logo Locadora Team One" src="/images/logo.png" style="width: 200px; border-radius: 20px; margin: auto;">
-</div>
-
----
+<p align="center">
+  <img alt="Logo Locadora Team One" src="/images/logo.png" style="width: 200px; border-radius: 20px; margin: auto; border-radius: 20px">
+</p>
 
 # Locadora Team One 🚗
 
-<div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+<p align="center">
   <img src="images/landingpage.gif" alt="Locadora Team One" style="margin: auto;">
-</div>
+</p>
 
 ## Descrição
 "Locadora Team One" é um projeto de locadora de veículos que oferece uma interface web para gerenciamento de veículos, usuários e agências. O projeto foi desenvolvido inteiramente em Java, sem a utilização de bibliotecas externas ou frameworks, utilizando uma API RESTful para a comunicação entre o cliente e o servidor.
