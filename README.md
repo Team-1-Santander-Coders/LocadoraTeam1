@@ -24,7 +24,7 @@
 ### Passos para Instalação
 1. Clone o repositório do projeto:
    ```bash
-   git clone <URL do repositório>
+   git clone https://github.com/Team-1-Santander-Coders/LocadoraTeam1
    cd locadora-team-one
    ```
 2. Abra o projeto na sua IDE preferida.
@@ -62,6 +62,15 @@ para ter um panorama geral dos dados:**
 
 **A interface mostra os veículos disponíveis para aluguel para o usuário, permitindo que ele alugue diretamente clicando no veículo:**
 ![User page](images/userpage.png)
+
+**Opção de filtrar por veículos:**
+![Tela de filtro](images/filtro.png)
+
+**Interace de aluguel:**
+![Tela de aluguel](images/aluguel.png)
+
+**Lista de alugueis dos clientes:**
+![Lista de Alugueis](images/lista_alugueis.png)
 
 ### Endpoints da API
 - **/agencies**: Consultar agências disponíveis.
