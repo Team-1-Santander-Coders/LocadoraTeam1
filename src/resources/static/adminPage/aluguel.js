@@ -2,6 +2,8 @@
     emailjs.init("-Z51VkHqRSKon-Gi5");
 })();
 
+let allVehicles = []
+
 document.addEventListener("DOMContentLoaded", function () {
     loadCustomers();
     loadAvailableVehicles()
@@ -54,6 +56,7 @@ function loadAvailableVehicles() {
     fetch('/vehicles')
         .then(response => response.text())
         .then(data => {
+            allVehicles = data.split('\n');
             const availableVehicles = data.split('\n').filter(vehicle => vehicle.includes('Disponível'));
             const vehicleSelect = document.getElementById('vehicle');
             vehicleSelect.innerHTML = '';
@@ -156,7 +159,6 @@ function loadRentals() {
             try {
                 const cleanedText = text.trim();
                 const rentals = JSON.parse(cleanedText);
-
                 if (Array.isArray(rentals)) {
                     populateRentalTable(rentals);
                 } else {
@@ -218,6 +220,12 @@ function populateRentalTable(rentals) {
             returnButton.textContent = 'Devolver';
             returnButton.addEventListener('click', () => openReturnModal(rental));
             returnButtonCell.appendChild(returnButton);
+            row.appendChild(returnButtonCell);
+            const emailButton = document.createElement('button');
+            emailButton.textContent = 'Enviar E-mail';
+            emailButton.style.marginLeft = '10px';
+            emailButton.addEventListener('click', () => sendRentalReceipt(rental));
+            returnButtonCell.appendChild(emailButton);
             row.appendChild(returnButtonCell);
         }
 
@@ -322,27 +330,68 @@ function generateReceipt(rental) {
     doc.save('boleto.pdf');
 }
 
+function getValorDiariaPelaPlaca(placa) {
+    tipo = allVehicles.filter(vehicle => vehicle.includes(placa))[0].split(" - ")[0];
+    if (tipo === "Carro") {
+        return "150,00"
+    }
+
+    if (tipo === "Moto") {
+        return "100,00"
+    }
+
+    if (tipo === "Caminhão") {
+        return "200,00"
+    }
+}
+
 function sendRentalReceipt(rental) {
     const customerName = capitalizeFirstLetters(rental.cliente.split(" - ")[1]);
     const customerEmail = rental.cliente.split(" - ")[2];
-    const templateParams = {
-        veiculo: rental.veiculo,
-        nome_do_cliente: customerName,
-        agencia_retirada: rental.agenciaRetirada,
-        agencia_devolucao: rental.agenciaDevolucao,
-        data_retirada: rental.dataRetirada,
-        data_devolucao: rental.dataDevolucao,
-        custo_total: rental.custoTotal,
-        to_email: customerEmail
-    };
+    console.log(rental.situacao)
+    if (rental.situacao === "Em aberto."){
+        const valor = getValorDiariaPelaPlaca(rental.veiculo.split(" - ")[0]);
+        const templateParams = {
+            veiculo: rental.veiculo,
+            nome_do_cliente: customerName,
+            agencia_retirada: rental.agenciaRetirada,
+            agencia_devolucao: rental.agenciaDevolucao,
+            data_retirada: rental.dataRetirada,
+            data_devolucao: rental.dataDevolucao,
+            custo_total: valor,
+            to_email: customerEmail,
+            tipo: "Preço da diária"
+        };
 
-    emailjs.send('service_h01md0f', 'template_qgzhnuj', templateParams)
-        .then(function(response) {
-            alert('Recibo enviado com sucesso para o e-mail do cliente!');
-        }, function(error) {
-            console.log('Erro ao enviar o e-mail:', error);
-            alert('Erro ao enviar o recibo. Tente novamente mais tarde.');
-        });
+        emailjs.send('service_h01md0f', 'template_qgzhnuj', templateParams)
+            .then(function(response) {
+                alert('Recibo enviado com sucesso para o e-mail do cliente!');
+            }, function(error) {
+                console.log('Erro ao enviar o e-mail:', error);
+                alert('Erro ao enviar o recibo. Tente novamente mais tarde.');
+            });
+    } else {
+        const templateParams = {
+            veiculo: rental.veiculo,
+            nome_do_cliente: customerName,
+            agencia_retirada: rental.agenciaRetirada,
+            agencia_devolucao: rental.agenciaDevolucao,
+            data_retirada: rental.dataRetirada,
+            data_devolucao: rental.dataDevolucao,
+            custo_total: rental.custoTotal,
+            to_email: customerEmail,
+            tipo: "Custo total"
+        };
+
+        emailjs.send('service_h01md0f', 'template_qgzhnuj', templateParams)
+            .then(function(response) {
+                alert('Recibo enviado com sucesso para o e-mail do cliente!');
+            }, function(error) {
+                console.log('Erro ao enviar o e-mail:', error);
+                alert('Erro ao enviar o recibo. Tente novamente mais tarde.');
+            });
+    }
+
 }
 
 function openReturnModal(rental) {
