@@ -40,6 +40,7 @@
    ```
 2. Abra o projeto na sua IDE preferida.
 3. Compile o projeto e execute o servidor.
+4. Para entrar como ADM use o login `locadorateamone@gmail.com` com a senha `@Locadora2009`.
 
 *Nota: Instruções detalhadas sobre a instalação serão adicionadas posteriormente.*
 
